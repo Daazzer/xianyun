@@ -1,6 +1,5 @@
 <template>
-  <div class="container">
-    <Logo />
+  <div class="index">
     <h1>首页</h1>
   </div>
 </template>
