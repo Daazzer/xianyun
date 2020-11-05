@@ -25,7 +25,8 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    '@/plugins/element-ui'
+    '@/plugins/element-ui',
+    '@/plugins/axios',
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -42,11 +43,11 @@ export default {
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {
-    // See https://github.com/nuxt-community/axios-module#options
-    baseURL: "http://157.122.54.189:9095" // 在线数据库
-    // baseURL: "http://localhost:1337" // 本地数据库
-  },
+  // axios: {
+  //   // See https://github.com/nuxt-community/axios-module#options
+  //   baseURL: "http://157.122.54.189:9095" // 在线数据库
+  //   // baseURL: "http://localhost:1337" // 本地数据库
+  // },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
