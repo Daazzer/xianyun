@@ -1,20 +1,20 @@
-# xianyun
+# 闲云旅游项目
 
-## Build Setup
+## 使用方法
 
 ```bash
-# install dependencies
+# 安装依赖
 $ npm install
 
-# serve with hot reload at localhost:3000
+# 项目开发服务器
 $ npm run dev
 
-# build for production and launch server
+# 打包编译并运行服务器
 $ npm run build
 $ npm run start
 
-# generate static project
+# 生成静态项目
 $ npm run generate
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+
