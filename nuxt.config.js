@@ -27,6 +27,7 @@ export default {
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/axios',
+    { src: '@/plugins/localStorage', ssr: false }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
