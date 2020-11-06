@@ -14,4 +14,3 @@ export default axios => ({
   ...index(axios),
   ...hotel(axios)
 })
-
