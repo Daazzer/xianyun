@@ -93,7 +93,7 @@ export default {
         color: #409eff;
       }
     }
-    ::v-deep .nuxt-link-exact-active {
+    ::v-deep .nuxt-link-exact-active, .nuxt-link-active:not(:first-child) {
       background: #409eff;
       color: #fff !important;
     }
