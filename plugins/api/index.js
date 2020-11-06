@@ -1,5 +1,6 @@
 import index from './_index'
 import hotel from './_hotel'
+import account from './_account'
 
 /**
  * 处理 axios 的响应与错误
@@ -12,5 +13,6 @@ export const handleAxiosRequest = axios => (
 
 export default axios => ({
   ...index(axios),
-  ...hotel(axios)
+  ...hotel(axios),
+  ...account(axios)
 })
