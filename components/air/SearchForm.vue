@@ -24,6 +24,7 @@
       <el-form-item label="到达城市">
         <el-autocomplete
           :fetch-suggestions="queryDestSearch"
+          v-model="form.destCity"
           placeholder="请搜索到达城市"
           @select="handleDestSelect"
         />
@@ -33,7 +34,8 @@
           type="date"
           placeholder="请选择日期"
           style="width: 100%"
-          @change="handleDate"
+          value-format="yyyy-MM-dd"
+          v-model="form.departDate"
         />
       </el-form-item>
       <el-form-item>
@@ -106,37 +108,37 @@ export default {
     // value 是选中的值，cb是回调函数，接收要展示的列表
     async queryDepartSearch (value, cb) {
       const result = await this.querySearch(value)
-      if (result.length > 0) {
-        // 不在下拉列表中选择，则默认选择第一项
-        this.form.departCity = result[0].value
-        this.form.departCode = result[0].sort
+      // 如果手动输入的城市与返回的数据城市完全匹配，那么就把该值的城市代码也赋值给 data
+      const matchResult = result.find(v => this.form.departCity === v.value)
+      if (matchResult) {
+        this.form.departCity = matchResult.value
+        this.form.departCode = matchResult.sort
       }
       cb(result)
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
-    queryDestSearch (value, cb) {
-      cb([
-        { value: 1 },
-        { value: 2 },
-        { value: 3 },
-      ])
+    async queryDestSearch (value, cb) {
+      const result = await this.querySearch(value)
+      const matchResult = result.find(v => this.form.destCity === v.value)
+      if (matchResult) {
+        this.form.destCity = matchResult.value
+        this.form.destCode = matchResult.sort
+      }
+      cb(result)
     },
 
     // 出发城市下拉选择时触发
     handleDepartSelect (item) {
-
+      this.form.departCity = item.value
+      this.form.departCode = item.sort
     },
 
     // 目标城市下拉选择时触发
     handleDestSelect (item) {
-
-    },
-
-    // 确认选择日期时触发
-    handleDate (value) {
-
+      this.form.destCity = item.value
+      this.form.destCode = item.sort
     },
 
     // 触发和目标城市切换时触发
@@ -146,7 +148,43 @@ export default {
 
     // 提交表单是触发
     handleSubmit () {
+      // 原生表单校验
+      const rules = {
+        depart: {
+          value: this.form.departCity,
+          message: '请选择出发城市'
+        },
+        dest: {
+          value: this.form.destCity,
+          message: '请选择到达城市'
+        },
+        departDate: {
+          value: this.form.departDate,
+          message: '请选择出发时间'
+        }
+      }
 
+      let isValidated = true
+      for (const key in rules) {
+        // 如果不通过则直接停止
+        const rule = rules[key]
+        if (rule.value === '' || !rule.value) {
+          isValidated = false
+          this.$alert(rule.message, '提示', {
+            type: 'warning'
+          }).catch(err => err)
+          return
+        }
+      }
+
+      if (!isValidated) {
+        return
+      }
+
+      this.$router.push({
+        path: '/air/flights',
+        query: this.form
+      })
     }
   },
   mounted () {
