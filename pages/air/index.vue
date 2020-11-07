@@ -10,13 +10,13 @@
       <!-- 搜索表单 -->
       <div>搜索</div>
 
-      <!-- banner广告 -->
+      <!-- banner 广告 -->
       <div class="sale-banner">
-        <img src="http://157.122.54.189:9093/images/pic_sale.jpeg" />
+        <el-image src="http://157.122.54.189:9093/images/pic_sale.jpeg" />
       </div>
     </el-row>
 
-    <!-- 广告 -->
+    <!-- 标语 -->
     <el-row type="flex" class="statement">
       <el-col :span="8">
         <i
