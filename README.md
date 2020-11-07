@@ -25,6 +25,7 @@ $ npm run generate
 - UI 框架：[element-ui](https://element.eleme.cn/#/)
 - 预编译样式语言：[sass](https://sass-lang.com/)
 - http 库：[@nuxtjs/axios](https://github.com/nuxt-community/axios-module#readme)
+- vuex 状态与本地存储动态数据更插件：[vuex-persistedstate](https://github.com/robinvdvleuten/vuex-persistedstate)
 
 
 
@@ -55,17 +56,20 @@ $ npm run generate
 
 ## 项目配置
 
-`/nuxt.config.js`
-
 ```js
+// /nuxt.config.js
 // ...
 export default {
   // ...
   // 免去手动引入组件
   components: true,
-  axios: {
-    baseURL: "http://157.122.54.189:9095" // 在线数据接口
-  },
+  // 项目插件
+  plugins: [
+    '@/plugins/element-ui',
+    '@/plugins/axios',
+    // 本地存储插件，在客户端渲染
+    { src: '@/plugins/localStorage', ssr: false }
+  ],
   // ...
 }
 ```
@@ -347,4 +351,202 @@ plugins: [
 - `Input` 组件实现搜索功能
 
 - 发送请求获取轮播图数据
+
+
+
+## 用户登录页
+
+### 技术实现
+
+- `Container` 、`Row`组件布局
+
+- 表单头部切换标签，通过当前点击索引判断改变样式，切换到登录表单或注册表单
+
+- `LoginForm` 与 `RegisterForm` 的自定义封装
+
+- `LoginForm` 组件实现登录功能
+
+  - `Form`、`FormItem`、`Input` 组件实现用户登录数据存储和校验
+
+    ```vue
+    <!-- 校验规则 -->
+    <script>
+    // ...
+    data () {
+      return {
+        // ...
+        rules: {
+          username: [
+            {
+              required: true,
+              message: '用户名不能为空',
+              trigger: 'blur'
+            },
+            {
+              pattern: /^\w+$/,
+              message: '非法的用户名',
+              trigger: 'blur'
+            }
+          ],
+          password: [
+            {
+              required: true,
+              message: '密码不能为空',
+              trigger: 'blur'
+            }
+          ]
+        }
+        // ...
+      }
+    }
+    // ...
+    </script>
+    ```
+
+  - 输入框聚焦时清除校验规则，提升体验
+  - 登录后将用户信息存储到 `vuex`
+  - 利用 `vuex-persistedstate`  将 `vuex`  中的数据与 `localStorage` 同步更新，实现数据持久化
+  - 登录成功后的页面跳转，并且将用户数据提交 `vuex` 进行数据更新
+  - [`vuex-persistedstate` 的部分 `vuex` 数据存储](#使用 vuex-persistedstate 存储部分 vuex 数据到本地)
+
+- `RegisterForm` 组件实现注册功能
+
+  - `Form`、`FormItem`、`Input`  组件实现用户登录数据存储和校验
+
+  - 密码确认校验
+
+    ```vue
+    <script>
+    // ...
+    data () {
+      const validatePass = (rule, value, cb) => {
+        if (value === '') {
+          cb(new Error('请再次输入密码'))
+        } else if (value !== this.form.password) {
+          cb(new Error('两次输入密码不一致!'))
+        } else {
+          cb()
+        }
+      }
+      return {
+        // ...
+        rules: {
+          // ...
+          checkPassword: [{
+            validator: validatePass,
+            trigger: 'blur'
+          }],
+          // ...
+        }
+        // ...
+      }
+    }
+    // ...
+    </script>
+    ```
+
+  - 验证码发送
+
+    ```js
+    // 发送验证码
+    async handleSendCaptcha () {
+      const tel = this.form.username
+    
+      if (tel === '') {
+        this.$alert('手机号不能为空', {
+          type: 'warning'
+        }).catch(err => err)
+        return
+      }
+      if (!/^1[35789]\d{9}$/.test(tel)) {
+        this.$alert('手机号格式错误', {
+          type: 'warning'
+        }).catch(err => err)
+        return
+      }
+      const [err, res] = await this.$api.getCaptchas({ tel })
+      if (err) {
+        return this.$message.error('手机验证码获取失败，发生错误')
+      }
+    
+      const captcha = res.data.code
+    
+      this.$alert(`获取验证码成功，模拟验证码为：${captcha}`, {
+        type: 'success'
+      }).then(() => {
+        this.form.captcha = captcha
+        // 设置验证码发送间隔并且显示倒计时
+        this.setSendCaptchaInterval(60)
+        this.isSendCaptcha = true
+      }).catch(err => err)
+    },
+    ```
+
+  - 验证码发送倒计时
+
+    ```vue
+    <script>
+    data () {
+      return {
+        isSendCaptcha: false,
+        sendCaptchaCountDown: 0
+      }
+    },
+    methods: {
+     /**
+     	* 设置验证码发送倒计时
+     	* @param {number} interval 验证码再次发送的间隔
+     	*/
+      setSendCaptchaInterval (interval) {
+        // 记录点击时刻
+        const clickTime = Date.now()
+        this.sendCaptchaCountDown = interval
+        let countTime = setInterval(() => {
+          // 每隔一秒获取当前时刻
+          const nowTime = Date.now()
+          // 对比两个时间间隔
+          const diffTime = parseInt((nowTime - clickTime)/1000)
+          // 给页面显示倒计时
+          this.sendCaptchaCountDown--
+          if (diffTime >= interval) {
+            clearInterval(countTime)
+            // 改变发送状态
+            this.isSendCaptcha = false
+          }
+        }, 1000)
+      }
+    }
+    </script>
+    ```
+
+    
+
+ 
+
+### 使用 vuex-persistedstate 存储部分 vuex 数据到本地
+
+`vuex-persistedstate` 默认会将所有 `vuex` 的数据存到本地，但是如果部分存储的话需要[配置](https://github.com/robinvdvleuten/vuex-persistedstate#createpersistedstateoptions)多一个 `paths` 属性
+
+`createPersistedState([options])`
+
+- `key <String>`：存储持久化数据的键名
+- `paths <Array>`：一个可以传入路径字符串的数组，如果不设置这个属性，则整个 `vuex` 数据都会存到本地。如果传入一个空数组，则不会保存数据。路径语法必须使用点语法。如果 `vuex` 使用了 `modules` 模式，则需要包含模块名，例如`"auth.user"`。（Nuxt 默认就是使用 `vuex` 的  `modules` 模式）。默认值为 `undefined`
+
+```js
+// @/plugins/localStorage.js
+import createPersistedState from 'vuex-persistedstate'
+
+export default ({ store }) => {
+  window.onNuxtReady(() => {
+    createPersistedState({
+      key: 'xianyun', // 读取本地存储的数据到 vuex
+      /**
+       * 利用 paths 保存部分状态到本地
+       * @see {@link https://github.com/robinvdvleuten/vuex-persistedstate#example-with-vuex-modules Github@vuex-persistedstate}
+       */
+      paths: ['user.userInfo']
+    })(store)
+  })
+}
+```
 
