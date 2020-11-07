@@ -16,6 +16,7 @@
       <el-form-item label="出发城市">
         <el-autocomplete
           placeholder="请搜索出发城市"
+          v-model="form.departCity"
           :fetch-suggestions="queryDepartSearch"
           @select="handleDepartSelect"
         />
@@ -61,6 +62,13 @@ export default {
         { icon: "iconfont iconshuangxiang", name: "往返" }
       ],
       currentTab: 0,
+      form: {
+        departCity: '',  // 出发城市
+        departCode: '',  // 出发城市代码
+        destCity: '',  // 到达城市
+        destCode: '',  // 到达城市代码
+        departDate: '',  // 日期字符串
+      }
     }
   },
   methods: {
@@ -69,14 +77,41 @@ export default {
 
     },
 
+    /**
+     * 发送查询城市请求
+     * @param {string} name 城市名
+     * @returns {Promise} 搜索结果的 Promise
+     */
+    async querySearch (name) {
+      if (name === '') {
+        return []
+      }
+
+      const [err, res] = await this.$api.getAirsCity({ name })
+
+      if (err) {
+        return [{ value: '数据获取失败' }]
+      }
+
+      // 必须数据中有 value 属性
+      const cityData = res.data.data.map(v => ({
+        ...v,
+        value: v.name
+      }))
+
+      return cityData
+    },
+
     // 出发城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
-    queryDepartSearch (value, cb) {
-      cb([
-        { value: 1 },
-        { value: 2 },
-        { value: 3 },
-      ])
+    async queryDepartSearch (value, cb) {
+      const result = await this.querySearch(value)
+      if (result.length > 0) {
+        // 不在下拉列表中选择，则默认选择第一项
+        this.form.departCity = result[0].value
+        this.form.departCode = result[0].sort
+      }
+      cb(result)
     },
 
     // 目标城市输入框获得焦点时触发
@@ -148,6 +183,7 @@ export default {
     box-sizing: border-box;
     border-top: 3px #eee solid;
     background: #eee;
+    cursor: pointer;
   }
 
   .active {
