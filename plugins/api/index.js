@@ -3,7 +3,7 @@ import hotel from './_hotel'
 import account from './_account'
 
 /**
- * 处理 axios 的响应与错误
+ * 集中处理 axios 的响应与错误
  * @param {Promise} axios axios Promise 对象
  * @returns {Promise<Response>}
  */
