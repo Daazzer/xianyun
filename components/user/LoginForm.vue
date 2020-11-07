@@ -59,8 +59,6 @@ export default {
       }
     }
   },
-  mounted () {
-  },
   methods: {
     // 提交登录
     async login () {
@@ -84,8 +82,6 @@ export default {
 
       // 跳转到首页
       setTimeout(() => this.$router.replace('/'), 1000)
-
-      console.log(res)
     },
     // 清空当前表单验证
     clearValidate (prop) {
