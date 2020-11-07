@@ -7,7 +7,7 @@ export default axios => ({
    * @param {string} data.tel 手机号码
    * @returns {Promise<Response>}
    */
-  getCaptchas: data => handleAxiosRequest(axios.post('/scenics/banners', data)),
+  getCaptchas: data => handleAxiosRequest(axios.post('/captchas', data)),
   /**
    * 登录
    * @param {Object} data
