@@ -57,6 +57,7 @@
 
 <script>
 export default {
+  name: 'RegisterForm',
   data () {
     const validatePass = (rule, value, cb) => {
       if (value === '') {
