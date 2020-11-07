@@ -20,7 +20,7 @@
       <nuxt-link to="#">忘记密码</nuxt-link>
     </p>
 
-    <el-button class="submit" type="primary" @click="handleLoginSubmit">
+    <el-button class="submit" type="primary" @click="login">
       登录
     </el-button>
   </el-form>
@@ -30,23 +30,6 @@
 export default {
   name: 'LoginForm',
   data () {
-    // 由于默认直接使用 rules 中的 required 与 message 属性，验证提示是英文的，所以在此自定义一个
-    const checkUsername = (rule, value, cb) => {
-      if (value === '') {
-        return cb(new Error('用户名不能为空'))
-      }
-      if (!/^\w+$/.test(value)) {
-        return cb(new Error('非法的用户名'))
-      }
-      cb()
-    }
-    const checkPassword = (rule, value, cb) => {
-      if (value === '') {
-        return cb(new Error('密码不能为空'))
-      }
-      cb()
-    }
-
     return {
       form: {
         username: '',
@@ -56,13 +39,20 @@ export default {
       rules: {
         username: [
           {
-            validator: checkUsername,
+            required: true,
+            message: '用户名不能为空',
+            trigger: 'blur'
+          },
+          {
+            pattern: /^\w+$/,
+            message: '非法的用户名',
             trigger: 'blur'
           }
         ],
         password: [
           {
-            validator: checkPassword,
+            required: true,
+            message: '密码不能为空',
             trigger: 'blur'
           }
         ]
@@ -70,13 +60,10 @@ export default {
     }
   },
   mounted () {
-    const userInfo = JSON.parse(localStorage.getItem('xianyun_userInfo'))
-
-    console.log(userInfo)
   },
   methods: {
     // 提交登录
-    async handleLoginSubmit () {
+    async login () {
       // 通过 promise 验证表单
       const isValidate = await this.$refs.form.validate().then(validated => validated).catch(invalidated => invalidated)
 
