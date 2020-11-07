@@ -4,7 +4,7 @@
       <!-- logo -->
       <div class="logo">
         <nuxt-link to="/">
-          <img src="http://157.122.54.189:9093/images/logo.jpg" alt="" />
+          <img src="http://157.122.54.189:9093/images/logo.jpg" alt="logo" />
         </nuxt-link>
       </div>
 
@@ -19,11 +19,11 @@
       <!-- 登录/用户信息 -->
       <el-row type="flex" align="middle">
         <!-- 如果用户存在则展示用户信息，用户数据来自store -->
-        <el-dropdown v-if="$store.state.user.userInfo.token">
+        <el-dropdown v-if="user.userInfo.token">
           <el-row type="flex" align="middle" class="el-dropdown-link">
             <nuxt-link to="#">
-              <img :src="$axios.defaults.baseURL + $store.state.user.userInfo.user.defaultAvatar" />
-              {{ $store.state.user.userInfo.user.nickname }}
+              <img :src="userAvatarUrl" />
+              {{ user.userInfo.user.nickname }}
             </nuxt-link>
             <i class="el-icon-caret-bottom el-icon--right"></i>
           </el-row>
@@ -32,7 +32,7 @@
               <nuxt-link to="#">个人中心</nuxt-link>
             </el-dropdown-item>
             <el-dropdown-item>
-              <div @click="handleLogout">退出</div>
+              <div @click="logout">退出</div>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -50,8 +50,22 @@
 export default {
   name: 'SiteHeader',
   methods: {
-    handleLogout () {
-
+    logout () {
+      this.$store.commit('user/removeUserInfo')
+      this.$message.success('注销成功')
+    }
+  },
+  computed: {
+    // 用户头像图片 url 校验
+    userAvatarUrl () {
+      let avatarUrl = this.user.userInfo.user.defaultAvatar
+      if (!/^https?:\/\//.test(avatarUrl)) {
+        return avatarUrl = this.$axios.defaults.baseURL + avatarUrl
+      }
+      return avatarUrl
+    },
+    user () {
+      return this.$store.state.user
     }
   }
 }
