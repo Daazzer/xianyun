@@ -43,13 +43,6 @@ export default {
     '@nuxtjs/axios',
   ],
 
-  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  // axios: {
-  //   // See https://github.com/nuxt-community/axios-module#options
-  //   baseURL: "http://157.122.54.189:9095" // 在线数据库
-  //   // baseURL: "http://localhost:1337" // 本地数据库
-  // },
-
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     transpile: [/^element-ui/],
