@@ -25,7 +25,6 @@ em,
 i {
   font-style: normal;
 }
-
 // 页面切换时候过渡样式
 .page {
   &-enter-active,
@@ -37,9 +36,8 @@ i {
     opacity: 0;
   }
 }
-
 // 页面顶部页面加载进度条
 .nuxt-progress{
   background: #409eff;
-  height: 1px;
+  height: 2px;
 }
