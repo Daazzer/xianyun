@@ -8,6 +8,12 @@ export const state = () => ({
 export const mutations = {
   setUserInfo (state, data) {
     state.userInfo = data
+  },
+  removeUserInfo (state) {
+    state.userInfo = {
+      token: '',
+      user: {}
+    }
   }
 }
 
