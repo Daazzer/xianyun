@@ -57,6 +57,7 @@
 
 <script>
 export default {
+  name: 'SearchForm',
   data () {
     return {
       tabs: [
@@ -163,11 +164,11 @@ export default {
         { value: this.form.departDate, message: '请选择出发时间' }
       ]
 
-      let isValidated = true
+      // let isValidated = true
       for (const rule of rules) {
         // 如果不通过则直接停止
         if (rule.value === '' || !rule.value) {
-          isValidated = false
+          // isValidated = false
           this.$alert(rule.message, '提示', {
             type: 'warning'
           }).catch(err => err)
@@ -175,9 +176,9 @@ export default {
         }
       }
 
-      if (!isValidated) {
-        return
-      }
+      // if (!isValidated) {
+      //   return
+      // }
 
       const query = this.form
 
@@ -186,6 +187,9 @@ export default {
           query[key] = query[key].replace('市', '')
         }
       }
+
+      // 存储历史记录并保存到本地
+      this.$store.commit('air/setQueryAirsHistory', query)
 
       this.$router.push({
         path: '/air/flights',
