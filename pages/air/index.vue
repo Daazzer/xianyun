@@ -40,7 +40,7 @@
       <i>特价机票</i>
     </h2>
 
-    <!-- 特价机票 -->
+    <!-- 机票推荐 -->
     <div class="air-sale">
       <el-row type="flex" class="air-sale-pic" justify="space-between">
         <el-col :span="6" v-for="(item, index) in sales" :key="index">
