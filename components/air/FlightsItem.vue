@@ -1,6 +1,6 @@
 <template>
   <div class="flight-item">
-    <div>
+    <div @click="handleShowRecommend">
       <!-- 显示的机票信息 -->
       <el-row type="flex" align="middle" class="flight-info">
         <el-col :span="6"> <span>{{ flight.airline_name }}</span>{{ flight.flight_no }}</el-col>
@@ -28,7 +28,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="flight-recommend">
+    <div class="flight-recommend" v-if="isShowRecommend">
       <!-- 隐藏的座位信息列表 -->
       <el-row type="flex" justify="space-between" align="middle">
         <el-col :span="4">低价推荐</el-col>
@@ -67,6 +67,16 @@ export default {
       default () {
         return {}
       }
+    }
+  },
+  data () {
+    return {
+      isShowRecommend: false
+    }
+  },
+  methods: {
+    handleShowRecommend () {
+      this.isShowRecommend = !this.isShowRecommend
     }
   },
   computed: {
