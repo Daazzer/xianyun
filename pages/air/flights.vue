@@ -11,7 +11,11 @@
 
         <!-- 航班信息 -->
         <div>
-          <FlightsItem />
+          <FlightsItem
+            v-for="(item, index) in dataList"
+            :key="index"
+            :data="item"
+          />
         </div>
       </div>
 
@@ -28,8 +32,19 @@ export default {
   name: 'Flights',
   data () {
     return {
-
+      flightsData: {}, // 航班总数据
+      dataList: []     // 航班列表数据，用于循环flightsItem组件，单独出来是因为要分页
     }
+  },
+  async mounted () {
+    const [err, res] = await this.$api.getAirs(this.$route.query)
+
+    if (err) {
+      return this.$message.error('获取航班信息失败，发生错误')
+    }
+
+    this.flightsData = res.data
+    this.dataList = this.flightsData.flights
   }
 }
 </script>
