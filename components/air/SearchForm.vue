@@ -179,9 +179,17 @@ export default {
         return
       }
 
+      const query = this.form
+
+      for (const key in query) {
+        if (/(departCity|destCity)/.test(key)) {
+          query[key] = query[key].replace('市', '')
+        }
+      }
+
       this.$router.push({
         path: '/air/flights',
-        query: this.form
+        query
       })
     }
   }
