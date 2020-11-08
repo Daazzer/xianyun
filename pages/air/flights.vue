@@ -12,9 +12,9 @@
         <!-- 航班信息 -->
         <div>
           <FlightsItem
-            v-for="(item, index) in dataList"
-            :key="index"
-            :data="item"
+            v-for="flight in flights"
+            :key="flight.id"
+            :flight="flight"
           />
         </div>
       </div>
@@ -33,7 +33,7 @@ export default {
   data () {
     return {
       flightsData: {}, // 航班总数据
-      dataList: []     // 航班列表数据，用于循环flightsItem组件，单独出来是因为要分页
+      flights: []     // 航班列表数据，用于循环flightsItem组件，单独出来是因为要分页
     }
   },
   async mounted () {
@@ -44,7 +44,7 @@ export default {
     }
 
     this.flightsData = res.data
-    this.dataList = this.flightsData.flights
+    this.flights = this.flightsData.flights
   }
 }
 </script>
