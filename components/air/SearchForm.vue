@@ -3,12 +3,12 @@
     <!-- 头部tab切换 -->
     <el-row type="flex" class="search-tab">
       <span
-        v-for="(item, index) in tabs"
+        v-for="(tab, index) in tabs"
         :class="{ active: index === currentTab }"
         :key="index"
-        @click="handleSearchTab(item, index)"
+        @click="handleSearchTab(tab, index)"
       >
-        <i :class="item.icon"></i>{{ item.name }}
+        <i :class="tab.icon"></i>{{ tab.name }}
       </span>
     </el-row>
 
@@ -75,8 +75,12 @@ export default {
   },
   methods: {
     // tab切换时触发
-    handleSearchTab (item, index) {
-
+    handleSearchTab (tab, index) {
+      if (index === 1) {
+        this.$alert('目前暂不支持往返，请使用单程选票！', '提示', {
+          type: 'warning'
+        })
+      }
     },
 
     /**
@@ -143,31 +147,25 @@ export default {
 
     // 触发和目标城市切换时触发
     handleReverse () {
-
+      const { departCity, departCode, destCity, destCode } = this.form
+      this.form.departCity = destCity
+      this.form.departCode = destCode
+      this.form.destCity = departCity
+      this.form.destCode = departCode
     },
 
     // 提交表单是触发
     handleSubmit () {
       // 原生表单校验
-      const rules = {
-        depart: {
-          value: this.form.departCity,
-          message: '请选择出发城市'
-        },
-        dest: {
-          value: this.form.destCity,
-          message: '请选择到达城市'
-        },
-        departDate: {
-          value: this.form.departDate,
-          message: '请选择出发时间'
-        }
-      }
+      const rules = [
+        { value: this.form.departCity, message: '请选择出发城市' },
+        { value: this.form.destCity, message: '请选择到达城市' },
+        { value: this.form.departDate, message: '请选择出发时间' }
+      ]
 
       let isValidated = true
-      for (const key in rules) {
+      for (const rule of rules) {
         // 如果不通过则直接停止
-        const rule = rules[key]
         if (rule.value === '' || !rule.value) {
           isValidated = false
           this.$alert(rule.message, '提示', {
