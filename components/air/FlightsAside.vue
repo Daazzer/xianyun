@@ -23,24 +23,23 @@
 
     <div class="history">
       <h5>历史查询</h5>
-      <nuxt-link
+      <el-row
+        type="flex"
+        justify="space-between"
+        align="middle"
+        class="history-item"
         v-for="(item, index) in $store.state.air.queryAirsHistory"
-        :key="index"
-        :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`"
+      :key="index"
       >
-        <el-row
-          type="flex"
-          justify="space-between"
-          align="middle"
-          class="history-item"
-        >
-          <div class="air-info">
-            <div class="to-from">{{item.departCity}} - {{item.destCity}}</div>
-            <p>{{item.departDate}}</p>
-          </div>
-          <span>选择</span>
-        </el-row>
-      </nuxt-link>
+        <div class="air-info">
+          <div class="to-from">{{item.departCity}} - {{item.destCity}}</div>
+          <p>{{item.departDate}}</p>
+        </div>
+        <nuxt-link
+          class="choose-btn"
+          :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`"
+        >选择</nuxt-link>
+      </el-row>
     </div>
   </div>
 </template>
@@ -55,7 +54,7 @@ export default {
 .statement {
   border: 1px #ddd solid;
 
-  .statement-list {
+  &-list {
     padding: 10px 0;
     > div {
       text-align: center;
@@ -89,7 +88,7 @@ export default {
     border-bottom: 1px #eee solid;
   }
 
-  .history-item {
+  &-item {
     padding: 10px 0;
     font-size: 14px;
     border-bottom: 1px #eee solid;
@@ -107,7 +106,7 @@ export default {
       color: #666;
     }
 
-    span {
+    .choose-btn {
       color: #fff;
       display: block;
       padding: 2px 10px;
