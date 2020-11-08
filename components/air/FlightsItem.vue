@@ -3,7 +3,7 @@
     <div>
       <!-- 显示的机票信息 -->
       <el-row type="flex" align="middle" class="flight-info">
-        <el-col :span="6"> <span>东航 </span> MU5316 </el-col>
+        <el-col :span="6"> <span>{{ flight.airline_name }}</span>{{ flight.flight_no }}</el-col>
         <el-col :span="12">
           <el-row
             type="flex"
@@ -11,20 +11,20 @@
             class="flight-info-center"
           >
             <el-col :span="8" class="flight-airport">
-              <strong>20:30</strong>
-              <span>白云机场T1</span>
+              <strong>{{ flight.dep_time }}</strong>
+              <span>{{ flight.org_ariport_name }}{{ flight.org_airport_quay }}</span>
             </el-col>
             <el-col :span="8" class="flight-time">
-              <span>2时20分</span>
+              <span>{{ timeRank }}</span>
             </el-col>
             <el-col :span="8" class="flight-airport">
-              <strong>22:50</strong>
-              <span>虹桥机场T2</span>
+              <strong>{{ flight.arr_time }}</strong>
+              <span>{{ flight.dst_ariport_name }}{{ flight.dst_airport_quay }}</span>
             </el-col>
           </el-row>
         </el-col>
         <el-col :span="6" class="flight-info-right">
-          ￥<span class="sell-price">810</span>起
+          ￥<span class="sell-price">{{ flight.seat_infos[0].org_settle_price_child }}</span>起
         </el-col>
       </el-row>
     </div>
@@ -38,14 +38,16 @@
             justify="space-between"
             align="middle"
             class="flight-sell"
+            v-for="(seatInfo, index) in flight.seat_infos"
+            :key="index"
           >
             <el-col :span="16" class="flight-sell-left">
-              <span>经济舱</span> | 上海一诺千金航空服务有限公司
+              <span>{{ seatInfo.name }}</span> | {{ seatInfo.supplierName }}
             </el-col>
-            <el-col :span="5" class="price"> ￥1345 </el-col>
+            <el-col :span="5" class="price">￥{{ seatInfo.org_settle_price }}</el-col>
             <el-col :span="3" class="choose-button">
-              <el-button type="warning" size="mini"> 选定 </el-button>
-              <p>剩余：83</p>
+              <el-button type="warning" size="mini">选定</el-button>
+              <p>剩余：{{ seatInfo.discount }}</p>
             </el-col>
           </el-row>
         </el-col>
@@ -59,12 +61,42 @@ export default {
   name: 'FlightsItem',
   props: {
     // 数据
-    data: {
+    flight: {
       type: Object,
       // 默认是空数据对象
       default () {
         return {}
       }
+    }
+  },
+  computed: {
+    /** 计算到出发日期时间与到达日期时间之差 */
+    timeRank () {
+      const depDate = new Date(this.flight.dep_datetime)
+      const arrDate = new Date(this.flight.arr_datetime)
+
+      const depYear = depDate.getFullYear()
+      const arrYear = arrDate.getFullYear()
+
+      const depMonth = depDate.getMonth() + 1
+      const arrMonth = arrDate.getMonth() + 1
+
+      // UTC 表示世界时间（0时区的时间），这里应该使用 getDate
+      const depDay = depDate.getDate()
+      const arrDay = arrDate.getDate()
+
+      const depHours = depDate.getHours()
+      const arrHours = arrDate.getHours()
+
+      const depMinutes = depDate.getMinutes()
+      const arrMinutes = arrDate.getMinutes()
+
+      // 从年份开始计算，计算到达与出发的小时与分钟之差
+      const diffMonth = (arrYear - depYear)*12 + Math.abs(arrMonth - depMonth)
+      const diffDay = diffMonth*30 + Math.abs(arrDay - depDay)
+      const diffHours = diffDay*24 + Math.abs(arrHours - depHours)
+      const diffMinutes = Math.abs(arrMinutes - depMinutes)
+      return `${diffHours}时${diffMinutes}分`
     }
   }
 }
