@@ -10,7 +10,9 @@
         <FlightsHeader />
 
         <!-- 航班信息 -->
-        <div></div>
+        <div>
+          <FlightsItem />
+        </div>
       </div>
 
       <!-- 侧边栏 -->
