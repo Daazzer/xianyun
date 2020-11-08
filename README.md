@@ -550,3 +550,76 @@ export default ({ store }) => {
 }
 ```
 
+
+
+## 机票页
+
+### 技术实现
+
+- `SearchForm` 组件封装
+
+  - `Form`、`FormItem` 组件实现搜索数据的存储与展示
+
+  - `AutoComplete` 组件实现自动匹配搜索建议，补全搜索
+
+  - `DatePicker` 组件实现出发日期选择，`value-format` 属性实现日期数据的格式化
+
+  - 出发城市的输入联想
+
+  - 目的地城市的输入联想
+
+  - 如果输入的城市名与匹配建议完全一致，则补全搜索数据
+
+    ```vue
+    <script>
+    // ...
+    methods: {
+      // ...
+      /**
+       * 发送查询城市请求
+       * @param {string} name 城市名
+       * @returns {Promise} 搜索结果的 Promise
+       */
+      async querySearch (name) {
+        if (name === '') {
+          return []
+        }
+    
+        const [err, res] = await this.$api.getAirsCity({ name })
+    
+        if (err) {
+          return [{ value: '数据获取失败' }]
+        }
+    
+        // 必须数据中有 value 属性
+        const cityData = res.data.data.map(v => ({
+          ...v,
+          value: v.name
+        }))
+    
+        return cityData
+      },
+    
+      // 出发城市输入框获得焦点时触发
+      async queryDepartSearch (value, cb) {
+        const result = await this.querySearch(value)
+        // 如果手动输入的城市与返回的数据城市完全匹配，那么就把该值的城市代码也赋值给 data
+        const matchResult = result.find(v => this.form.departCity === v.value)
+        if (matchResult) {
+          this.form.departCity = matchResult.value
+          this.form.departCode = matchResult.sort
+        }
+        cb(result)
+      },
+      // ...
+    }
+    </script>
+    ```
+
+    
+
+  - 出发城市与目的地城市之间的数据切换
+
+  - 机票数据搜索提交前的校验功能
+
+- 机票推荐数据获取
