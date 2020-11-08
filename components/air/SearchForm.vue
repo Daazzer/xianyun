@@ -164,21 +164,15 @@ export default {
         { value: this.form.departDate, message: '请选择出发时间' }
       ]
 
-      // let isValidated = true
       for (const rule of rules) {
         // 如果不通过则直接停止
         if (rule.value === '' || !rule.value) {
-          // isValidated = false
           this.$alert(rule.message, '提示', {
             type: 'warning'
           }).catch(err => err)
           return
         }
       }
-
-      // if (!isValidated) {
-      //   return
-      // }
 
       const query = this.form
 
