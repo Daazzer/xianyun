@@ -4,7 +4,10 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <div></div>
+        <FlightsFilters
+          :data="flightsCacheData"
+          @filterdata="setFlights"
+        />
 
         <!-- 航班头部布局 -->
         <FlightsHeader />
@@ -49,7 +52,16 @@ export default {
   name: 'Flights',
   data () {
     return {
-      flightsData: {}, // 航班总数据
+      flightsData: {
+        flights: [],
+        info: {},
+        options: {}
+      }, // 航班总数据，会被筛选出来的数据不停的覆盖
+      flightsCacheData: {  // 缓存一份数据，用于返回筛选数据
+        flights: [],
+        info: {},
+        options: {}
+      },
       flights: [],     // 航班列表数据，用于循环 FlightsItem组件，单独出来是因为要分页
       pageIndex: 1, // 当前页码
       pageSize: 5,  // 显示条数
@@ -57,7 +69,14 @@ export default {
   },
   methods: {
     // 获取一段航班列表数据，设置每一页的航班列表数据
-    setFlights () {
+    setFlights (data) {
+      // 如果有新数据从第一页开始显示
+      if (data) {
+        this.pageIndex = 1
+        this.flightsData.flights = data
+        this.flightsData.total = data.length
+      }
+
       const start = (this.pageIndex - 1) * this.pageSize
       const end = start + this.pageSize
       this.flights = this.flightsData.flights.slice(start, end)
@@ -83,6 +102,13 @@ export default {
     }
 
     this.flightsData = res.data
+    /*
+    缓存一份新的列表数据数据，这个列表不会被修改
+    而 flightsData 会被修改，注意这里需要使用 ES9 的解构对象，或者
+    Object.assign() 静态方法进行对象的复制，否则会出现引用赋值的现象，两个变量
+    指向同一个对象
+     */
+    this.flightsCacheData = { ...res.data }
     this.setFlights()
   }
 }
