@@ -115,6 +115,10 @@ export default {
     },
     // 发送验证码
     async handleSendCaptcha () {
+      // 函数节流
+      if (this.isSendCaptcha) {
+        return
+      }
       const tel = this.form.username
 
       if (tel === '') {
