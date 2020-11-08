@@ -624,3 +624,88 @@ export default ({ store }) => {
   - 机票数据搜索提交前的校验功能
 
 - 机票推荐数据获取
+
+
+
+## 机票列表页
+
+### 技术实现
+
+- 列表页的航班数据获取
+
+- `FlightsHeader` 组件封装，用于表示航班信息标题
+
+- `FlightsItem` 组件封装，用于展示航班详细信息
+
+  - 出发与到达时间的计算
+
+    - 以年开始考虑，换算成总小时与分钟数
+    - 注意不要使用 UTC 方法，UTC 返回 0 时区时间
+    - 计算两个日期相差的小时数与分钟数
+
+    ```vue
+    <template>
+    	<!-- 显示的机票信息 -->
+    	<el-row type="flex" align="middle" class="flight-info">
+        <!--
+    			...	
+    		-->
+        <el-row
+         type="flex"
+         justify="space-between"
+         class="flight-info-center"
+        >
+          <!--
+            ...	
+          -->
+          <el-col :span="8" class="flight-time">
+            <span>{{ timeRank }}</span>
+      		</el-col>
+          <!--
+            ...	
+          -->
+      	</el-row>
+        <!--
+          ...	
+        -->
+    	</el-row>
+    </template>
+    ```
+
+    ```vue
+    <script>
+    computed: {
+      /** 计算到出发日期时间与到达日期时间之差 */
+      timeRank () {
+        // 通过数据中的日期，实例化一个 Date 对象
+        const depDate = new Date(this.flight.dep_datetime)
+        const arrDate = new Date(this.flight.arr_datetime)
+    
+        const depYear = depDate.getFullYear()
+        const arrYear = arrDate.getFullYear()
+    
+        const depMonth = depDate.getMonth() + 1
+        const arrMonth = arrDate.getMonth() + 1
+    
+        // UTC 表示世界时间（0时区的时间），这里应该使用 getDate
+        const depDay = depDate.getDate()
+        const arrDay = arrDate.getDate()
+    
+        const depHours = depDate.getHours()
+        const arrHours = arrDate.getHours()
+    
+        const depMinutes = depDate.getMinutes()
+        const arrMinutes = arrDate.getMinutes()
+    
+        // 从年份开始计算，计算到达与出发的小时与分钟之差
+        const diffMonth = (arrYear - depYear)*12 + Math.abs(arrMonth - depMonth)
+        const diffDay = diffMonth*30 + Math.abs(arrDay - depDay)
+        const diffHours = diffDay*24 + Math.abs(arrHours - depHours)
+        const diffMinutes = Math.abs(arrMinutes - depMinutes)
+        return `${diffHours}时${diffMinutes}分`
+      }
+    }
+    </script>
+    ```
+
+    
