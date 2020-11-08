@@ -155,7 +155,7 @@ export default {
       this.form.destCode = departCode
     },
 
-    // 提交表单是触发
+    // 提交表单时触发
     handleSubmit () {
       // 原生表单校验
       const rules = [
