@@ -69,6 +69,23 @@ export default {
     }
   },
   methods: {
+    async getFlightsData () {
+      const [err, res] = await this.$api.getAirs(this.$route.query)
+
+      if (err) {
+        return this.$message.error('获取航班信息失败，发生错误')
+      }
+
+      this.flightsData = res.data
+      /*
+      缓存一份新的列表数据数据，这个列表不会被修改
+      而 flightsData 会被修改，注意这里需要使用 ES9 的解构对象，或者
+      Object.assign() 静态方法进行对象的复制，否则会出现引用赋值的现象，两个变量
+      指向同一个对象
+      */
+      this.flightsCacheData = { ...res.data }
+      this.setFlights()
+    },
     // 获取一段航班列表数据，设置每一页的航班列表数据
     setFlights (data) {
       // 如果有新数据从第一页开始显示
@@ -95,22 +112,13 @@ export default {
       this.setFlights()
     },
   },
-  async mounted () {
-    const [err, res] = await this.$api.getAirs(this.$route.query)
-
-    if (err) {
-      return this.$message.error('获取航班信息失败，发生错误')
-    }
-
-    this.flightsData = res.data
-    /*
-    缓存一份新的列表数据数据，这个列表不会被修改
-    而 flightsData 会被修改，注意这里需要使用 ES9 的解构对象，或者
-    Object.assign() 静态方法进行对象的复制，否则会出现引用赋值的现象，两个变量
-    指向同一个对象
-     */
-    this.flightsCacheData = { ...res.data }
-    this.setFlights()
+  mounted () {
+    this.getFlightsData()
+  },
+  beforeRouteUpdate (to, from, next) {
+    // 如果路由变化则重新发起请求
+    this.getFlightsData()
+    next()
   }
 }
 </script>
