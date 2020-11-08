@@ -7,5 +7,6 @@ export default axios => ({
    * @param {string} params.name 出发城市
    * @returns {Promise<Response>}
    */
-  getAirsCity: params => handleAxiosRequest(axios.get('/airs/city', { params }))
+  getAirsCity: params => handleAxiosRequest(axios.get('/airs/city', { params })),
+  getRecommendAirs: () => handleAxiosRequest(axios.get('/airs/sale'))
 })
