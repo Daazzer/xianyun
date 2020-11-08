@@ -1,5 +1,5 @@
 <template>
-  <el-row class="flight-title">
+  <el-row class="flights-title">
     <el-col :span="5">航空信息</el-col>
     <el-col :span="14">
       <el-row type="flex" justify="space-between">
@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.flight-title {
+.flights-title {
   padding: 0 15px;
   border: 1px #ddd solid;
   background: #f6f6f6;
