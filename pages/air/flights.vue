@@ -7,7 +7,7 @@
         <div></div>
 
         <!-- 航班头部布局 -->
-        <div>机票列表</div>
+        <FlightsHeader />
 
         <!-- 航班信息 -->
         <div></div>
