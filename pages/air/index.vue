@@ -41,13 +41,44 @@
     </h2>
 
     <!-- 特价机票 -->
-    <div class="air-sale"></div>
+    <div class="air-sale">
+      <el-row type="flex" class="air-sale-pic" justify="space-between">
+        <el-col :span="6" v-for="(item, index) in sales" :key="index">
+          <nuxt-link
+            :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`"
+          >
+            <img :src="item.cover" />
+            <el-row class="layer-bar" type="flex" justify="space-between">
+              <span>{{ item.departCity }}-{{ item.destCity }}</span>
+              <span>￥699</span>
+            </el-row>
+          </nuxt-link>
+        </el-col>
+      </el-row>
+    </div>
   </section>
 </template>
 
 <script>
 export default {
-  name: 'Air'
+  name: 'Air',
+  data () {
+    return {
+      sales: []
+    }
+  },
+  async mounted () {
+    const [err, res] = await this.$api.getRecommendAirs()
+
+    if (err) {
+      return this.$message.error('获取推荐机票数据失败，发生错误')
+    }
+
+    this.sales = res.data.data.map(v => {
+      v.cover = /^https?:\/\//.test(v.cover) ? v.cover : this.$axios.defaults.baseURL + v.cover
+      return v
+    })
+  }
 }
 </script>
 
