@@ -22,7 +22,15 @@
     </div>
 
     <div class="history">
-      <h5>历史查询</h5>
+      <el-row class="history-header" type="flex" justify="space-between" align="middle">
+        <h5>历史查询</h5>
+        <el-button
+          class="history__remove-btn"
+          icon="el-icon-close"
+          type="text"
+          @click="removeQueryAirsHistory"
+        />
+      </el-row>
       <el-row
         type="flex"
         justify="space-between"
@@ -46,7 +54,13 @@
 
 <script>
 export default {
-  name: 'FlightsAside'
+  name: 'FlightsAside',
+  methods: {
+    // 清空搜索历史
+    removeQueryAirsHistory () {
+      this.$store.commit('air/removeQueryAirsHistory')
+    }
+  }
 }
 </script>
 
@@ -81,11 +95,18 @@ export default {
   padding: 10px;
   margin-top: 10px;
 
+  &-header {
+    padding-bottom: 10px;
+    border-bottom: 1px #eee solid;
+  }
+
+  &__remove-btn {
+    color: #868686;
+  }
+
   h5 {
     font-size: 16px;
     font-weight: normal;
-    padding-bottom: 10px;
-    border-bottom: 1px #eee solid;
   }
 
   &-item {
