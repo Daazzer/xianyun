@@ -1,5 +1,9 @@
 export const state = () => ({
-  queryAirsHistory: []
+  queryAirsHistory: [],
+  orderAside: {
+    usersAmount: 0,
+    insurances: []
+  }
 })
 
 export const mutations = {
@@ -8,5 +12,11 @@ export const mutations = {
   },
   removeQueryAirsHistory (state) {
     state.queryAirsHistory = []
+  },
+  setUsersAmount (state, data) {
+    state.orderAside.usersAmount = data
+  },
+  setInsurances (state, data) {
+    state.orderAside.insurances = data
   }
 }
