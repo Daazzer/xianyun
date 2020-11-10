@@ -3,25 +3,37 @@
     <div class="air-column">
       <h2>剩机人</h2>
       <el-form class="member-info">
-        <div class="member-info-item">
+        <el-row
+          v-for="(user, index) in users"
+          :key="index"
+          class="member-info-item"
+        >
           <el-form-item label="乘机人类型">
-            <el-input placeholder="姓名" class="input-with-select">
+            <el-input
+              placeholder="姓名"
+              class="input-with-select"
+              v-model="user.username"
+            >
               <el-select slot="prepend" value="1" placeholder="请选择">
-                <el-option label="成人" value="1"></el-option>
+                <el-option label="成人" value="1" />
               </el-select>
             </el-input>
           </el-form-item>
 
           <el-form-item label="证件类型">
-            <el-input placeholder="证件号码" class="input-with-select">
+            <el-input
+              placeholder="证件号码"
+              class="input-with-select"
+              v-model="user.id"
+            >
               <el-select slot="prepend" value="1" placeholder="请选择">
-                <el-option label="身份证" value="1" :checked="true"></el-option>
+                <el-option label="身份证" value="1" :checked="true" />
               </el-select>
             </el-input>
           </el-form-item>
 
-          <span class="delete-user" @click="handleDeleteUser()">-</span>
-        </div>
+          <span class="delete-user" @click="handleDeleteUser(index)">-</span>
+        </el-row>
       </el-form>
 
       <el-button
@@ -34,10 +46,18 @@
     <div class="air-column">
       <h2>保险</h2>
       <div>
-        <div class="insurance-item">
-          <el-checkbox label="航空意外险：￥30/份×1  最高赔付260万" border>
-          </el-checkbox>
-        </div>
+        <el-row
+          v-for="(insurance, index) in insurancesData"
+          :key="insurance.id"
+          class="insurance-item"
+        >
+          <el-checkbox
+            :label="`${insurance.type}：￥${insurance.price}/份×${users.length}  最高赔付${insurance.compensation}`"
+            :checked="insurance.isSelected"
+            border
+            @change="handleInsurance(insurance.id, index)"
+          />
+        </el-row>
       </div>
     </div>
 
@@ -46,11 +66,11 @@
       <div class="contact">
         <el-form label-width="60px">
           <el-form-item label="姓名">
-            <el-input></el-input>
+            <el-input v-model="contactName" />
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input placeholder="请输入内容">
+            <el-input placeholder="请输入内容" v-model="contactPhone">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">发送验证码</el-button>
               </template>
@@ -58,12 +78,14 @@
           </el-form-item>
 
           <el-form-item label="验证码">
-            <el-input></el-input>
+            <el-input v-model="captcha" />
           </el-form-item>
         </el-form>
-        <el-button type="warning" class="submit" @click="handleSubmit"
-          >提交订单</el-button
-        >
+        <el-button
+          type="warning"
+          class="submit"
+          @click="handleSubmit"
+        >提交订单</el-button>
       </div>
     </div>
   </div>
@@ -72,15 +94,55 @@
 <script>
 export default {
   name: 'OrderForm',
+  props: {
+    infoData: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
+  data () {
+    return {
+      users: [{
+        username: '',
+        id: ''
+      }],
+      insurances: [], // 保险数据
+      contactName: '', // 联系人名字
+      contactPhone: '', // 联系人电话
+      captcha: '000000', // 验证码
+      invoice: false   // 发票
+    }
+  },
   methods: {
     // 添加乘机人
     handleAddUsers () {
-
+      this.users.push({
+        username: '',
+        id: ''
+      })
     },
 
     // 移除乘机人
-    handleDeleteUser () {
+    handleDeleteUser (index) {
+      this.users.splice(index, 1)
+    },
 
+    handleInsurance (id, index) {
+      // 根据选中状态来添加/删除保险数据
+      this.insurancesData[index].isSelected = !this.insurancesData[index].isSelected
+
+      const isSelected = this.insurancesData[index].isSelected
+      const delIndex = this.insurances.indexOf(id)
+
+      // 如果没有选中并且存在这个保险则删除
+      if (!isSelected && delIndex > -1) {
+        this.insurances.splice(delIndex, 1)
+      } else if (delIndex === -1) {
+        // 如果不存在，则将当前选中的放到保险 id 集合中，并且去重
+        this.insurances = [...new Set([...this.insurances, id])]
+      }
     },
 
     // 发送手机验证码
@@ -90,8 +152,37 @@ export default {
 
     // 提交订单
     handleSubmit () {
+      const orderData = {
+        users: this.users,
+        insurances: this.insurances,
+        contactName: this.contactName,
+        contactPhone: this.contactPhone,
+        invoice: this.invoice,
+        captcha: this.captcha,
+        seat_xid: this.data.seat_infos.seat_xid,
+        air: this.data.id
+      }
 
+      console.log(orderData)
     }
+  },
+  computed: {
+    // 改造保险数据，添加选中状态属性
+    insurancesData () {
+      return this.infoData.insurances.map(v => {
+        v.isSelected = false
+        return v
+      })
+    }
+  },
+  mounted () {
+    // 如果默认选择了保险则显示选中状态
+    const insurancesIdSet = new Set(this.insurancesData.filter(v => {
+      if (v.isSelected) {
+        return v.id
+      }
+    }))
+    this.insurances = [...insurancesIdSet]
   }
 }
 </script>
