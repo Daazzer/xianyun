@@ -79,7 +79,20 @@ export default {
   },
   methods: {
     disabledDate (time) {
-      return time.getTime() < Date.now()
+      const getToday = (date) => {
+        const d = {
+          year: date.getFullYear(),
+          month: date.getMonth(),
+          day: date.getDate()
+        }
+
+        const today = new Date(d.year, d.month, d.day)
+        return today.getTime()
+      }
+      const calendarDate = time.getTime()
+      const nowDate = getToday(new Date())
+
+      return calendarDate < nowDate
     },
     // tab切换时触发
     handleSearchTab (tab, index) {
@@ -134,7 +147,9 @@ export default {
     // value 是选中的值，cb是回调函数，接收要展示的列表
     async queryDestSearch (value, cb) {
       const result = await this.querySearch(value)
-      const matchResult = result.find(v => this.form.destCity === v.value)
+      const matchResult = result.find(v =>
+        this.form.destCity === v.value || this.form.destCity.replace('市', '') === v.value.replace('市', '')
+      )
       if (matchResult) {
         this.form.destCity = matchResult.value
         this.form.destCode = matchResult.sort
