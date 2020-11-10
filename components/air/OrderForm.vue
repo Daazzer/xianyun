@@ -1,7 +1,7 @@
 <template>
-  <div class="main">
+  <div class="main" id="orderForm">
     <div class="air-column">
-      <h2>剩机人</h2>
+      <h2>乘机人</h2>
       <el-form class="member-info">
         <el-row
           v-for="(user, index) in users"
@@ -64,21 +64,24 @@
     <div class="air-column">
       <h2>联系人</h2>
       <div class="contact">
-        <el-form label-width="60px">
-          <el-form-item label="姓名">
-            <el-input v-model="contactName" />
+        <el-form label-width="80px">
+          <el-form-item label="姓名" required>
+            <el-input placeholder="请输入姓名" v-model="contactName" />
           </el-form-item>
 
-          <el-form-item label="手机">
-            <el-input placeholder="请输入内容" v-model="contactPhone">
+          <el-form-item label="手机" required>
+            <el-input placeholder="请输入手机号" v-model="contactPhone" />
+          </el-form-item>
+
+          <el-form-item label="验证码" required>
+            <el-input placeholder="请输入验证码" v-model="captcha">
               <template slot="append">
-                <el-button @click="handleSendCaptcha">发送验证码</el-button>
+                <el-button
+                  @click="handleSendCaptcha"
+                  :disabled="isSendCaptcha"
+                >发送验证码 <CaptchaCountDownTimer v-show="isSendCaptcha" ref="captchaCountDownTimer" /></el-button>
               </template>
             </el-input>
-          </el-form-item>
-
-          <el-form-item label="验证码">
-            <el-input v-model="captcha" />
           </el-form-item>
         </el-form>
         <el-button
@@ -108,10 +111,11 @@ export default {
         username: '',
         id: ''
       }],
+      isSendCaptcha: false,
       insurances: [], // 保险数据
       contactName: '', // 联系人名字
       contactPhone: '', // 联系人电话
-      captcha: '000000', // 验证码
+      captcha: '', // 验证码
       invoice: false   // 发票
     }
   },
@@ -146,12 +150,49 @@ export default {
     },
 
     // 发送手机验证码
-    handleSendCaptcha () {
+    async handleSendCaptcha () {
+      // 函数节流
+      if (this.isSendCaptcha) {
+        return
+      }
 
+      const tel = this.contactPhone
+
+      if (tel === '') {
+        this.$alert('手机号码不能为空', '提示', {
+          type: 'warning'
+        }).catch(err => err)
+        return
+      }
+
+      if (!/^1[3456789]\d{9}$/.test(tel)) {
+        this.$alert('手机号格式错误', {
+          type: 'warning'
+        }).catch(err => err)
+        return
+      }
+
+      const [err, res] = await this.$api.getCaptchas({ tel })
+      if (err) {
+        return this.$message.error('手机验证码获取失败，发生错误')
+      }
+
+      const captcha = res.data.code
+
+      this.$alert(`获取验证码成功，模拟验证码为：${captcha}`, {
+        type: 'success'
+      }).then(() => {
+        this.captcha = captcha
+        // 设置验证码发送间隔并且显示倒计时
+        this.isSendCaptcha = true
+        this.$refs.captchaCountDownTimer.setCountDownTimer(60, () => {
+          this.isSendCaptcha = false
+        })
+      }).catch(err => err)
     },
 
     // 提交订单
-    handleSubmit () {
+    async handleSubmit () {
       const orderData = {
         users: this.users,
         insurances: this.insurances,
@@ -159,11 +200,26 @@ export default {
         contactPhone: this.contactPhone,
         invoice: this.invoice,
         captcha: this.captcha,
-        seat_xid: this.data.seat_infos.seat_xid,
-        air: this.data.id
+        seat_xid: this.infoData.seat_infos.seat_xid,
+        air: this.infoData.id
       }
 
-      console.log(orderData)
+      const loadingInstance = this.$loading({
+        target: '#orderForm',
+        text: '正在生成订单！请稍等'
+      })
+
+      const [err, res] = await this.$api.submitAirOrders(orderData)
+
+      if (err) {
+        loadingInstance.close()
+        this.$message.error('生成订单失败，发生错误')
+        return
+      }
+
+      loadingInstance.close()
+      this.$router.push('/air/pay')
+      console.log(res)
     }
   },
   computed: {
