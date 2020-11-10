@@ -10,7 +10,7 @@ export default ({ $axios }, inject) => {
    */
   const checkAuthUrl = url => (
     /^\/comments(\/like)?/.test(url) ||
-    /^\/airorders(\/(pay|checkpay|\d+))?/.test(url) ||
+    /^\/airorders(\/(pay|checkpay))?/.test(url) ||
     /^\/posts(\/(star|like))?/.test(url) ||
     /^\/upload/.test(url)
   )
