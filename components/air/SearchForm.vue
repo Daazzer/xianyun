@@ -36,6 +36,9 @@
           style="width: 100%"
           value-format="yyyy-MM-dd"
           v-model="form.departDate"
+          :picker-options="{
+            disabledDate
+          }"
         />
       </el-form-item>
       <el-form-item>
@@ -75,6 +78,9 @@ export default {
     }
   },
   methods: {
+    disabledDate (time) {
+      return time.getTime() < Date.now()
+    },
     // tab切换时触发
     handleSearchTab (tab, index) {
       if (index === 1) {
@@ -114,7 +120,9 @@ export default {
     async queryDepartSearch (value, cb) {
       const result = await this.querySearch(value)
       // 如果手动输入的城市与返回的数据城市完全匹配，那么就把该值的城市代码也赋值给 data
-      const matchResult = result.find(v => this.form.departCity === v.value)
+      const matchResult = result.find(v =>
+        this.form.departCity === v.value || this.form.departCity.replace('市', '') === v.value.replace('市', '')
+      )
       if (matchResult) {
         this.form.departCity = matchResult.value
         this.form.departCode = matchResult.sort
