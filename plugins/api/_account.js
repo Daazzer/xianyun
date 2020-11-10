@@ -5,7 +5,7 @@ export default axios => ({
    * 获取手机验证码
    * @param {Object} data
    * @param {string} data.tel 手机号码
-   * @returns {Promise<Response>}
+   * @returns {Promise}
    */
   getCaptchas: data => handleAxiosRequest(axios.post('/captchas', data)),
   /**
@@ -13,7 +13,7 @@ export default axios => ({
    * @param {Object} data
    * @param {string} data.username 用户名
    * @param {string} data.password 密码
-   * @returns {Promise<Response>}
+   * @returns {Promise}
    */
   login: data => handleAxiosRequest(axios.post('/accounts/login', data)),
   /**
@@ -23,7 +23,7 @@ export default axios => ({
    * @param {string} data.nickname 昵称
    * @param {string} data.captcha 手机验证码
    * @param {string} data.password 密码
-   * @returns {Promise<Response>}
+   * @returns {Promise}
    */
   register: data => handleAxiosRequest(axios.post('/accounts/register', data))
 })

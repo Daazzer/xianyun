@@ -18,9 +18,10 @@ export default axios => ({
    * @param {string} params._sort 排序
    * @param {number} params._limit 条数
    * @param {number} params._start 开始数据（分页）
-   * @returns {Promise<Response>}
+   * @returns {Promise}
    */
   getHotelDetails: params => handleAxiosRequest(axios.get('/hotels', { params })),
+  /** 获取酒店选项数据 */
   getHotelOptions: () => handleAxiosRequest(axios.get('/hotels/options')),
   /**
    * 获取酒店评论
@@ -29,7 +30,7 @@ export default axios => ({
    * @param {string} params._sort 排序
    * @param {number} params._limit 条数
    * @param {number} params._start 开始数据（分页）
-   * @returns {Promise<Response>}
+   * @returns {Promise}
    */
   getHotelComments: params => handleAxiosRequest(axios.get('/hotels/comments', { params }))
 })

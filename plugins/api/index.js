@@ -6,7 +6,7 @@ import air from './_air'
 /**
  * 集中处理 axios 的响应与错误
  * @param {Promise} axios axios Promise 对象
- * @returns {Promise<Response>}
+ * @returns {Promise}
  */
 export const handleAxiosRequest = axios => (
   axios.then(res => [null, res]).catch(err => [err])
