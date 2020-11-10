@@ -33,10 +33,10 @@ export default ({ $axios }, inject) => {
 
   // 可以设置请求拦截器
   $axios.onError(error => {
-    console.log(error)
+    console.dir('axios error: ', error)
     const { statusCode, message } = error.response.data
     if (statusCode === 400) {
-      Message.warning(message)
+      Message.error(message)
     }
   })
 
