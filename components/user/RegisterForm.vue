@@ -127,7 +127,7 @@ export default {
         }).catch(err => err)
         return
       }
-      if (!/^1[35789]\d{9}$/.test(tel)) {
+      if (!/^1[3456789]\d{9}$/.test(tel)) {
         this.$alert('手机号格式错误', {
           type: 'warning'
         }).catch(err => err)
