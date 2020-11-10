@@ -2,10 +2,10 @@
   <div class="order">
     <el-row type="flex" justify="space-between">
       <!-- 订单表单 -->
-      <OrderForm :infoData="infoData" />
+      <OrderForm :infoData="infoData" @select-insurance="handleSelectInsurance" />
 
       <!-- 侧边栏 -->
-      <div class="aside"></div>
+      <OrderAside :infoData="infoData"/>
     </el-row>
   </div>
 </template>
@@ -17,8 +17,17 @@ export default {
     return {
       // 机票信息
       infoData: {
-        insurances: [] // 初始化保险数据
+        insurances: [], // 初始化保险数据
+        seat_infos: {},
+        dep_datetime: 0,
+        arr_datetime: 0
       }
+    }
+  },
+  methods: {
+    handleSelectInsurance (index) {
+      // 修改选中状态
+      this.infoData.insurances[index].isSelected = !this.infoData.insurances[index].isSelected
     }
   },
   async mounted () {
@@ -29,6 +38,12 @@ export default {
     if (err) {
       return this.$message.error('获取订单信息失败')
     }
+
+    // 改造保险数据，添加选中状态属性
+    res.data.insurances = res.data.insurances.map(v => {
+      v.isSelected = false
+      return v
+    })
 
     this.infoData = res.data
   }

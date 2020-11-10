@@ -47,7 +47,7 @@
       <h2>保险</h2>
       <div>
         <el-row
-          v-for="(insurance, index) in insurancesData"
+          v-for="(insurance, index) in infoData.insurances"
           :key="insurance.id"
           class="insurance-item"
         >
@@ -126,27 +126,33 @@ export default {
         username: '',
         id: ''
       })
+      this.$store.commit('air/setUsersAmount', this.users.length)
     },
 
     // 移除乘机人
     handleDeleteUser (index) {
       this.users.splice(index, 1)
+      this.$store.commit('air/setUsersAmount', this.users.length)
     },
 
     handleInsurance (id, index) {
-      // 根据选中状态来添加/删除保险数据
-      this.insurancesData[index].isSelected = !this.insurancesData[index].isSelected
+      // 修改选中状态
+      this.$emit('select-insurance', index)
 
-      const isSelected = this.insurancesData[index].isSelected
+      const isSelected = this.infoData.insurances[index].isSelected
       const delIndex = this.insurances.indexOf(id)
 
-      // 如果没有选中并且存在这个保险则删除
+      /*
+      根据选中状态来添加/删除保险数据
+      如果没有选中并且存在这个保险则删除
+       */
       if (!isSelected && delIndex > -1) {
         this.insurances.splice(delIndex, 1)
       } else if (delIndex === -1) {
         // 如果不存在，则将当前选中的放到保险 id 集合中，并且去重
         this.insurances = [...new Set([...this.insurances, id])]
       }
+      this.$store.commit('air/setInsurances', [...this.insurances])
     },
 
     // 发送手机验证码
@@ -222,23 +228,16 @@ export default {
       console.log(res)
     }
   },
-  computed: {
-    // 改造保险数据，添加选中状态属性
-    insurancesData () {
-      return this.infoData.insurances.map(v => {
-        v.isSelected = false
-        return v
-      })
-    }
-  },
   mounted () {
     // 如果默认选择了保险则显示选中状态
-    const insurancesIdSet = new Set(this.insurancesData.filter(v => {
+    const insurancesIdSet = new Set(this.infoData.insurances.filter(v => {
       if (v.isSelected) {
         return v.id
       }
     }))
     this.insurances = [...insurancesIdSet]
+    this.$store.commit('air/setUsersAmount', this.users.length)
+    this.$store.commit('air/setInsurances', [...this.insurances])
   }
 }
 </script>
