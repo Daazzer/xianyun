@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import timeDiff from '@/plugins/timeRank'
 export default {
   name: 'FlightsItem',
   props: {
@@ -90,33 +91,8 @@ export default {
     }
   },
   computed: {
-    /** 计算到出发日期时间与到达日期时间之差 */
     timeRank () {
-      const depDate = new Date(this.flight.dep_datetime)
-      const arrDate = new Date(this.flight.arr_datetime)
-
-      const depYear = depDate.getFullYear()
-      const arrYear = arrDate.getFullYear()
-
-      const depMonth = depDate.getMonth() + 1
-      const arrMonth = arrDate.getMonth() + 1
-
-      // UTC 表示世界时间（0时区的时间），这里应该使用 getDate
-      const depDay = depDate.getDate()
-      const arrDay = arrDate.getDate()
-
-      const depHours = depDate.getHours()
-      const arrHours = arrDate.getHours()
-
-      const depMinutes = depDate.getMinutes()
-      const arrMinutes = arrDate.getMinutes()
-
-      // 从年份开始计算，计算到达与出发的小时与分钟之差
-      const diffMonth = (arrYear - depYear)*12 + Math.abs(arrMonth - depMonth)
-      const diffDay = diffMonth*30 + Math.abs(arrDay - depDay)
-      const diffHours = diffDay*24 + Math.abs(arrHours - depHours)
-      const diffMinutes = Math.abs(arrMinutes - depMinutes)
-      return `${diffHours}时${diffMinutes}分`
+      return timeDiff(this.flight.dep_datetime, this.flight.arr_datetime)
     }
   }
 }
