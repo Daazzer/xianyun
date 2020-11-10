@@ -19,5 +19,13 @@ export default axios => ({
    * @param {string} params.departDate 出发日期（例如：2019-05-01）
    * @returns {Promise<Response>}
    */
-  getAirs: params => handleAxiosRequest(axios.get('/airs', { params }))
+  getAirs: params => handleAxiosRequest(axios.get('/airs', { params })),
+  /**
+   * 选择机票
+   * @param {string} id 机票id
+   * @param {Object} params
+   * @param {string} params.seat_xid 座位id
+   * @returns {Promise<Response>}
+   */
+  getAirsById: (id, params) => handleAxiosRequest(axios.get(`/airs/${id}`, { params }))
 })
