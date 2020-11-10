@@ -80,7 +80,7 @@ export default {
         return accuVal
       }, 0)
 
-      return total
+      return total || 0
     }
   },
 }
