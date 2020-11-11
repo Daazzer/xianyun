@@ -247,7 +247,7 @@ plugins: [
 
 ### 判断需要 token 的请求路由
 
-通过正则判断需要 token 的 `url`
+通过正则判断需要 token 的 `url`，然后设置请求拦截，在请求需要 token 的路由时加上 token
 
 ```js
 // @/plugins/axios.js
@@ -265,10 +265,18 @@ export default ({ $axios }, inject) => {
     /^\/upload/.test(url)
   )
   // ...
+  // 请求拦截
+  $axios.onRequest(config => {
+    const xianyun = JSON.parse(localStorage.getItem('xianyun'))
+
+    if (xianyun && checkAuthUrl(config.url)) {
+      const token = xianyun.user.userInfo.token
+      config.headers.Authorization = 'Bearer ' + token
+    }
+  })
+  // ...
 }
 ```
-
-
 
 
 
