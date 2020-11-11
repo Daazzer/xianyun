@@ -99,7 +99,7 @@ export default {
       console.log(isPaid)
     }, 3000)
   },
-  destroyed () {
+  beforeDestroy () {
     // 页面销毁时删除计时器
     clearInterval(this.checkPayTimer)
   }
