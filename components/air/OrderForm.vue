@@ -223,9 +223,15 @@ export default {
         return
       }
 
+      const id = res.data.data.id
+
       loadingInstance.close()
-      this.$router.push('/air/pay')
-      console.log(res)
+      this.$router.push({
+        path: '/air/pay',
+        query: {
+          id
+        }
+      })
     }
   },
   mounted () {
