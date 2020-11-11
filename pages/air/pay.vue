@@ -14,12 +14,12 @@
         >
           <div class="qrcode">
             <!-- 二维码 -->
-            <canvas id="qrcode-stage"></canvas>
+            <canvas id="qrcodeStage"></canvas>
             <p>请使用微信扫一扫</p>
             <p>扫描二维码支付</p>
           </div>
           <div class="pay-example">
-            <img src="http://157.122.54.189:9093/images/wx-sweep2.jpg" alt="" />
+            <img src="http://157.122.54.189:9093/images/wx-sweep2.jpg" alt="phone" />
           </div>
         </el-row>
       </div>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import QRCode from 'qrcode'
 export default {
   name: 'Pay',
   async mounted () {
@@ -39,7 +40,14 @@ export default {
       return this.$message.error('获取订单详情信息失败，发生错误')
     }
 
-    console.log(res)
+    const codeUrl = res.data.payInfo.code_url
+    const codeCanvas = document.querySelector('#qrcodeStage')
+
+    QRCode.toCanvas(codeCanvas, codeUrl, { width: 200 }, err => {
+      if (err) {
+        return this.$message.error('生成二维码失败')
+      }
+    })
   }
 }
 </script>
@@ -82,7 +90,7 @@ export default {
         padding: 15px;
         border: 1px #ddd solid;
 
-        #qrcode-stage {
+        #qrcodeStage {
           $size: 200px;
           width: $size;
           height: $size;
