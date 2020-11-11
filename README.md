@@ -78,11 +78,15 @@ export default {
 
 ## 项目路由
 
+Api 地址：http://157.122.54.189:9095
+
 | 描述       | URL            |
 | ---------- | -------------- |
 | 首页       | `/`            |
 | 机票页     | `/air`         |
 | 航班列表页 | `/air/flights` |
+| 机票订单页 | `/air/order`   |
+| 付款页     | `/air/pay`     |
 | 酒店页     | `/hotel`       |
 | 旅游攻略页 | `/strategy`    |
 | 登录页     | `/user/login`  |
