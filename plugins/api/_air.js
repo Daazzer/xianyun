@@ -44,5 +44,11 @@ export default axios => ({
    * @param {string} data.air 航班 id
    * @returns {Promise}
    */
-  submitAirOrders: data => handleAxiosRequest(axios.post('/airorders', data))
+  submitAirsOrders: data => handleAxiosRequest(axios.post('/airorders', data)),
+  /**
+   * 订单详情
+   * @param {string} id 订单 id
+   * @returns {Promise}
+   */
+  getAirsOrderById: id => handleAxiosRequest(axios.get(`/airorders/${id}`))
 })
