@@ -2,7 +2,7 @@
   <div class="pay">
     <main>
       <div class="pay-title">
-        支付总金额 <span class="pay-price">￥ 1000</span>
+        支付总金额 <span class="pay-price">￥ {{ totalPrice }}</span>
       </div>
       <div class="pay-main">
         <h4>微信支付</h4>
@@ -31,6 +31,11 @@
 import QRCode from 'qrcode'
 export default {
   name: 'Pay',
+  data () {
+    return {
+      totalPrice: 0
+    }
+  },
   async mounted () {
     const id = this.$route.query.id
 
@@ -40,8 +45,10 @@ export default {
       return this.$message.error('获取订单详情信息失败，发生错误')
     }
 
-    const codeUrl = res.data.payInfo.code_url
+    const { payInfo: { code_url: codeUrl }, price } = res.data
     const codeCanvas = document.querySelector('#qrcodeStage')
+
+    this.totalPrice = price
 
     QRCode.toCanvas(codeCanvas, codeUrl, { width: 200 }, err => {
       if (err) {
