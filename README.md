@@ -514,46 +514,104 @@ export default ({ $axios }, inject) => {
     },
     ```
 
-  - 验证码发送倒计时
+  - 验证码发送倒计时，并封装为一个组件 `CaptchaCountDownTimer`
 
     ```vue
+    <!-- @/components/CaptchaCountDownTimer.vue -->
+    <template>
+      <span>({{ countDown }}s)</span>
+    </template>
+    
     <script>
-    data () {
-      return {
-        isSendCaptcha: false,
-        sendCaptchaCountDown: 0
-      }
-    },
-    methods: {
-     /**
-     	* 设置验证码发送倒计时
-     	* @param {number} interval 验证码再次发送的间隔
-     	*/
-      setSendCaptchaInterval (interval) {
-        // 记录点击时刻
-        const clickTime = Date.now()
-        this.sendCaptchaCountDown = interval
-        let countTime = setInterval(() => {
-          // 每隔一秒获取当前时刻
-          const nowTime = Date.now()
-          // 对比两个时间间隔
-          const diffTime = parseInt((nowTime - clickTime)/1000)
-          // 给页面显示倒计时
-          this.sendCaptchaCountDown--
-          if (diffTime >= interval) {
-            clearInterval(countTime)
-            // 改变发送状态
-            this.isSendCaptcha = false
+    export default {
+      name: 'CaptchaCountDownTimer',
+      data () {
+        return {
+          countDown: 0,
+          countDownTimer: null
+        }
+      },
+      methods: {
+        /**
+         * 设置验证码发送倒计时
+         * @param {number} interval 倒计时的间隔
+         * @param {Function} cb 倒计时完毕时回调
+         */
+        setCountDownTimer (interval, cb) {
+          if (interval < 0) {
+            try {
+              throw new Error('时间间隔不能小于0')
+            } catch (error) {
+              console.error(error.message)
+              cb()
+              return
+            }
           }
-        }, 1000)
+          // 防止定时器多次触发
+          clearInterval(this.countDownTimer)
+          // 记录开始时刻
+      const beginTime = Date.now()
+          this.countDown = interval
+          this.countDownTimer = setInterval(() => {
+            // 每隔一秒获取当前时刻
+            const nowTime = Date.now()
+            // 对比两个时间间隔
+            const diffTime = parseInt((nowTime - beginTime)/1000)
+            // 给页面显示倒计时
+            this.countDown--
+            if (diffTime >= interval) {
+              clearInterval(this.countDownTimer)
+              cb()
+            }
+          }, 1000)
+        }
       }
     }
     </script>
     ```
-
     
-
- 
+    将组件引入到 `RegisterForm` 组件中，通过 `this.$refs` 调用其方法，传入时间到时的回调
+    
+    ```vue
+    <!-- @/components/user/RegisterForm.vue -->
+    <template>
+      <!-- ... -->
+      <template #append>
+        <el-button @click="handleSendCaptcha" :disabled="isSendCaptcha">
+          发送验证码
+          <CaptchaCountDownTimer v-show="isSendCaptcha" ref="captchaCountDownTimer" />
+        </el-button>
+      </template>
+      <!-- ... -->
+    </template>
+    
+    <script>
+    export default {
+      // ...
+      data () {
+        // ...
+        return {
+          // ...
+        	isSendCaptcha: false,
+          // ...
+        }
+      },
+      methods: {
+        // 发送验证码
+        async handleSendCaptcha () {
+          // ...
+          this.$refs.captchaCountDownTimer.setCountDownTimer(60, () => {
+            this.isSendCaptcha = false
+          })
+         	// ...
+        },
+      },
+      // ...
+    }
+    </script>
+    ```
+    
+    
 
 ### 使用 vuex-persistedstate 存储部分 vuex 数据到本地
 
