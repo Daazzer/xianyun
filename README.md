@@ -1196,3 +1196,39 @@ export default ({ store }) => {
   
     
 
+## 支付页
+
+### 技术实现
+
+- 通过 `qrcode` 插件实现支付二维码的生成
+
+- 支付结果的轮询检测，通过定时发请求模拟服务器轮询
+
+  - 支付成功或出错则结束轮询
+
+  - 否则不断轮询
+
+    ```vue
+    <script>
+    export default {
+       // ...
+      async mounted () {
+        // ...
+        // 支付结果轮询
+        this.checkPayTimer = setInterval(async () => {
+          const isPaid = await this.checkPay(res.data)
+    
+          if (typeof isPaid !== 'boolean' || isPaid) {
+            clearInterval(this.checkPayTimer)
+            return
+          }
+          console.log(isPaid)
+        }, 3000)
+        // ...
+      },
+      // ...
+    }
+    </script>
+    ```
+
+    
