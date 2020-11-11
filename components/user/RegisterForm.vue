@@ -17,7 +17,6 @@
         <template #append>
           <el-button @click="handleSendCaptcha" :disabled="isSendCaptcha">
             发送验证码
-            <!-- <span v-if="isSendCaptcha">({{ sendCaptchaCountDown }}s)</span> -->
             <CaptchaCountDownTimer v-show="isSendCaptcha" ref="captchaCountDownTimer" />
           </el-button>
         </template>
@@ -106,7 +105,6 @@ export default {
         }],
       },
       isSendCaptcha: false,
-      // sendCaptchaCountDown: 0
     }
   },
   methods: {
@@ -148,7 +146,6 @@ export default {
         // 设置验证码发送间隔并且显示倒计时
         this.isSendCaptcha = true
 
-        // this.setSendCaptchaInterval(60)
         this.$refs.captchaCountDownTimer.setCountDownTimer(60, () => {
           this.isSendCaptcha = false
         })
@@ -174,28 +171,6 @@ export default {
       this.$message.success('注册成功')
       this.$router.push('/user/login')
     },
-    /**
-     * 设置验证码发送倒计时
-     * @param {number} interval 验证码再次发送的间隔
-     */
-    // setSendCaptchaInterval (interval) {
-    //   // 记录点击时刻
-    //   const clickTime = Date.now()
-    //   this.sendCaptchaCountDown = interval
-    //   let countTime = setInterval(() => {
-    //     // 每隔一秒获取当前时刻
-    //     const nowTime = Date.now()
-    //     // 对比两个时间间隔
-    //     const diffTime = parseInt((nowTime - clickTime)/1000)
-    //     // 给页面显示倒计时
-    //     this.sendCaptchaCountDown--
-    //     if (diffTime >= interval) {
-    //       clearInterval(countTime)
-    //       // 改变发送状态
-    //       this.isSendCaptcha = false
-    //     }
-    //   }, 1000)
-    // }
   }
 }
 </script>
