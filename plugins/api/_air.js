@@ -50,5 +50,14 @@ export default axios => ({
    * @param {string} id 订单 id
    * @returns {Promise}
    */
-  getAirsOrderById: id => handleAxiosRequest(axios.get(`/airorders/${id}`))
+  getAirsOrderById: id => handleAxiosRequest(axios.get(`/airorders/${id}`)),
+  /**
+   * 查询付款状态
+   * @param {Object} data 参数对象
+   * @param {number} data.id 订单 id
+   * @param {number} data.nonce_str 支付接口返回的订单金额
+   * @param {string} data.out_trade_no 订单编号
+   * @returns {Promise}
+   */
+  checkpay: data => handleAxiosRequest(axios.post('/airorders/checkpay', data))
 })
