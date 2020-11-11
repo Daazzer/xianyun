@@ -79,20 +79,7 @@ export default {
   },
   methods: {
     disabledDate (time) {
-      const getToday = (date) => {
-        const d = {
-          year: date.getFullYear(),
-          month: date.getMonth(),
-          day: date.getDate()
-        }
-
-        const today = new Date(d.year, d.month, d.day)
-        return today.getTime()
-      }
-      const calendarDate = time.getTime()
-      const nowDate = getToday(new Date())
-
-      return calendarDate < nowDate
+      return time.getTime() < Date.now() - 24*60*60*1000
     },
     // tab切换时触发
     handleSearchTab (tab, index) {
