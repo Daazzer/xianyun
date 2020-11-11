@@ -28,35 +28,37 @@
         </el-col>
       </el-row>
     </div>
-    <div class="flight-recommend" v-if="isShowRecommend">
-      <!-- 隐藏的座位信息列表 -->
-      <el-row type="flex" justify="space-between" align="middle">
-        <el-col :span="4">低价推荐</el-col>
-        <el-col :span="20">
-          <el-row
-            type="flex"
-            justify="space-between"
-            align="middle"
-            class="flight-sell"
-            v-for="(seatInfo, index) in flight.seat_infos"
-            :key="index"
-          >
-            <el-col :span="16" class="flight-sell-left">
-              <span>{{ seatInfo.name }}</span> | {{ seatInfo.supplierName }}
-            </el-col>
-            <el-col :span="5" class="price">￥{{ seatInfo.org_settle_price }}</el-col>
-            <el-col :span="3" class="choose-button">
-              <el-button
-                type="warning"
-                size="mini"
-                @click="handleChoose(flight.id, seatInfo.seat_xid)"
-              >选定</el-button>
-              <p>剩余：{{ seatInfo.discount }}</p>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-    </div>
+    <el-collapse-transition>
+      <div class="flight-recommend" v-if="isShowRecommend">
+        <!-- 隐藏的座位信息列表 -->
+        <el-row type="flex" justify="space-between" align="middle">
+          <el-col :span="4">低价推荐</el-col>
+          <el-col :span="20">
+            <el-row
+              type="flex"
+              justify="space-between"
+              align="middle"
+              class="flight-sell"
+              v-for="(seatInfo, index) in flight.seat_infos"
+              :key="index"
+            >
+              <el-col :span="16" class="flight-sell-left">
+                <span>{{ seatInfo.name }}</span> | {{ seatInfo.supplierName }}
+              </el-col>
+              <el-col :span="5" class="price">￥{{ seatInfo.org_settle_price }}</el-col>
+              <el-col :span="3" class="choose-button">
+                <el-button
+                  type="warning"
+                  size="mini"
+                  @click="handleChoose(flight.id, seatInfo.seat_xid)"
+                >选定</el-button>
+                <p>剩余：{{ seatInfo.discount }}</p>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </div>
+    </el-collapse-transition>
   </div>
 </template>
 
