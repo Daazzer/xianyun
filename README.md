@@ -1025,14 +1025,174 @@ export default ({ store }) => {
 
 ### 技术实现
 
-- 乘机人信息填写
-- 添加乘机人
+- 初始化数据改造，添加保险选择状态的字段
+
+  ```vue
+  <script>
+  // ...
+  async mounted () {
+    const { id, seat_xid } = this.$route.query
+  
+    const [err, res] = await this.$api.getAirsById(id, { seat_xid })
+  
+    if (err) {
+      return this.$message.error('获取订单信息失败')
+    }
+  
+    // 改造保险数据，添加选中状态属性
+    res.data.insurances = res.data.insurances.map(v => {
+      v.isSelected = false
+      return v
+    })
+  
+    this.infoData = res.data
+  }
+  // ...
+  </script>
+  ```
+
+- `OrderForm` 组件封装，展示订单编辑信息
+  
+  - 添加乘机人
 - 保险选择
 - 联系人信息填写
   - 复用验证码发送计时器组件
-  - `refs` 调用子组件的 `methods`
-- 侧边栏组件 `FlightsAside` 进行计价
-  - 通过 `vuex` 实现兄弟组件传值
-- 订单表单提交
-  - 订单信息提交前验证
+    - 发送验证码前手机号码数据验证
+  - `refs` 调用子组件的 `methods`，用法与注册页相同
+  - 订单表单提交
+    - 订单信息提交前验证
+- 封装侧边栏组件 `FlightsAside` ，进行计价
+  
+  - 通过 `vuex` 与 `OrderForm` 组件实现兄弟组件传值
+  
+    定义 `vuex` 侧边栏数据
+  
+    ```js
+    // @/store/air.js
+    export const state = () => ({
+      // ...
+      orderAside: {
+        usersAmount: 0,
+        insurances: []
+      }
+    })
+    
+    // 修改侧边栏数据的 mutations
+    export const mutations = {
+      // ...
+      setUsersAmount (state, data) {
+        state.orderAside.usersAmount = data
+      },
+      setInsurances (state, data) {
+        state.orderAside.insurances = data
+      }
+      // ...
+    }
+    ```
+  
+    在 `OrderAside` 中挂载好数据
+  
+    ```vue
+    <!-- @/components/air/OrderAside.vue -->
+    <template>
+    	<!-- ... -->
+      <el-row type="flex" justify="space-between" class="info-bar">
+        <span>成人机票</span>
+        <span>￥{{ infoData.seat_infos.org_settle_price }}</span>
+        <span>x{{ orderInfo.usersAmount }}</span>
+      </el-row>
+      <el-row type="flex" justify="space-between" class="info-bar">
+        <span>机建＋燃油</span>
+        <span>¥{{ infoData.airport_tax_audlet }}/人/单程</span>
+        <span>x{{ orderInfo.usersAmount }}</span>
+      </el-row>
+    	<!-- ... -->
+    </template>
+    
+    <script>
+    export default {
+    	// ...
+      computed: {
+        // ...
+        orderInfo () {
+          return this.$store.state.air.orderAside
+        },
+        // ...
+      }
+      // ...
+    }
+    </script>
+    ```
+  
+    
+  
+    在 `OrderForm` 挂载时初始化数据
+  
+    ```vue
+    <!-- @/components/air/OrderForm.vue -->
+    <script>
+    // ...
+    mounted () {
+      // 如果默认选择了保险则显示选中状态
+      const insurancesIdSet = new Set(this.infoData.insurances.filter(v => {
+        if (v.isSelected) {
+          return v.id
+        }
+      }))
+      this.insurances = [...insurancesIdSet]
+      this.$store.commit('air/setUsersAmount', this.users.length)
+      this.$store.commit('air/setInsurances', [...this.insurances])
+    }
+    // ...
+    </script>
+    ```
+  
+    每次操作 `OrderForm` 时都 `commit` 一次修改 vuex 的数据，实现对 `OrderAside` 的动态响应
+  
+    ```vue
+    <script>
+    export default {
+      // ...
+      methods: {
+        // 添加乘机人
+        handleAddUsers () {
+          this.users.push({
+            username: '',
+            id: ''
+          })
+          this.$store.commit('air/setUsersAmount', this.users.length)
+        },
+    
+        // 移除乘机人
+        handleDeleteUser (index) {
+          this.users.splice(index, 1)
+          this.$store.commit('air/setUsersAmount', this.users.length)
+        },
+        handleInsurance (id, index) {
+          // 修改选中状态
+          this.$emit('select-insurance', index)
+    
+          const isSelected = this.infoData.insurances[index].isSelected
+          const delIndex = this.insurances.indexOf(id)
+    
+          /*
+          根据选中状态来添加/删除保险数据
+          如果没有选中并且存在这个保险则删除
+           */
+          if (!isSelected && delIndex > -1) {
+            this.insurances.splice(delIndex, 1)
+          } else if (delIndex === -1) {
+            // 如果不存在，则将当前选中的放到保险 id 集合中，并且去重
+            this.insurances = [...new Set([...this.insurances, id])]
+          }
+          this.$store.commit('air/setInsurances', [...this.insurances])
+        },
+        // ...
+      }
+      // ...
+    }
+    </script>
+    ```
+  
+    
 
