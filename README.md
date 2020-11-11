@@ -245,6 +245,33 @@ plugins: [
 
 
 
+### 判断需要 token 的请求路由
+
+通过正则判断需要 token 的 `url`
+
+```js
+// @/plugins/axios.js
+// ...
+export default ({ $axios }, inject) => {
+  /**
+   * 判断是否请求到需要 token 的路由
+   * @param {string} url 请求地址段
+   * @returns {boolean} 是否匹配给定的地址段
+   */
+  const checkAuthUrl = url => (
+    /^\/comments(\/like)?/.test(url) ||
+    /^\/airorders(\/(pay|checkpay))?/.test(url) ||
+    /^\/posts(\/(star|like))?/.test(url) ||
+    /^\/upload/.test(url)
+  )
+  // ...
+}
+```
+
+
+
+
+
 ## 首页
 
 ### 技术实现
