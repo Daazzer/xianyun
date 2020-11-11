@@ -17,7 +17,7 @@
           size="mini"
           v-model="airport"
           placeholder="起飞机场"
-          @change="filterAirport"
+          @change="filterAirData"
         >
           <el-option
             v-for="(item, index) in data.options.airport"
@@ -32,7 +32,7 @@
           size="mini"
           v-model="flightTimes"
           placeholder="起飞时间"
-          @change="filterFlightTimes"
+          @change="filterAirData"
         >
           <el-option
             v-for="(item, index) in data.options.flightTimes"
@@ -47,7 +47,7 @@
           size="mini"
           v-model="company"
           placeholder="航空公司"
-          @change="filterCompany"
+          @change="filterAirData"
         >
           <el-option
             v-for="(item, index) in data.options.company"
@@ -62,7 +62,7 @@
           size="mini"
           v-model="airSize"
           placeholder="机型"
-          @change="filterAirSize"
+          @change="filterAirData"
         >
           <el-option
             v-for="(item, index) in sizeOptions"
@@ -113,43 +113,42 @@ export default {
     }
   },
   methods: {
-    // 选择机场时候触发
-    filterAirport (value) {
-      const airportData = this.data.flights.filter(v =>
-        v.org_airport_name === value
-      )
-      this.$emit('filterdata', airportData)
+    /** 管道方式实现机票数据筛选，每次选择条件时触发一次 */
+    filterAirData () {
+      let flightsData = this.filterAirport(this.data.flights)
+      flightsData = this.filterFlightTimes(flightsData)
+      flightsData = this.filterCompany(flightsData)
+      flightsData = this.filterAirSize(flightsData)
+
+      this.$emit('filterdata', flightsData)
     },
 
-    // 选择出发时间时候触发
-    filterFlightTimes (value) {
-      const [from, to] = value.split(',') // [6,12]
+    // 如果筛选框为空则全部数据返回，下同
+    filterAirport (data) {
+      return data.filter(v =>
+        this.airport === '' || v.org_airport_name === this.airport
+      )
+    },
 
-      const flightTimesData = this.data.flights.filter(v => {
-        // 出发时间小时
-        const start = +v.dep_time.split(':')[0]
-        return start >= from && start < to
+    filterFlightTimes (data) {
+      const [from, to] = this.flightTimes.split(',') // [6,12]
+
+      return data.filter(v => {
+        const start = Number(v.dep_time.split(':')[0])
+        return this.flightTimes === '' || (start >= from && start < to)
       })
-
-      this.$emit('filterdata', flightTimesData)
     },
 
-    // 选择航空公司时候触发
-    filterCompany (value) {
-      const companyData = this.data.flights.filter(v =>
-        v.airline_name === value
+    filterCompany (data) {
+      return data.filter(v =>
+        this.company === '' || v.airline_name === this.company
       )
-
-      this.$emit('filterdata', companyData)
     },
 
-    // 选择机型时候触发
-    filterAirSize (value) {
-      const airSizeData = this.data.flights.filter(v =>
-        v.plane_size === value
+    filterAirSize (data) {
+      return data.filter(v =>
+        this.airSize === '' || v.plane_size === this.airSize
       )
-
-      this.$emit('filterdata', airSizeData)
     },
 
     // 撤销条件时候触发
