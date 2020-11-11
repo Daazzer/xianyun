@@ -29,7 +29,18 @@
 
 <script>
 export default {
-  name: 'Pay'
+  name: 'Pay',
+  async mounted () {
+    const id = this.$route.query.id
+
+    const [err, res] = await this.$api.getAirsOrderById(id)
+
+    if (err) {
+      return this.$message.error('获取订单详情信息失败，发生错误')
+    }
+
+    console.log(res)
+  }
 }
 </script>
 
