@@ -215,7 +215,7 @@ export default {
         text: '正在生成订单！请稍等'
       })
 
-      const [err, res] = await this.$api.submitAirOrders(orderData)
+      const [err, res] = await this.$api.submitAirsOrders(orderData)
 
       if (err) {
         loadingInstance.close()
