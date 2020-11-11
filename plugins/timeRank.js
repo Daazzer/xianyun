@@ -1,33 +1,24 @@
 /**
- * 计算到出发日期时间与到达日期时间之差
- * @param {string} depDateTime 出发日期
- * @param {string} arrDateTime 到达日期
- * @returns {string} 出发与到达的小时与分钟差
+ * 从年份开始考虑，通过时间戳计算出发与到达的时间差，并转换为小时分钟数
+ * @param {string} depDateStr 出发日期
+ * @param {string} arrDateStr 到达日期
+ * @returns {string} 出发与到达的时间差
  */
-export default function timeDiff (depDateTime, arrDateTime) {
-  const depDate = new Date(depDateTime)
-  const arrDate = new Date(arrDateTime)
+export default function timeDiff (depDateStr, arrDateStr) {
+  const depDate = new Date(depDateStr)
+  const arrDate = new Date(arrDateStr)
 
-  const depYear = depDate.getFullYear()
-  const arrYear = arrDate.getFullYear()
+  // 获取时间戳毫秒数
+  const depTime = depDate.getTime()
+  const arrTime = arrDate.getTime()
 
-  const depMonth = depDate.getMonth() + 1
-  const arrMonth = arrDate.getMonth() + 1
+  // 将时间戳毫秒转换为分钟数
+  const depMinutes = parseInt(depTime / 1000 / 60)
+  const arrMinutes = parseInt(arrTime / 1000 / 60)
 
-  // UTC 表示世界时间（0时区的时间），这里应该使用 getDate
-  const depDay = depDate.getDate()
-  const arrDay = arrDate.getDate()
+  const diffMinutes = arrMinutes - depMinutes  // 实际相差的分钟
+  const diffHours = parseInt(diffMinutes / 60)  // 相差的小时数，可能不为两位数，已排除分钟
+  const mm = diffMinutes - diffHours * 60
 
-  const depHours = depDate.getHours()
-  const arrHours = arrDate.getHours()
-
-  const depMinutes = depDate.getMinutes()
-  const arrMinutes = arrDate.getMinutes()
-
-  // 从年份开始计算，计算到达与出发的小时与分钟之差
-  const diffMonth = (arrYear - depYear) * 12 + Math.abs(arrMonth - depMonth)
-  const diffDay = diffMonth * 30 + Math.abs(arrDay - depDay)
-  const diffHours = diffDay * 24 + Math.abs(arrHours - depHours)
-  const diffMinutes = Math.abs(arrMinutes - depMinutes)
-  return `${diffHours}时${diffMinutes}分`
+  return `${diffHours}时${mm}分`
 }
