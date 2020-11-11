@@ -1195,7 +1195,12 @@ export default ({ store }) => {
     </script>
     ```
   
-    
+
+
+
+> **注意** 使用 vuex  时，在此踩到的坑，如果 `commit` 引用类型时，如果是组件内部的 data ，则需要进行 data 的复制再 `commit`，就像上面的扩展 `this.insurances` 否则会出现值的引用赋值现象，导致存在 vuex 中的数据是指向组件内的 data，如果组件内不是通过修改了自身 data，会报错
+
+
 
 ## 支付页
 
