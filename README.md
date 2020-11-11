@@ -771,8 +771,7 @@ export default ({ store }) => {
         -->
     	</el-row>
     </template>
-  ```
-  
+    ```
     ```js
     // @/plugins/timeRank.js
     /**
@@ -784,19 +783,19 @@ export default ({ store }) => {
     export default function timeDiff (depDateStr, arrDateStr) {
       const depDate = new Date(depDateStr)
       const arrDate = new Date(arrDateStr)
-    
+
       // 获取时间戳毫秒数
       const depTime = depDate.getTime()
       const arrTime = arrDate.getTime()
-    
+
       // 将时间戳毫秒转换为分钟数
       const depMinutes = parseInt(depTime / 1000 / 60)
       const arrMinutes = parseInt(arrTime / 1000 / 60)
-    
+
       const diffMinutes = arrMinutes - depMinutes  // 实际相差的分钟
       const diffHours = parseInt(diffMinutes / 60)  // 相差的小时数，可能不为两位数，已排除分钟
       const mm = diffMinutes - diffHours * 60
-    
+
       return `${diffHours}时${mm}分`
     }
     ```
@@ -878,6 +877,7 @@ export default ({ store }) => {
         // 如果有新数据从第一页开始显示
         if (data) {
           this.pageIndex = 1
+          // 将过滤后的数据覆盖掉现有的展示数据
           this.flightsData.flights = data
           this.flightsData.total = data.length
         }
@@ -893,7 +893,7 @@ export default ({ store }) => {
 
   - 子组件的筛选操作实现
 
-    - 选择下拉列表时触发筛选操作
+    - 选择下拉列表时触发筛选操作，使用管道方法来筛选，每次筛选操作都执行所有的过滤函数
 
     ```vue
     <template>
@@ -903,14 +903,9 @@ export default ({ store }) => {
       	size="mini"
       	v-model="airport"
       	placeholder="起飞机场"
-      	@change="filterAirport"
+      	@change="filterAirData"
        >
-        <el-option
-        	v-for="(item, index) in data.options.airport"
-        	:key="index"
-        	:label="item"
-        	:value="item"
-        />
+        <!-- ... -->
       </el-select>
     </el-col>
     <el-col :span="4">
@@ -918,48 +913,81 @@ export default ({ store }) => {
       	size="mini"
       	v-model="flightTimes"
       	placeholder="起飞时间"
-      	@change="filterFlightTimes"
+      	@change="filterAirData"
       >
-        <el-option
-        	v-for="(item, index) in data.options.flightTimes"
-        	:key="index"
-        	:label="`${item.from}:00 - ${item.to}:00`"
-        	:value="`${item.from},${item.to}`"
-        />
+        <!-- ... -->
       </el-select>
     </el-col>
-    <!-- ... -->
+    <el-col :span="4">
+      <el-select
+      	size="mini"
+      	v-model="company"
+      	placeholder="航空公司"
+      	@change="filterAirData"
+      >
+        <!-- ... -->
+      </el-select>
+    </el-col>
+     <el-col :span="4">
+       <el-select
+       	size="mini"
+       	v-model="airSize"
+       	placeholder="机型"
+       	@change="filterAirData"
+       >
+          <!-- ... -->
+      </el-select>
+    </el-col>
     </template>
     <script>
+    export default {
     // ...
     methods: {
-      // 选择机场时候触发
-      filterAirport (value) {
-        const airportData = this.data.flights.filter(v =>
-        	v.org_airport_name === value
-        )
-        this.$emit('filterdata', airportData)
+        /** 管道方式实现机票数据筛选，每次选择条件时触发一次 */
+      filterAirData () {
+        let flightsData = this.filterAirport(this.data.flights)
+        flightsData = this.filterFlightTimes(flightsData)
+        flightsData = this.filterCompany(flightsData)
+        flightsData = this.filterAirSize(flightsData)
+    
+        this.$emit('filterdata', flightsData)
       },
     
-      // 选择出发时间时候触发
-      filterFlightTimes (value) {
-        const [from, to] = value.split(',') // [6,12]
+        // 如果筛选框为空则全部数据返回，下同
+      filterAirport (data) {
+        return data.filter(v =>
+        	this.airport === '' || v.org_airport_name === this.airport
+      )
+      },
+
+      filterFlightTimes (data) {
+        const [from, to] = this.flightTimes.split(',') // [6,12]
     
-        const flightTimesData = this.data.flights.filter(v => {
-          // 出发时间小时
-          const start = +v.dep_time.split(':')[0]
-          return start >= from && start < to
+        return data.filter(v => {
+          const start = Number(v.dep_time.split(':')[0])
+          return this.flightTimes === '' || (start >= from && start < to)
         })
+      },
     
-        this.$emit('filterdata', flightTimesData)
-      }
+      filterCompany (data) {
+      	return data.filter(v =>
+      		this.company === '' || v.airline_name === this.company
+    		)
+      },
+    
+      filterAirSize (data) {
+        return data.filter(v =>
+    			this.airSize === '' || v.plane_size === this.airSize
+    		)
+    	},
       // ...
+    	}
     }
     </script>
     ```
-
+    
     - 筛选条件撤销功能
-
+    
       ```js
       // 撤销条件时候触发
       handleFiltersCancel () {
