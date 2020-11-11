@@ -848,8 +848,8 @@ export default ({ store }) => {
       // 选择机场时候触发
       filterAirport (value) {
         const airportData = this.data.flights.filter(v =>
-                                                     v.org_airport_name === value
-                                                    )
+        	v.org_airport_name === value
+        )
         this.$emit('filterdata', airportData)
       },
     
