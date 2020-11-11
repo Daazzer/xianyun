@@ -91,6 +91,7 @@ export default {
       // 如果有新数据从第一页开始显示
       if (data) {
         this.pageIndex = 1
+        // 将过滤后的数据覆盖掉现有的展示数据
         this.flightsData.flights = data
         this.flightsData.total = data.length
       }
