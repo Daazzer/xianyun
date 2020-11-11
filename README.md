@@ -448,7 +448,7 @@ export default ({ $axios }, inject) => {
   - 登录后将用户信息存储到 `vuex`
   - 利用 `vuex-persistedstate`  将 `vuex`  中的数据与 `localStorage` 同步更新，实现数据持久化
   - 登录成功后的页面跳转，并且将用户数据提交 `vuex` 进行数据更新
-  - [`vuex-persistedstate` 的部分 `vuex` 数据存储](#使用 vuex-persistedstate 存储部分 vuex 数据到本地)
+  - [vuex-persistedstate 的部分 vuex 数据存储](#使用 vuex-persistedstate 存储部分 vuex 数据到本地)
 
 - `RegisterForm` 组件实现注册功能
 
