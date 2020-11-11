@@ -637,6 +637,8 @@ export default ({ store }) => {
 
 - 列表页的航班数据获取
 
+- 列表分页
+
 - `FlightsHeader` 组件封装，用于表示航班信息标题
 
 - `FlightsItem` 组件封装，用于展示航班详细信息
@@ -711,7 +713,7 @@ export default ({ store }) => {
       const diffMinutes = Math.abs(arrMinutes - depMinutes)
       return `${diffHours}时${diffMinutes}分`
     }
-  ```
+    ```
   
   - 机票项详情信息的展开与收起
   
@@ -755,7 +757,7 @@ export default ({ store }) => {
         this.flightsData = res.data
         /*
         缓存一份新的列表数据数据，这个列表不会被修改
-        而 flightsData 会被修改，注意这里需要使用 ES9 的解构对象，或者
+        而 flightsData 会被修改，注意这里需要使用 ES9 的扩展对象，或者
         Object.assign() 静态方法进行对象的复制，否则会出现引用赋值的现象，两个变量
         指向同一个对象
          */
@@ -922,5 +924,5 @@ export default ({ store }) => {
   })(store)
   ```
 
-  
+- 搜索记录的清空
 
