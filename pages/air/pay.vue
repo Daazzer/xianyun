@@ -19,7 +19,10 @@
             <p>扫描二维码支付</p>
           </div>
           <div class="pay-example">
-            <img src="http://157.122.54.189:9093/images/wx-sweep2.jpg" alt="phone" />
+            <img
+              src="http://157.122.54.189:9093/images/wx-sweep2.jpg"
+              alt="phone"
+            />
           </div>
         </el-row>
       </div>
@@ -33,7 +36,35 @@ export default {
   name: 'Pay',
   data () {
     return {
-      totalPrice: 0
+      totalPrice: 0,
+      checkPayTimer: null
+    }
+  },
+  methods: {
+    async checkPay (orderInfo) {
+      const { id, orderNo: out_trade_no, payInfo: { nonce_str } } = orderInfo
+
+      const [err, res] = await this.$api.checkpay({
+        id,
+        out_trade_no,
+        nonce_str
+      })
+
+      if (err) {
+        this.$message.error('支付失败')
+        return err
+      }
+
+      const statusTxt = res.data.statusTxt
+
+      if (statusTxt === '支付完成') {
+        this.$alert('订单支付成功', '提示', {
+          type: 'success'
+        })
+        return true
+      }
+
+      return false
     }
   },
   async mounted () {
@@ -52,9 +83,25 @@ export default {
 
     QRCode.toCanvas(codeCanvas, codeUrl, { width: 200 }, err => {
       if (err) {
-        return this.$message.error('生成二维码失败')
+        this.$message.error('生成二维码失败')
       }
     })
+
+
+    // 支付结果轮询
+    this.checkPayTimer = setInterval(async () => {
+      const isPaid = await this.checkPay(res.data)
+
+      if (typeof isPaid !== 'boolean' || isPaid) {
+        clearInterval(this.checkPayTimer)
+        return
+      }
+      console.log(isPaid)
+    }, 3000)
+  },
+  destroyed () {
+    // 页面销毁时删除计时器
+    clearInterval(this.checkPayTimer)
   }
 }
 </script>
