@@ -26,6 +26,7 @@ $ npm run generate
 - 预编译样式语言：[sass](https://sass-lang.com/)
 - http 库：[@nuxtjs/axios](https://github.com/nuxt-community/axios-module#readme)
 - vuex 状态与本地存储动态数据更插件：[vuex-persistedstate](https://github.com/robinvdvleuten/vuex-persistedstate)
+- 二维码生成插件：[qrcode](https://github.com/soldair/node-qrcode)
 
 
 
