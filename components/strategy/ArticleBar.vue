@@ -2,101 +2,101 @@
   <el-col class="strategy__article-bar">
     <ArticleBarHeader />
     <el-row class="article-list">
-      <el-row class="article-item article-item--tb" tag="article">
-        <h4>
-          <a href="#">塞班贵？一定是你的打开方式不对！6000块玩转塞班</a>
-        </h4>
-        <p class="article-item__desc">
-          <a href="#">
-            大家对塞班岛总存在着dsadsadsadadsadsacascs这样的误解，知道它是美属地盘，就理所当然地觉得这里的花费一定很高，花费高有高的玩法，那如果只有6000块的预算呢？要怎么玩？关于旅行这件事，我们要让钱花得更有道理，收下这份攻略，带你6000块花式玩转塞班。图：塞班岛。
-            by第5季旅游一、怎样用6000块玩转塞班？大多数出境游客人不做预算或最终
-          </a>
-        </p>
-        <el-row
-          type="flex"
-          justify="space-between"
-          class="article-item__images"
-        >
-          <a href="#">
-            <el-image
-              src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
-            />
-          </a>
-          <a href="#">
-            <el-image
-              src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
-            />
-          </a>
-          <a href="#">
-            <el-image
-              src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
-            />
-          </a>
-        </el-row>
-        <el-row class="article-item__info" type="flex" justify="space-between">
-          <el-row class="main-info" type="flex" align="middle">
-            <span><i class="el-icon-location-outline"></i>北京市</span>
-            <el-row type="flex" align="middle">
-              by
-              <a class="user-avatar" href="#">
-                <el-image
-                  src="http://157.122.54.189:9095/assets/images/avatar.jpg"
-                />
-              </a>
-              <a class="user-nickname" href="#">地球发动机</a>
-            </el-row>
-            <span><i class="el-icon-view"></i>14589</span>
-          </el-row>
-          <span class="likes">79 赞</span>
-        </el-row>
-      </el-row>
-      <el-row
-        class="article-item article-item--lr"
-        type="flex"
-        justify="space-between"
-        tag="article"
+      <article
+        v-for="strategicalArticle in strategicalArticles"
+        :key="strategicalArticle.id"
       >
-        <div class="article-item__images">
-          <a href="#">
-            <el-image
-              src="https://p3-q.mafengwo.net/s13/M00/41/C4/wKgEaVyaOs2AA9IKAAj8Lg2YzaU64.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90"
-            />
-          </a>
-        </div>
-        <div class="article-item__content">
+        <!--
+        根据文章图片数决定是上下结构函数左右结构，
+        上下结构则只能显示 3 张
+        左右结构则最多能显示 1 张
+        -->
+        <el-row
+          v-if="strategicalArticle.images.length >= 3"
+          class="article-item article-item--tb"
+        >
           <h4>
-            <a href="#">
-              远东行：用好奇心打量这座城 —— 最值得收藏的海参崴出行攻略
-            </a>
+            <a href="#">{{ strategicalArticle.title }}</a>
           </h4>
-          <p>
-            <a href="#">
-              想象一下一个距离 北京 只有2.5小时飞行距离的城市：身处 亚洲
-              却能感受到十足的欧陆风情——欧式建筑和街道，金发碧眼的路人，正宗的西餐外加只有国内一半售价的帝王蟹可以敞开吃——更难能可贵的是，这里对国人（实质）免签，有直
-            </a>
+          <p class="article-item__desc">
+            <a href="#" v-html="strategicalArticle.summary"></a>
           </p>
           <el-row
-            class="article-item__info"
+            class="article-item__images"
             type="flex"
             justify="space-between"
           >
+            <a
+              href="#"
+              v-for="(imgSrc, index) in strategicalArticle.images.filter((v, i) => i < 3)"
+              :key="index"
+            >
+              <el-image :src="imgSrc" />
+            </a>
+          </el-row>
+          <el-row class="article-item__info" type="flex" justify="space-between">
             <el-row class="main-info" type="flex" align="middle">
-              <span><i class="el-icon-location-outline"></i>北京市</span>
+              <span><i class="el-icon-location-outline"></i>{{ strategicalArticle.cityName }}</span>
               <el-row type="flex" align="middle">
                 by
                 <a class="user-avatar" href="#">
                   <el-image
-                    src="http://157.122.54.189:9095/assets/images/avatar.jpg"
+                    :src="$axios.defaults.baseURL + strategicalArticle.account.defaultAvatar"
                   />
                 </a>
-                <a class="user-nickname" href="#">地球发动机</a>
+                <a class="user-nickname" href="#">{{ strategicalArticle.account.nickname }}</a>
               </el-row>
-              <span><i class="el-icon-view"></i>14589</span>
+              <span><i class="el-icon-view"></i>{{ strategicalArticle.watch }}</span>
             </el-row>
-            <span class="likes">79 赞</span>
+            <span class="likes">{{ strategicalArticle.like }} 赞</span>
           </el-row>
-        </div>
-      </el-row>
+        </el-row>
+        <el-row
+          v-else-if="strategicalArticle.images.length < 3"
+          class="article-item article-item--lr"
+          type="flex"
+          justify="space-between"
+        >
+          <div
+            v-if="strategicalArticle.images && strategicalArticle.images.length > 0"
+            class="article-item__images"
+          >
+            <a href="#">
+              <el-image :src="strategicalArticle.images[0]" />
+            </a>
+          </div>
+          <div class="article-item__content">
+            <h4>
+              <a href="#">
+                {{ strategicalArticle.title }}
+              </a>
+            </h4>
+            <p>
+              <a href="#" v-html="strategicalArticle.summary"></a>
+            </p>
+            <el-row
+              class="article-item__info"
+              type="flex"
+              justify="space-between"
+            >
+              <el-row class="main-info" type="flex" align="middle">
+                <span><i class="el-icon-location-outline"></i>{{ strategicalArticle.cityName }}</span>
+                <el-row type="flex" align="middle">
+                  by
+                  <a class="user-avatar" href="#">
+                    <el-image
+                      :src="$axios.defaults.baseURL + strategicalArticle.account.defaultAvatar"
+                    />
+                  </a>
+                  <a class="user-nickname" href="#">{{ strategicalArticle.account.nickname }}</a>
+                </el-row>
+                <span><i class="el-icon-view"></i>{{ strategicalArticle.watch }}</span>
+              </el-row>
+              <span class="likes">{{ strategicalArticle.like }} 赞</span>
+            </el-row>
+          </div>
+        </el-row>
+      </article>
     </el-row>
     <el-row
       class="article-pagination"
@@ -123,6 +123,7 @@ export default {
   data () {
     return {
       currentPage4: 4,
+      strategicalArticles: [],
     }
   },
   methods: {
@@ -133,6 +134,15 @@ export default {
       console.log(`当前页: ${val}`)
     }
   },
+  async mounted () {
+    const [err, res] = await this.$api.getStrategies()
+
+    if (err) {
+      return this.$message.error('获取文章数据失败，发生错误')
+    }
+
+    this.strategicalArticles = res.data.data
+  }
 }
 </script>
 
