@@ -255,7 +255,6 @@ $linkColor: #ffa500;
     }
   }
 }
-
 .comment-item {
   padding: 20px 0;
   border-bottom: 1px solid #eee;
