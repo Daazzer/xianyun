@@ -742,6 +742,7 @@ export default ({ store }) => {
     - 以年开始考虑，换算成总小时与分钟数
     - 注意不要使用 UTC 方法，UTC 返回 0 时区时间
     - 利用时间戳进行时差计算，将时间戳毫秒换算为时分
+    
   - 计算两个日期相差的小时数与分钟数
   
     ```vue
@@ -782,26 +783,39 @@ export default ({ store }) => {
      */
     export default function timeDiff (depDateStr, arrDateStr) {
       const depDate = new Date(depDateStr)
-      const arrDate = new Date(arrDateStr)
-
+    const arrDate = new Date(arrDateStr)
+    
       // 获取时间戳毫秒数
       const depTime = depDate.getTime()
-      const arrTime = arrDate.getTime()
-
+    const arrTime = arrDate.getTime()
+    
       // 将时间戳毫秒转换为分钟数
       const depMinutes = parseInt(depTime / 1000 / 60)
-      const arrMinutes = parseInt(arrTime / 1000 / 60)
-
-      const diffMinutes = arrMinutes - depMinutes  // 实际相差的分钟
-      const diffHours = parseInt(diffMinutes / 60)  // 相差的小时数，可能不为两位数，已排除分钟
+    const arrMinutes = parseInt(arrTime / 1000 / 60)
+    
+      /*
+      这里需要校正时间基准问题
+    航班系统计算时间：
+      01:00:00 算作当天的开始时刻
+      00:59:59 算作当天的结束时刻
+      而 ECMAScript 计算时间：
+      00:00:00 算作当天的开始时刻
+      23:59:59 算作当天的结束时刻
+      所以如果相差分钟值出现负数的话，就是出现到达时间为 0 点当中造成的，按照 ECMAScript 的算法
+      则算作当天的开始，因此如果对准航班系统进行校正的话需要加上 24 小时
+       */
+      const diffMinutes = arrMinutes - depMinutes > 0 ? arrMinutes - depMinutes : arrMinutes + (24 * 60) - depMinutes // 实际相差的分钟
+      const diffHours = parseInt(diffMinutes / 60)  // 相差的小时数，可能不只两位数，已排除分钟
       const mm = diffMinutes - diffHours * 60
-
+    
       return `${diffHours}时${mm}分`
     }
     ```
   
-  - 机票项详情信息的展开与收起
+    > **注意** 项目的航班系统将 00:59:59 算作当天的结束时刻，01:00:00 算作当天的开始时刻
   
+- 机票项详情信息的展开与收起
+
 - `FlightsFilters` 组件实现机票列表的数据筛选
 
   - 利用组件自定义事件在 `flights.vue` 父组件触发
@@ -893,7 +907,7 @@ export default ({ store }) => {
 
   - 子组件的筛选操作实现
 
-    - 选择下拉列表时触发筛选操作，使用管道方法来筛选，每次筛选操作都执行所有的过滤函数
+    - 选择下拉列表时触发筛选操作，使用管道方法来筛选，每次筛选操作都有条件的执行所有的过滤函数
 
     ```vue
     <template>
@@ -941,46 +955,55 @@ export default ({ store }) => {
     </template>
     <script>
     export default {
-    // ...
-    methods: {
+    	// ...
+    	methods: {
         /** 管道方式实现机票数据筛选，每次选择条件时触发一次 */
-      filterAirData () {
-        let flightsData = this.filterAirport(this.data.flights)
-        flightsData = this.filterFlightTimes(flightsData)
-        flightsData = this.filterCompany(flightsData)
-        flightsData = this.filterAirSize(flightsData)
+        filterAirData () {
+          let flightsData = [...this.data.flights]
+          if (this.airport !== '') {
+            flightsData = this.filterAirport(flightsData, this.airport)
+          }
+          if (this.flightTimes !== '') {
+            flightsData = this.filterFlightTimes(flightsData, this.flightTimes)
+          }
+          if (this.company !== '') {
+            flightsData = this.filterCompany(flightsData, this.company)
+          }
+          if (this.airSize !== '') {
+            flightsData = this.filterAirSize(flightsData, this.airSize)
+          }
     
         this.$emit('filterdata', flightsData)
-      },
+        },
     
-        // 如果筛选框为空则全部数据返回，下同
-      filterAirport (data) {
-        return data.filter(v =>
-        	this.airport === '' || v.org_airport_name === this.airport
-      )
-      },
-
-      filterFlightTimes (data) {
-        const [from, to] = this.flightTimes.split(',') // [6,12]
+          // 如果筛选框为空则全部数据返回，下同
+        filterAirport (data, condition) {
+          return data.filter(v =>
+            v.org_airport_name === condition
+          )
+        },
     
-        return data.filter(v => {
-          const start = Number(v.dep_time.split(':')[0])
-          return this.flightTimes === '' || (start >= from && start < to)
-        })
-      },
+        filterFlightTimes (data, condition) {
+          const [from, to] = condition.split(',') // [6,12]
     
-      filterCompany (data) {
-      	return data.filter(v =>
-      		this.company === '' || v.airline_name === this.company
-    		)
-      },
+          return data.filter(v => {
+            const start = Number(v.dep_time.split(':')[0])
+            return start >= from && start < to
+          })
+        },
     
-      filterAirSize (data) {
-        return data.filter(v =>
-    			this.airSize === '' || v.plane_size === this.airSize
-    		)
-    	},
-      // ...
+        filterCompany (data, condition) {
+          return data.filter(v =>
+                             v.airline_name === condition
+                            )
+        },
+    
+        filterAirSize (data, condition) {
+          return data.filter(v =>
+            v.plane_size === condition
+          )
+        },
+        // ...
     	}
     }
     </script>
