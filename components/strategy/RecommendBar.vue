@@ -2,8 +2,12 @@
   <el-col class="strategy__recommend-bar">
     <el-row class="recommend-cascader">
       <ul class="recommend-cascader__list">
-        <li class="recommend-cascader__item">
-          热门城市<i class="el-icon-arrow-right"></i>
+        <li
+          class="recommend-cascader__item"
+          v-for="(recommendCityListItem, index) in recommendCityListItems"
+          :key="index"
+        >
+          {{ recommendCityListItem.type }}<i class="el-icon-arrow-right"></i>
         </li>
       </ul>
       <ol class="recommend-cascader__sublist">
@@ -28,12 +32,18 @@
 <script>
 export default {
   name: 'RecommendBar',
+  data () {
+    return {
+      recommendCityListItems: []
+    }
+  },
   async mounted () {
     const [err, res] = await this.$api.getRecommendCityList()
     if (err) {
       return this.$message.error('获取城市推荐列表数据失败，发生错误')
     }
-    console.log(res)
+
+    this.recommendCityListItems = res.data.data
   }
 }
 </script>
