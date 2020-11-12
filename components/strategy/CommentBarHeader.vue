@@ -28,7 +28,20 @@
 
 <script>
 export default {
-  name: 'CommentBarHeader'
+  name: 'CommentBarHeader',
+  data () {
+    return {
+      searchVal: '',
+      options: [{
+        value: 'zhinan',
+        label: '指南',
+        children: [{
+          value: 'shejiyuanze',
+          label: '设计原则',
+        }]
+      }]
+    }
+  }
 }
 </script>
 

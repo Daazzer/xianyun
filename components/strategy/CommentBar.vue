@@ -121,16 +121,7 @@ export default {
   name: 'CommentBar',
   data () {
     return {
-      searchVal: '',
       currentPage4: 4,
-      options: [{
-        value: 'zhinan',
-        label: '指南',
-        children: [{
-          value: 'shejiyuanze',
-          label: '设计原则',
-        }]
-      }]
     }
   },
   methods: {
