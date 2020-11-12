@@ -28,7 +28,7 @@
     <el-row class="recommend-city">
       <h4>推荐城市</h4>
       <nuxt-link to="#">
-        <el-image :src="$axios.defaults.baseURL + '/images/pic_sea.jpeg'" />
+        <el-image src="http://157.122.54.189:9093/images/pic_sea.jpeg" />
       </nuxt-link>
     </el-row>
   </el-col>
