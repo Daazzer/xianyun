@@ -55,7 +55,33 @@
             <span class="likes">79赞</span>
           </el-row>
         </el-row>
-        <el-row class="comment-item comment-item--lr"></el-row>
+        <el-row type="flex" justify="space-between" class="comment-item comment-item--lr">
+          <div>
+            <el-image
+              style="width: 100px; height: 100px"
+              src="https://p3-q.mafengwo.net/s13/M00/41/C4/wKgEaVyaOs2AA9IKAAj8Lg2YzaU64.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90"
+            />
+          </div>
+          <div class="comment-item__content">
+            <h4>远东行：用好奇心打量这座城 —— 最值得收藏的海参崴出行攻略</h4>
+            <p>想象一下一个距离 北京 只有2.5小时飞行距离的城市：身处 亚洲 却能感受到十足的欧陆风情——欧式建筑和街道，金发碧眼的路人，正宗的西餐外加只有国内一半售价的帝王蟹可以敞开吃——更难能可贵的是，这里对国人（实质）免签，有直</p>
+            <el-row type="flex" justify="space-between" class="comment-item__info">
+              <div class="main-info">
+                <span><i class="el-icon-location-outline"></i>北京市</span>
+                <span>
+                  by
+                  <el-image
+                    style="width: 15px; height: 15px"
+                    src="http://157.122.54.189:9095/assets/images/avatar.jpg"
+                  />
+                  地球发动机
+                </span>
+                <span><i class="el-icon-view"></i>14589</span>
+              </div>
+              <span class="likes">79赞</span>
+            </el-row>
+          </div>
+        </el-row>
       </el-row>
     </el-col>
   </el-row>
