@@ -115,39 +115,48 @@ export default {
   methods: {
     /** 管道方式实现机票数据筛选，每次选择条件时触发一次 */
     filterAirData () {
-      let flightsData = this.filterAirport(this.data.flights)
-      flightsData = this.filterFlightTimes(flightsData)
-      flightsData = this.filterCompany(flightsData)
-      flightsData = this.filterAirSize(flightsData)
+      let flightsData = [...this.data.flights]
+      if (this.airport !== '') {
+        flightsData = this.filterAirport(flightsData, this.airport)
+      }
+      if (this.flightTimes !== '') {
+        flightsData = this.filterFlightTimes(flightsData, this.flightTimes)
+      }
+      if (this.company !== '') {
+        flightsData = this.filterCompany(flightsData, this.company)
+      }
+      if (this.airSize !== '') {
+        flightsData = this.filterAirSize(flightsData, this.airSize)
+      }
 
       this.$emit('filterdata', flightsData)
     },
 
     // 如果筛选框为空则全部数据返回，下同
-    filterAirport (data) {
+    filterAirport (data, condition) {
       return data.filter(v =>
-        this.airport === '' || v.org_airport_name === this.airport
+        v.org_airport_name === condition
       )
     },
 
-    filterFlightTimes (data) {
-      const [from, to] = this.flightTimes.split(',') // [6,12]
+    filterFlightTimes (data, condition) {
+      const [from, to] = condition.split(',') // [6,12]
 
       return data.filter(v => {
         const start = Number(v.dep_time.split(':')[0])
-        return this.flightTimes === '' || (start >= from && start < to)
+        return start >= from && start < to
       })
     },
 
-    filterCompany (data) {
+    filterCompany (data, condition) {
       return data.filter(v =>
-        this.company === '' || v.airline_name === this.company
+        v.airline_name === condition
       )
     },
 
-    filterAirSize (data) {
+    filterAirSize (data, condition) {
       return data.filter(v =>
-        this.airSize === '' || v.plane_size === this.airSize
+        v.plane_size === condition
       )
     },
 
