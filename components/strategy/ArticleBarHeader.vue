@@ -48,6 +48,10 @@ export default {
 <style lang="scss" scoped>
 $linkColor: #ffa500;
 .article-header {
+  h4 {
+    font-size: 18px;
+    font-weight: 400;
+  }
   &__search {
     position: relative;
     .el-input {
