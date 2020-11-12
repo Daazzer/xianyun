@@ -9,24 +9,10 @@
     </el-row>
     <el-row class="comment-header__recommend-text">
       <span>推荐：</span>
-      <el-link
-        :underline="false"
-        href="https://element.eleme.io"
+      <nuxt-link
+        to="https://element.eleme.io"
         target="_blank"
-        >默认链接</el-link
-      >
-      <el-link
-        :underline="false"
-        href="https://element.eleme.io"
-        target="_blank"
-        >默认链接</el-link
-      >
-      <el-link
-        :underline="false"
-        href="https://element.eleme.io"
-        target="_blank"
-        >默认链接</el-link
-      >
+      >默认链接</nuxt-link>
     </el-row>
     <el-row
       class="comment-header__title"
@@ -81,14 +67,11 @@ $linkColor: #ffa500;
       margin-right: 4px;
       font-size: 12px;
     }
-    .el-link {
+    a {
       @extend span;
       border-bottom: 1px solid transparent;
-      &:hover,
-      &.is-underline:hover:after {
-        border-bottom: 1px solid $linkColor;
-      }
       &:hover {
+        text-decoration: underline;
         color: $linkColor;
       }
     }
