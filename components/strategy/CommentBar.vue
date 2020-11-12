@@ -1,14 +1,14 @@
 <template>
   <el-col class="strategy__comment-bar">
     <el-row class="comment-header">
-      <el-row class="search">
+      <el-row class="comment-header__search">
         <el-input
           v-model="searchVal"
           placeholder="请输入想去的地方，比如'广州'"
         />
         <el-button class="search-btn" type="text" icon="el-icon-search" />
       </el-row>
-      <el-row class="search-recommend">
+      <el-row class="comment-header__recommend-text">
         <span>推荐：</span>
         <el-link
           :underline="false"
@@ -30,7 +30,7 @@
         >
       </el-row>
       <el-row
-        class="strategy-title"
+        class="comment-header__title"
         type="flex"
         justify="space-between"
         align="middle"
@@ -191,30 +191,33 @@ $linkColor: #ffa500;
     font-weight: 400;
   }
 }
-.search {
-  position: relative;
-  .el-input {
-    ::v-deep .el-input__inner {
-      border: 3px solid $linkColor;
-      border-radius: 0;
-      &:focus {
-        border-color: $linkColor;
+.comment-header {
+  &__search {
+    position: relative;
+    .el-input {
+      ::v-deep .el-input__inner {
+        border: 3px solid $linkColor;
+        border-radius: 0;
+        &:focus {
+          border-color: $linkColor;
+        }
+      }
+    }
+    .search-btn {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      margin-right: 10px;
+      transform: translateY(-50%);
+      font-size: 24px;
+      color: $linkColor;
+      ::v-deep .el-icon-search {
+        font-weight: bold;
       }
     }
   }
-  &-btn {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    margin-right: 10px;
-    transform: translateY(-50%);
-    font-size: 24px;
-    color: $linkColor;
-    ::v-deep .el-icon-search {
-      font-weight: bold;
-    }
-  }
-  &-recommend {
+
+  &__recommend-text {
     padding: 10px 0;
     color: #666;
     span {
@@ -233,25 +236,26 @@ $linkColor: #ffa500;
       }
     }
   }
-}
-.strategy-title {
-  position: relative;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
-  &::after {
-    content: "";
-    position: absolute;
-    display: block;
-    bottom: 0;
-    left: 0;
-    width: 72px;
-    height: 2px;
-    background-color: $linkColor;
+  &__title {
+    position: relative;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    &::after {
+      content: "";
+      position: absolute;
+      display: block;
+      bottom: 0;
+      left: 0;
+      width: 72px;
+      height: 2px;
+      background-color: $linkColor;
+    }
+    h4 {
+      color: $linkColor;
+    }
   }
-  h4 {
-    color: $linkColor;
-  }
 }
+
 .comment-item {
   padding: 20px 0;
   border-bottom: 1px solid #eee;
