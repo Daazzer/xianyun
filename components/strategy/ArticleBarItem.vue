@@ -26,22 +26,7 @@
           <el-image :src="imgSrc" />
         </a>
       </el-row>
-      <el-row class="article-item__info" type="flex" justify="space-between">
-        <el-row class="main-info" type="flex" align="middle">
-          <span><i class="el-icon-location-outline"></i>{{ strategicalArticle.cityName }}</span>
-          <el-row type="flex" align="middle">
-            by
-            <a class="user-avatar" href="#">
-              <el-image
-                :src="$axios.defaults.baseURL + strategicalArticle.account.defaultAvatar"
-              />
-            </a>
-            <a class="user-nickname" href="#">{{ strategicalArticle.account.nickname }}</a>
-          </el-row>
-          <span><i class="el-icon-view"></i>{{ strategicalArticle.watch }}</span>
-        </el-row>
-        <span class="likes">{{ strategicalArticle.like }} 赞</span>
-      </el-row>
+      <ArticleBarItemInfo :strategicalArticle="strategicalArticle" />
     </el-row>
     <el-row
       v-else-if="strategicalArticle.images.length < 3"
@@ -66,26 +51,7 @@
         <p class="article-item__desc">
           <a href="#" v-html="strategicalArticle.summary"></a>
         </p>
-        <el-row
-          class="article-item__info"
-          type="flex"
-          justify="space-between"
-        >
-          <el-row class="main-info" type="flex" align="middle">
-            <span><i class="el-icon-location-outline"></i>{{ strategicalArticle.cityName }}</span>
-            <el-row type="flex" align="middle">
-              by
-              <a class="user-avatar" href="#">
-                <el-image
-                  :src="$axios.defaults.baseURL + strategicalArticle.account.defaultAvatar"
-                />
-              </a>
-              <a class="user-nickname" href="#">{{ strategicalArticle.account.nickname }}</a>
-            </el-row>
-            <span><i class="el-icon-view"></i>{{ strategicalArticle.watch }}</span>
-          </el-row>
-          <span class="likes">{{ strategicalArticle.like }} 赞</span>
-        </el-row>
+        <ArticleBarItemInfo :strategicalArticle="strategicalArticle" />
       </div>
     </el-row>
   </article>
@@ -151,27 +117,6 @@ $linkColor: #ffa500;
       width: 220px;
       height: 150px;
     }
-  }
-  .main-info {
-    font-size: 12px;
-    color: #999;
-    > * {
-      margin-right: 10px;
-    }
-    .user-avatar {
-      margin: 5px;
-      .el-image {
-        display: block;
-        width: 16px;
-        height: 16px;
-      }
-    }
-    .user-nickname {
-      color: $linkColor;
-    }
-  }
-  .likes {
-    color: $linkColor;
   }
 }
 </style>
