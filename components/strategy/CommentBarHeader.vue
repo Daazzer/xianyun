@@ -9,10 +9,10 @@
     </el-row>
     <el-row class="comment-header__recommend-text">
       <span>推荐：</span>
-      <nuxt-link
-        to="https://element.eleme.io"
+      <a
+        href="https://element.eleme.io"
         target="_blank"
-      >默认链接</nuxt-link>
+      >默认链接</a>
     </el-row>
     <el-row
       class="comment-header__title"
