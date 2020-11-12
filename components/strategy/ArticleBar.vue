@@ -1,51 +1,49 @@
 <template>
-  <el-col class="strategy__comment-bar">
-    <CommentBarHeader />
-    <el-row class="comment-list">
-      <el-row class="comment-item comment-item--tb">
+  <el-col class="strategy__article-bar">
+    <ArticleBarHeader />
+    <el-row class="article-list">
+      <el-row class="article-item article-item--tb" tag="article">
         <h4>
-          <nuxt-link to="#"
-            >塞班贵？一定是你的打开方式不对！6000块玩转塞班</nuxt-link
-          >
+          <a href="#">塞班贵？一定是你的打开方式不对！6000块玩转塞班</a>
         </h4>
-        <p class="comment-item__desc">
-          <nuxt-link to="#"
-            >大家对塞班岛总存在着dsadsadsadadsadsacascs这样的误解，知道它是美属地盘，就理所当然地觉得这里的花费一定很高，花费高有高的玩法，那如果只有6000块的预算呢？要怎么玩？关于旅行这件事，我们要让钱花得更有道理，收下这份攻略，带你6000块花式玩转塞班。图：塞班岛。
-            by第5季旅游一、怎样用6000块玩转塞班？大多数出境游客人不做预算或最终</nuxt-link
-          >
+        <p class="article-item__desc">
+          <a href="#">
+            大家对塞班岛总存在着dsadsadsadadsadsacascs这样的误解，知道它是美属地盘，就理所当然地觉得这里的花费一定很高，花费高有高的玩法，那如果只有6000块的预算呢？要怎么玩？关于旅行这件事，我们要让钱花得更有道理，收下这份攻略，带你6000块花式玩转塞班。图：塞班岛。
+            by第5季旅游一、怎样用6000块玩转塞班？大多数出境游客人不做预算或最终
+          </a>
         </p>
         <el-row
           type="flex"
           justify="space-between"
-          class="comment-item__images"
+          class="article-item__images"
         >
-          <nuxt-link to="#">
+          <a href="#">
             <el-image
               src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
             />
-          </nuxt-link>
-          <nuxt-link to="#">
+          </a>
+          <a href="#">
             <el-image
               src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
             />
-          </nuxt-link>
-          <nuxt-link to="#">
+          </a>
+          <a href="#">
             <el-image
               src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
             />
-          </nuxt-link>
+          </a>
         </el-row>
-        <el-row type="flex" justify="space-between" class="comment-item__info">
-          <el-row type="flex" align="middle" class="main-info">
+        <el-row class="article-item__info" type="flex" justify="space-between">
+          <el-row class="main-info" type="flex" align="middle">
             <span><i class="el-icon-location-outline"></i>北京市</span>
             <el-row type="flex" align="middle">
               by
-              <nuxt-link class="user-avatar" to="#">
+              <a class="user-avatar" href="#">
                 <el-image
                   src="http://157.122.54.189:9095/assets/images/avatar.jpg"
                 />
-              </nuxt-link>
-              <nuxt-link class="user-nickname" to="#">地球发动机</nuxt-link>
+              </a>
+              <a class="user-nickname" href="#">地球发动机</a>
             </el-row>
             <span><i class="el-icon-view"></i>14589</span>
           </el-row>
@@ -53,42 +51,45 @@
         </el-row>
       </el-row>
       <el-row
+        class="article-item article-item--lr"
         type="flex"
         justify="space-between"
-        class="comment-item comment-item--lr"
+        tag="article"
       >
-        <div class="comment-item__images">
-          <nuxt-link to="#">
+        <div class="article-item__images">
+          <a href="#">
             <el-image
               src="https://p3-q.mafengwo.net/s13/M00/41/C4/wKgEaVyaOs2AA9IKAAj8Lg2YzaU64.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90"
             />
-          </nuxt-link>
+          </a>
         </div>
-        <div class="comment-item__content">
+        <div class="article-item__content">
           <h4>
-            <nuxt-link to="#">
+            <a href="#">
               远东行：用好奇心打量这座城 —— 最值得收藏的海参崴出行攻略
-            </nuxt-link>
+            </a>
           </h4>
           <p>
-            想象一下一个距离 北京 只有2.5小时飞行距离的城市：身处 亚洲
-            却能感受到十足的欧陆风情——欧式建筑和街道，金发碧眼的路人，正宗的西餐外加只有国内一半售价的帝王蟹可以敞开吃——更难能可贵的是，这里对国人（实质）免签，有直
+            <a href="#">
+              想象一下一个距离 北京 只有2.5小时飞行距离的城市：身处 亚洲
+              却能感受到十足的欧陆风情——欧式建筑和街道，金发碧眼的路人，正宗的西餐外加只有国内一半售价的帝王蟹可以敞开吃——更难能可贵的是，这里对国人（实质）免签，有直
+            </a>
           </p>
           <el-row
+            class="article-item__info"
             type="flex"
             justify="space-between"
-            class="comment-item__info"
           >
-            <el-row type="flex" align="middle" class="main-info">
+            <el-row class="main-info" type="flex" align="middle">
               <span><i class="el-icon-location-outline"></i>北京市</span>
               <el-row type="flex" align="middle">
                 by
-                <nuxt-link class="user-avatar" to="#">
+                <a class="user-avatar" href="#">
                   <el-image
                     src="http://157.122.54.189:9095/assets/images/avatar.jpg"
                   />
-                </nuxt-link>
-                <nuxt-link class="user-nickname" to="#">地球发动机</nuxt-link>
+                </a>
+                <a class="user-nickname" href="#">地球发动机</a>
               </el-row>
               <span><i class="el-icon-view"></i>14589</span>
             </el-row>
@@ -98,7 +99,7 @@
       </el-row>
     </el-row>
     <el-row
-      class="comment-pagination"
+      class="article-pagination"
       type="flex"
       justify="center"
       align="middle"
@@ -118,7 +119,7 @@
 
 <script>
 export default {
-  name: 'CommentBar',
+  name: 'ArticleBar',
   data () {
     return {
       currentPage4: 4,
@@ -137,16 +138,26 @@ export default {
 
 <style lang="scss" scoped>
 $linkColor: #ffa500;
-.strategy__comment-bar {
+.strategy__article-bar {
   width: 700px;
   h4 {
     font-size: 18px;
     font-weight: 400;
   }
 }
-.comment-item {
+.article-item {
   padding: 20px 0;
   border-bottom: 1px solid #eee;
+  &--tb {
+    .article-item__images {
+      margin: 15px 0;
+    }
+  }
+  &--lr {
+    .article-item__images {
+      margin-right: 10px;
+    }
+  }
   h4,
   p {
     margin-bottom: 15px;
@@ -175,16 +186,6 @@ $linkColor: #ffa500;
       height: 150px;
     }
   }
-  &--tb {
-    .comment-item__images {
-      margin: 15px 0;
-    }
-  }
-  &--lr {
-    .comment-item__images {
-      margin-right: 10px;
-    }
-  }
   .main-info {
     font-size: 12px;
     color: #999;
@@ -207,7 +208,7 @@ $linkColor: #ffa500;
     color: $linkColor;
   }
 }
-.comment-pagination {
+.article-pagination {
   margin-top: 10px;
 }
 </style>

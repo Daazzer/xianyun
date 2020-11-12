@@ -1,7 +1,7 @@
 <template>
   <el-row class="strategy" type="flex" justify="space-between" tag="main">
     <RecommendBar />
-    <CommentBar />
+    <ArticleBar />
   </el-row>
 </template>
 

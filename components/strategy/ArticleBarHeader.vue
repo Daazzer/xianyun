@@ -1,13 +1,13 @@
 <template>
-  <el-row class="comment-header">
-    <el-row class="comment-header__search">
+  <el-row class="article-header">
+    <el-row class="article-header__search">
       <el-input
         v-model="searchVal"
         placeholder="请输入想去的地方，比如'广州'"
       />
       <el-button class="search-btn" type="text" icon="el-icon-search" />
     </el-row>
-    <el-row class="comment-header__recommend-text">
+    <el-row class="article-header__recommend-text">
       <span>推荐：</span>
       <a
         href="https://element.eleme.io"
@@ -15,7 +15,7 @@
       >默认链接</a>
     </el-row>
     <el-row
-      class="comment-header__title"
+      class="article-header__title"
       type="flex"
       justify="space-between"
       align="middle"
@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'CommentBarHeader',
+  name: 'ArticleBarHeader',
   data () {
     return {
       searchVal: '',
@@ -47,7 +47,7 @@ export default {
 
 <style lang="scss" scoped>
 $linkColor: #ffa500;
-.comment-header {
+.article-header {
   &__search {
     position: relative;
     .el-input {
