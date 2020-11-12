@@ -24,7 +24,7 @@ export default function timeDiff (depDateStr, arrDateStr) {
   而 ECMAScript 计算时间：
   00:00:00 算作当天的开始时刻
   23:59:59 算作当天的结束时刻
-  所以如果相差分钟值出现负数的话，就是出现到达时间为 0 点当中造成的，按照 ECMAScript 的算法
+  所以如果相差分钟值出现负数的话，就是出现到达时间在 0 点当中造成的，按照 ECMAScript 的算法
   则算作当天的开始，因此如果对准航班系统进行校正的话需要加上 24 小时
    */
   const diffMinutes = arrMinutes - depMinutes > 0 ? arrMinutes - depMinutes : arrMinutes + (24 * 60) - depMinutes // 实际相差的分钟
