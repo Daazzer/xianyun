@@ -72,6 +72,7 @@ $linkColor: #ffa500;
     border-top: $border;
   }
   &__sublist {
+    display: none;
     position: absolute;
     top: 0;
     left: 259.5px;
