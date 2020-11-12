@@ -27,7 +27,14 @@
 
 <script>
 export default {
-  name: 'RecommendBar'
+  name: 'RecommendBar',
+  async mounted () {
+    const [err, res] = await this.$api.getRecommendCityList()
+    if (err) {
+      return this.$message.error('获取城市推荐列表数据失败，发生错误')
+    }
+    console.log(res)
+  }
 }
 </script>
 
