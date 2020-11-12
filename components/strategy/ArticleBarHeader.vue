@@ -10,9 +10,10 @@
     <el-row class="article-header__recommend-text">
       <span>推荐：</span>
       <a
-        href="https://element.eleme.io"
-        target="_blank"
-      >默认链接</a>
+        v-for="(recommendCity, index) in recommendCities"
+        :key="index"
+        href="#"
+      >{{ recommendCity }}</a>
     </el-row>
     <el-row
       class="article-header__title"
@@ -29,17 +30,17 @@
 <script>
 export default {
   name: 'ArticleBarHeader',
+  props: {
+    recommendCities: {
+      type: Array,
+      default () {
+        return []
+      }
+    }
+  },
   data () {
     return {
-      searchVal: '',
-      options: [{
-        value: 'zhinan',
-        label: '指南',
-        children: [{
-          value: 'shejiyuanze',
-          label: '设计原则',
-        }]
-      }]
+      searchVal: ''
     }
   }
 }

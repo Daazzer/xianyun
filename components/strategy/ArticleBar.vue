@@ -1,6 +1,6 @@
 <template>
   <el-col class="strategy__article-bar">
-    <ArticleBarHeader />
+    <ArticleBarHeader :recommendCities="recommendCities" />
     <el-row class="article-list">
       <ArticleBarItem
         v-for="strategicalArticle in strategicalArticles"
@@ -34,6 +34,7 @@ export default {
     return {
       currentPage4: 4,
       strategicalArticles: [],
+      recommendCities: []
     }
   },
   methods: {
@@ -52,6 +53,11 @@ export default {
     }
 
     this.strategicalArticles = res.data.data
+
+    // 在文章头部搜索栏显示前三个城市
+    for (let i = 0; i < 3; i++) {
+      this.recommendCities.push(this.strategicalArticles[i].cityName.replace('市', ''))
+    }
   }
 }
 </script>
