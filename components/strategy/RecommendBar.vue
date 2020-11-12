@@ -6,24 +6,29 @@
           class="recommend-cascader__item"
           v-for="(recommendCityListItem, index) in recommendCityListItems"
           :key="index"
+          @mouseover="handleHoverCascaderItem(index)"
         >
           {{ recommendCityListItem.type }}<i class="el-icon-arrow-right"></i>
         </li>
       </ul>
       <ol class="recommend-cascader__sublist">
-        <li class="recommend-cascader__subitem">
-          <nuxt-link to="#">
-            <i>1</i>
-            <strong>北京</strong>
-            <span>世界著名古都和现代化国际城市</span>
-          </nuxt-link>
+        <li
+          class="recommend-cascader__subitem"
+          v-for="(recommendCitySubItem, index) in recommendCityListSubItems"
+          :key="index"
+        >
+          <a :href="recommendCitySubItem.link">
+            <i>{{ index + 1 }}</i>
+            <strong>{{ recommendCitySubItem.city }}</strong>
+            <span>{{ recommendCitySubItem.desc }}</span>
+          </a>
         </li>
       </ol>
     </el-row>
     <el-row class="recommend-city">
       <h4>推荐城市</h4>
       <nuxt-link to="#">
-        <el-image src="http://157.122.54.189:9093/images/pic_sea.jpeg" />
+        <el-image :src="$axios.defaults.baseURL + '/images/pic_sea.jpeg'" />
       </nuxt-link>
     </el-row>
   </el-col>
@@ -34,7 +39,21 @@ export default {
   name: 'RecommendBar',
   data () {
     return {
-      recommendCityListItems: []
+      recommendCityListItems: [],
+      recommendCityListSubItems: []
+    }
+  },
+  methods: {
+    handleHoverCascaderItem (index) {
+      this.renderRecommendCityListSubItem(index)
+    },
+    renderRecommendCityListSubItem (index) {
+      const recommendCityListSubItems = [...this.recommendCityListItems[index].children]
+      // 添加一个链接接字段
+      this.recommendCityListSubItems = recommendCityListSubItems.map(city => {
+        city.link = this.$axios.defaults.baseURL + '/posts?city=' + city.city
+        return city
+      })
     }
   },
   async mounted () {
@@ -44,6 +63,7 @@ export default {
     }
 
     this.recommendCityListItems = res.data.data
+    this.renderRecommendCityListSubItem(0)
   }
 }
 </script>
@@ -57,6 +77,10 @@ $linkColor: #ffa500;
   $border: 1px solid #ddd;
   position: relative;
   font-size: 14px;
+  /* 悬停时都会显示，无论父子 DOM */
+  &:hover &__sublist {
+    display: block;
+  }
   &__list {
     border-top: $border;
     border-bottom: $border;
@@ -100,13 +124,10 @@ $linkColor: #ffa500;
     z-index: 10;
   }
   &__subitem {
-    display: flex;
-    align-items: center;
     height: 36px;
-    line-height: 1.5;
-    a {
-      display: flex;
-      align-items: center;
+    line-height: 36px;
+    * {
+      vertical-align: middle;
     }
     i {
       font-size: 24px;
