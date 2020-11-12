@@ -1,10 +1,13 @@
 <template>
   <el-col class="strategy__recommend-bar">
-    <el-row class="recommend-cascader">
+    <el-row class="recommend-cascader" @mouseleave.native="clearActive">
       <ul class="recommend-cascader__list">
         <li
-          class="recommend-cascader__item"
           v-for="(recommendCityListItem, index) in recommendCityListItems"
+          :class="{
+            'recommend-cascader__item': true,
+            'active': recommendCityListItem.isActived
+          }"
           :key="index"
           @mouseover="handleHoverCascaderItem(index)"
         >
@@ -44,7 +47,17 @@ export default {
     }
   },
   methods: {
+    clearActive () {
+      this.recommendCityListItems.forEach(v => {
+        if (v.isActived) {
+          v.isActived = false
+        }
+      });
+    },
+    // 悬停时给当前列表项添加激活类名，并且鼠标在子级菜单时保持当前父级菜单的激活状态
     handleHoverCascaderItem (index) {
+      this.clearActive()
+      this.recommendCityListItems[index].isActived = true
       this.renderRecommendCityListSubItem(index)
     },
     renderRecommendCityListSubItem (index) {
@@ -62,7 +75,10 @@ export default {
       return this.$message.error('获取城市推荐列表数据失败，发生错误')
     }
 
-    this.recommendCityListItems = res.data.data
+    this.recommendCityListItems = res.data.data.map(v => {
+      v.isActived = false
+      return v
+    })
     this.renderRecommendCityListSubItem(0)
   }
 }
@@ -97,7 +113,7 @@ $linkColor: #ffa500;
     padding: 0 10px 0 20px;
     border-left: $border;
     border-right: $border;
-    &:hover {
+    &:hover, &.active {
       border-right-color: #fff;
       &,
       .el-icon-arrow-right {
