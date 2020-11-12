@@ -97,6 +97,17 @@
           </div>
         </el-row>
       </el-row>
+      <el-row class="comment-pagination" type="flex" justify="center" align="middle">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage4"
+          :page-sizes="[100, 200, 300, 400]"
+          :page-size="100"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="400"
+        />
+      </el-row>
     </el-col>
   </el-row>
 </template>
@@ -106,9 +117,18 @@ export default {
   name: 'Strategy',
   data () {
     return {
-      searchVal: ''
+      searchVal: '',
+      currentPage4: 4
     }
-  }
+  },
+  methods: {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    }
+  },
 }
 </script>
 
@@ -249,6 +269,9 @@ export default {
     .likes {
       color: $linkColor;
     }
+  }
+  .comment-pagination {
+    margin-top: 10px;
   }
 }
 </style>
