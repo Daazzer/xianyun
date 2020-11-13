@@ -6,7 +6,7 @@ export default axios => ({
   /**
    * 获取文章列表
    * @param {Object} params 参数对象
-   * @param {number} [params._start] 开始数据（分页）
+   * @param {number} [params._start] 当前数据项索引，分页时需要注意计算（从0开始）
    * @param {number} [params._limit] 条数
    * @param {string} [params.city] 城市
    * @returns {Promise}
