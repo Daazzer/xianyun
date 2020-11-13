@@ -2,17 +2,22 @@
   <el-row class="article-header">
     <el-row class="article-header__search">
       <el-input
-        v-model="searchVal"
+        v-model="citySearchVal"
         placeholder="请输入想去的地方，比如'广州'"
       />
-      <el-button class="search-btn" type="text" icon="el-icon-search" />
+      <el-button
+        class="search-btn"
+        type="text"
+        icon="el-icon-search"
+        @click="searchArticle"
+      />
     </el-row>
     <el-row class="article-header__recommend-text">
       <span>推荐：</span>
       <a
         v-for="(recommendCity, index) in recommendCities"
         :key="index"
-        href="#"
+        @click="searchRecommendArticle(recommendCity)"
       >{{ recommendCity }}</a>
     </el-row>
     <el-row
@@ -40,7 +45,31 @@ export default {
   },
   data () {
     return {
-      searchVal: ''
+      citySearchVal: ''
+    }
+  },
+  methods: {
+    async searchArticle () {
+      const city = this.citySearchVal
+      const [err, res] = await this.$api.getStrategicalArticles({
+        city
+      })
+
+      if (err) {
+        return this.$message.error('获取文章失败，发生错误')
+      }
+
+      // 点击搜索的时候通过地址栏把搜索状态显示给用户
+      this.$router.push({
+        path: '/strategy',
+        query: { city }
+      })
+
+      console.log(res)
+    },
+    searchRecommendArticle (recommendCity) {
+      this.citySearchVal = recommendCity
+      this.searchArticle()
     }
   }
 }
@@ -88,6 +117,7 @@ $linkColor: #ffa500;
     a {
       @extend span;
       border-bottom: 1px solid transparent;
+      cursor: pointer;
       &:hover {
         text-decoration: underline;
         color: $linkColor;
