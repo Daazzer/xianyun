@@ -17,53 +17,58 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :current-page="currentPage"
+        :page-sizes="[2, 4, 6, 8]"
+        :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="totalPage"
       />
     </el-row>
   </el-col>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'ArticleBar',
-  data () {
-    return {
-      currentPage4: 4,
-      // recommendCities: []
-    }
-  },
   methods: {
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+    async renderStrategicalArticles (currentPage, pageSize) {
+      // 如果路由有 city 参数则返回对应城市的文章
+      const city = this.$route.query.city
+      const [err, res] = await this.$api.getStrategicalArticles({
+        _start: currentPage,
+        _limit: pageSize,
+        city,
+      })
+
+      if (err) {
+        return this.$message.error('获取文章数据失败，发生错误')
+      }
+
+      this.$store.commit('strategy/setTotalPage', res.data.total)
+
+      this.$store.commit('strategy/setStrategicalArticles', res.data.data)
     },
-    handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+    handleSizeChange (pageSize) {
+      this.pageSize = pageSize
+      this.renderStrategicalArticles(this.currentPage, pageSize)
+    },
+    handleCurrentChange (currentPage) {
+      this.currentPage = currentPage
+      this.renderStrategicalArticles(currentPage, this.pageSize)
     }
   },
   computed: {
-    strategicalArticles () {
-      return this.$store.state.strategy.strategicalArticles
-    },
-    recommendCities () {
-      return this.$store.state.strategy.recommendCities
-    }
+    ...mapState({
+      strategicalArticles: state => state.strategy.strategicalArticles,
+      recommendCities: state => state.strategy.recommendCities,
+      currentPage: state => state.strategy.currentPage,
+      pageSize: state => state.strategy.pageSize,
+      totalPage: state => state.strategy.totalPage,
+    })
   },
   async mounted () {
-    // 如果路由有 city 参数则返回对应城市的文章
-    const city = this.$route.query.city
-    const [err, res] = await this.$api.getStrategicalArticles({
-      city
-    })
-
-    if (err) {
-      return this.$message.error('获取文章数据失败，发生错误')
-    }
-
-    this.$store.commit('strategy/setStrategicalArticles', res.data.data)
+    this.renderStrategicalArticles(this.currentPage, this.pageSize)
   }
 }
 </script>

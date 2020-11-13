@@ -1,6 +1,9 @@
 export const state = () => ({
   strategicalArticles: [],
-  recommendCities: []
+  recommendCities: [],
+  currentPage: 1,
+  pageSize: 2,
+  totalPage: 0
 })
 
 export const mutations = {
@@ -9,5 +12,8 @@ export const mutations = {
   },
   setRecommendCities (state, data) {
     state.recommendCities = data
+  },
+  setTotalPage (state, data) {
+    state.totalPage = data
   }
 }
