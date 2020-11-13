@@ -27,7 +27,7 @@
       align="middle"
     >
       <h4>推荐攻略</h4>
-      <el-button icon="el-icon-edit" type="primary">写游记</el-button>
+      <el-button icon="el-icon-edit" type="primary" @click="$router.push('/strategy/publish')">写游记</el-button>
     </el-row>
   </el-row>
 </template>
