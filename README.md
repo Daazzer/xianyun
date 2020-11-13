@@ -1360,6 +1360,8 @@ export default ({ store }) => {
 
   - 文章搜索后路由参数追加
 
+  - 如果为空搜索，则清空页面路由参数，数据请求参数 city 字段删除
+
   - 文章搜索后数据展示在 `ArticleBar` 组件
 
 - `ArticleBarItem` 组件展示文章列表数据
