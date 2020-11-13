@@ -33,7 +33,7 @@ export default {
   data () {
     return {
       currentPage4: 4,
-      recommendCities: []
+      // recommendCities: []
     }
   },
   methods: {
@@ -47,21 +47,23 @@ export default {
   computed: {
     strategicalArticles () {
       return this.$store.state.strategy.strategicalArticles
+    },
+    recommendCities () {
+      return this.$store.state.strategy.recommendCities
     }
   },
   async mounted () {
-    const [err, res] = await this.$api.getStrategicalArticles()
+    // 如果路由有 city 参数则返回对应城市的文章
+    const city = this.$route.query.city
+    const [err, res] = await this.$api.getStrategicalArticles({
+      city
+    })
 
     if (err) {
       return this.$message.error('获取文章数据失败，发生错误')
     }
 
     this.$store.commit('strategy/setStrategicalArticles', res.data.data)
-
-    // 在文章头部搜索栏显示前三个城市
-    for (let i = 0; i < 3; i++) {
-      this.recommendCities.push(this.strategicalArticles[i].cityName.replace('市', ''))
-    }
   }
 }
 </script>
