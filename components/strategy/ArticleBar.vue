@@ -1,6 +1,6 @@
 <template>
   <el-col class="strategy__article-bar">
-    <ArticleBarHeader :recommendCities="recommendCities" />
+    <ArticleBarHeader />
     <el-row class="article-list">
       <ArticleBarItem
         v-for="strategicalArticle in strategicalArticles"
@@ -60,7 +60,6 @@ export default {
   computed: {
     ...mapState('strategy', {
       strategicalArticles: state => state.strategicalArticles,
-      recommendCities: state => state.recommendCities,
       currentPage: state => state.currentPage,
       pageSize: state => state.pageSize,
       totalPage: state => state.totalPage

@@ -35,14 +35,6 @@
 <script>
 export default {
   name: 'ArticleBarHeader',
-  props: {
-    recommendCities: {
-      type: Array,
-      default () {
-        return []
-      }
-    }
-  },
   data () {
     return {
       citySearchVal: ''
@@ -57,6 +49,11 @@ export default {
         query: { city: recommendCity }
       })
       this.$store.dispatch('strategy/searchRecommendArticles', recommendCity)
+    }
+  },
+  computed: {
+    recommendCities () {
+      return this.$store.state.strategy.recommendCities
     }
   }
 }
