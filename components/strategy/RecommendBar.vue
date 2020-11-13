@@ -20,11 +20,11 @@
           v-for="(recommendCitySubItem, index) in recommendCityListSubItems"
           :key="index"
         >
-          <a :href="recommendCitySubItem.link">
+          <nuxt-link :to="recommendCitySubItem.link" @click.native="searchRecommendArticle(recommendCitySubItem.city)">
             <i>{{ index + 1 }}</i>
             <strong>{{ recommendCitySubItem.city }}</strong>
             <span>{{ recommendCitySubItem.desc }}</span>
-          </a>
+          </nuxt-link>
         </li>
       </ol>
     </el-row>
@@ -64,9 +64,18 @@ export default {
       const recommendCityListSubItems = [...this.recommendCityListItems[index].children]
       // 添加一个链接接字段
       this.recommendCityListSubItems = recommendCityListSubItems.map(city => {
-        city.link = this.$axios.defaults.baseURL + '/posts?city=' + city.city
+        city.link = '/strategy?city=' + city.city
         return city
       })
+    },
+    async searchRecommendArticle (recommendCity) {
+      const [err, res] = await this.$api.getStrategicalArticles({
+        city: recommendCity
+      })
+      if (err) {
+        return this.$message.error('获取文章失败，发生错误')
+      }
+      console.log(res)
     }
   },
   async mounted () {
