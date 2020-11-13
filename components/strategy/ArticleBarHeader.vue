@@ -9,7 +9,7 @@
         class="search-btn"
         type="text"
         icon="el-icon-search"
-        @click="searchArticle"
+        @click="searchRecommendArticles(citySearchVal)"
       />
     </el-row>
     <el-row class="article-header__recommend-text">
@@ -17,7 +17,7 @@
       <a
         v-for="(recommendCity, index) in recommendCities"
         :key="index"
-        @click="searchRecommendArticle(recommendCity)"
+        @click="searchRecommendArticles(recommendCity)"
       >{{ recommendCity }}</a>
     </el-row>
     <el-row
@@ -49,27 +49,14 @@ export default {
     }
   },
   methods: {
-    async searchArticle () {
-      const city = this.citySearchVal
-      const [err, res] = await this.$api.getStrategicalArticles({
-        city
-      })
-
-      if (err) {
-        return this.$message.error('获取文章失败，发生错误')
-      }
-
+    searchRecommendArticles (recommendCity) {
+      this.citySearchVal = recommendCity
       // 点击搜索的时候通过地址栏把搜索状态显示给用户
       this.$router.push({
         path: '/strategy',
-        query: { city }
+        query: { city: recommendCity }
       })
-
-      this.$store.commit('strategy/setStrategicalArticles', res.data.data)
-    },
-    searchRecommendArticle (recommendCity) {
-      this.citySearchVal = recommendCity
-      this.searchArticle()
+      this.$store.dispatch('strategy/searchRecommendArticles', recommendCity)
     }
   }
 }

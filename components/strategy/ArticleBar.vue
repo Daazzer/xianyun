@@ -45,9 +45,8 @@ export default {
         return this.$message.error('获取文章数据失败，发生错误')
       }
 
-      this.$store.commit('strategy/setTotalPage', res.data.total)
-
       this.$store.commit('strategy/setStrategicalArticles', res.data.data)
+      this.$store.commit('strategy/setTotalPage', res.data.total)
     },
     handleSizeChange (pageSize) {
       this.pageSize = pageSize

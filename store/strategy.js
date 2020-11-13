@@ -15,5 +15,28 @@ export const mutations = {
   },
   setTotalPage (state, data) {
     state.totalPage = data
+  },
+  resetPagination (state) {
+    state.currentPage = 1
+    state.pageSize = 2
+  }
+}
+
+export const actions = {
+  async searchRecommendArticles ({ commit, state }, recommendCity) {
+    commit('resetPagination')
+
+    const [err, res] = await this.$api.getStrategicalArticles({
+      _start: state.currentPage,
+      _limit: state.pageSize,
+      city: recommendCity
+    })
+
+    if (err) {
+      return this.$message.error('获取文章失败，发生错误')
+    }
+
+    commit('setStrategicalArticles', res.data.data)
+    commit('setTotalPage', res.data.total)
   }
 }

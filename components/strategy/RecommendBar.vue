@@ -20,7 +20,7 @@
           v-for="(recommendCitySubItem, index) in recommendCityListSubItems"
           :key="index"
         >
-          <nuxt-link :to="recommendCitySubItem.link" @click.native="searchRecommendArticle(recommendCitySubItem.city)">
+          <nuxt-link :to="recommendCitySubItem.link" @click.native="searchRecommendArticles(recommendCitySubItem.city)">
             <i>{{ index + 1 }}</i>
             <strong>{{ recommendCitySubItem.city }}</strong>
             <span>{{ recommendCitySubItem.desc }}</span>
@@ -68,14 +68,8 @@ export default {
         return city
       })
     },
-    async searchRecommendArticle (recommendCity) {
-      const [err, res] = await this.$api.getStrategicalArticles({
-        city: recommendCity
-      })
-      if (err) {
-        return this.$message.error('获取文章失败，发生错误')
-      }
-      this.$store.commit('strategy/setStrategicalArticles', res.data.data)
+    searchRecommendArticles (recommendCity) {
+      this.$store.dispatch('strategy/searchRecommendArticles', recommendCity)
     }
   },
   async mounted () {
