@@ -75,7 +75,7 @@ export default {
       if (err) {
         return this.$message.error('获取文章失败，发生错误')
       }
-      console.log(res)
+      this.$store.commit('strategy/setStrategicalArticles', res.data.data)
     }
   },
   async mounted () {

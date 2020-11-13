@@ -65,7 +65,7 @@ export default {
         query: { city }
       })
 
-      console.log(res)
+      this.$store.commit('strategy/setStrategicalArticles', res.data.data)
     },
     searchRecommendArticle (recommendCity) {
       this.citySearchVal = recommendCity
