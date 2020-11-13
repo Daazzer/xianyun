@@ -54,7 +54,7 @@ export default {
         }
       });
     },
-    // 悬停时给当前列表项添加激活类名，并且鼠标在子级菜单时保持当前父级菜单的激活状态
+    // 悬停时给当前列表项添加激活类名，并且鼠标在子级菜单时保持当前父级菜单列表项的激活状态
     handleHoverCascaderItem (index) {
       this.clearActive()
       this.recommendCityListItems[index].isActived = true
