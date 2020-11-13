@@ -89,6 +89,14 @@ export default {
       return v
     })
     this.renderRecommendCityListSubItem(0)
+    for (const recommendCityListItem of this.recommendCityListItems) {
+      if (recommendCityListItem.type === '推荐城市') {
+        // 在文章头部搜索栏显示前三个城市
+        const recommendCities = recommendCityListItem.children.slice(0, 3)
+        this.$store.commit('strategy/setRecommendCities', recommendCities.map(v => v.city))
+        break
+      }
+    }
   }
 }
 </script>
