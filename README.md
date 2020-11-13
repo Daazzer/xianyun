@@ -1281,3 +1281,146 @@ export default ({ store }) => {
     ```
 
     
+
+## 旅游攻略页
+
+### 技术实现
+
+- `RecommendBar` 组件展示推荐城市攻略数据
+
+  - 推荐城市悬停级联菜单数据展示
+
+  - 悬停级联菜单状态保持
+
+  - 完全离开级联菜单状态清空
+
+  - 点击推荐级联菜单中的数据项，配合 `vuex` 展示对应文章到文章列表，复用 `vuex` 的 `actions`
+
+    ```js
+    // @/store/strategy.js
+    export const actions = {
+      async searchRecommendArticles ({ commit, state }, recommendCity) {
+        commit('resetPagination')
+    
+        const [err, res] = await this.$api.getStrategicalArticles({
+          _start: (state.currentPage - 1) * state.pageSize,
+          _limit: state.pageSize,
+          city: recommendCity
+        })
+    
+        if (err) {
+          return this.$message.error('获取文章失败，发生错误')
+        }
+    
+        commit('setStrategicalArticles', res.data.data)
+        commit('setTotalPage', res.data.total)
+      }
+    }
+    ```
+
+    
+
+- `ArticleBar` 组件展示 攻略文章列表数据
+
+  - 抽离所有数据到 `vuex`
+  - `mapState()` 辅助函数调用，简化数据写法
+  - 文章列表数据初始化
+  - 文章列表分页，配合 api 分页进行数据展示
+
+- `ArticleBarHeader` 头部搜索组件
+
+  - 文章搜索功能，复用 `vuex` 的 `actions` 同上
+
+    ```vue
+    <!-- @/components/strategy/ArticleBarHeader.vue -->
+    <script>
+    export default {
+    	// ...
+      methods: {
+        searchRecommendArticles (recommendCity) {
+          this.citySearchVal = recommendCity
+          // 点击搜索的时候通过地址栏把搜索状态显示给用户
+          this.$router.push({
+            path: '/strategy',
+            query: { city: recommendCity }
+          })
+          this.$store.dispatch('strategy/searchRecommendArticles', recommendCity)
+        }
+      }
+      // ...
+    }
+    </script>
+    ```
+
+    
+
+  - 文章推荐数据配合 `vuex` 从 `RecommendBar` 组件中获取并渲染
+
+  - 点击推荐文章按钮搜索框显示内容
+
+  - 文章搜索后路由参数追加
+
+  - 文章搜索后数据展示在 `ArticleBar` 组件
+
+- `ArticleBarItem` 组件展示文章列表数据
+
+  - 根据文章图片数来决定是上下结构还是左右结构，上下结构则只能显示 3 张，左右结构则最多只能显示 1 张
+
+    ```vue
+    <!-- @/components/strategy/ArticleBarItem.vue -->
+    <template>
+      <article>
+        <!-- 上下结构 -->
+        <el-row
+          v-if="strategicalArticle.images.length >= 3"
+          class="article-item article-item--tb"
+        >
+          <!-- ... -->
+          <el-row
+            class="article-item__images"
+            type="flex"
+            justify="space-between"
+          >
+            <!-- 只显示三张图片 -->
+            <nuxt-link
+              :to="articleDetailPage"
+              v-for="(imgSrc, index) in strategicalArticle.images.filter((v, i) => i < 3)"
+              :key="index"
+            >
+              <el-image :src="imgSrc" />
+            </nuxt-link>
+          </el-row>
+          <!-- ... -->
+        </el-row>
+        <!-- 左右结构 -->
+        <el-row
+          v-else-if="strategicalArticle.images.length < 3"
+          class="article-item article-item--lr"
+          type="flex"
+          justify="space-between"
+        >
+          <!-- 只显示第一张图片，如果没有则不显示 -->
+          <div
+            class="article-item__images"
+            v-if="strategicalArticle.images && strategicalArticle.images.length > 0"
+          >
+            <nuxt-link :to="articleDetailPage">
+              <el-image :src="strategicalArticle.images[0]" />
+            </nuxt-link>
+          </div>
+          <!-- ... -->
+        </el-row>
+      </article>
+    </template>
+    ```
+
+    
+
+  - 组件的遍历操作在父组件，而展示每一项在组件内部操作
+
+  - 组件的进一步封装
+
+    - `ArticleBarItemInfo` 组件展示文章信息
+      - 用户信息
+      - 点赞数
+      - 观看数
