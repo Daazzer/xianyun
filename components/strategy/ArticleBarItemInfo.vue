@@ -4,16 +4,16 @@
       <span><i class="el-icon-location-outline"></i>{{ strategicalArticle.cityName }}</span>
       <el-row type="flex" align="middle">
         by
-        <a class="user-avatar" href="#">
+        <nuxt-link class="user-avatar" to="user/personal">
           <el-image
             :src="$axios.defaults.baseURL + strategicalArticle.account.defaultAvatar"
           />
-        </a>
-        <a class="user-nickname" href="#">{{ strategicalArticle.account.nickname }}</a>
+        </nuxt-link>
+        <nuxt-link class="user-nickname" to="user/personal">{{ strategicalArticle.account.nickname }}</nuxt-link>
       </el-row>
-      <span><i class="el-icon-view"></i> {{ strategicalArticle.watch }}</span>
+      <span><i class="el-icon-view"></i> {{ strategicalArticle.watch || 0 }}</span>
     </el-row>
-    <span class="likes">{{ strategicalArticle.like }} 赞</span>
+    <span class="likes">{{ strategicalArticle.like || 0 }} 赞</span>
   </el-row>
 </template>
 

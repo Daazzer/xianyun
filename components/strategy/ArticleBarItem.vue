@@ -9,22 +9,22 @@
       v-if="strategicalArticle.images.length >= 3"
       class="article-item article-item--tb"
     >
-      <h4><a href="#">{{ strategicalArticle.title }}</a></h4>
+      <h4><nuxt-link :to="articleDetailPage">{{ strategicalArticle.title }}</nuxt-link></h4>
       <p class="article-item__desc">
-        <a href="#" v-html="strategicalArticle.summary"></a>
+        <nuxt-link :to="articleDetailPage" v-html="strategicalArticle.summary" />
       </p>
       <el-row
         class="article-item__images"
         type="flex"
         justify="space-between"
       >
-        <a
-          href="#"
+        <nuxt-link
+          :to="articleDetailPage"
           v-for="(imgSrc, index) in strategicalArticle.images.filter((v, i) => i < 3)"
           :key="index"
         >
           <el-image :src="imgSrc" />
-        </a>
+        </nuxt-link>
       </el-row>
       <ArticleBarItemInfo :strategicalArticle="strategicalArticle" />
     </el-row>
@@ -38,18 +38,18 @@
         class="article-item__images"
         v-if="strategicalArticle.images && strategicalArticle.images.length > 0"
       >
-        <a href="#">
+        <nuxt-link :to="articleDetailPage">
           <el-image :src="strategicalArticle.images[0]" />
-        </a>
+        </nuxt-link>
       </div>
       <div class="article-item__content">
         <h4>
-          <a href="#">
+          <nuxt-link :to="articleDetailPage">
             {{ strategicalArticle.title }}
-          </a>
+          </nuxt-link>
         </h4>
         <p class="article-item__desc">
-          <a href="#" v-html="strategicalArticle.summary"></a>
+          <nuxt-link :to="articleDetailPage" v-html="strategicalArticle.summary" />
         </p>
         <ArticleBarItemInfo :strategicalArticle="strategicalArticle" />
       </div>
@@ -68,6 +68,11 @@ export default {
           images: []
         }
       }
+    }
+  },
+  computed: {
+    articleDetailPage () {
+      return '/strategy/detail?id=' + this.strategicalArticle.id
     }
   }
 }
@@ -117,6 +122,9 @@ $linkColor: #ffa500;
       width: 220px;
       height: 150px;
     }
+  }
+  &__content {
+    flex: 1;
   }
 }
 </style>
