@@ -35,7 +35,7 @@ export const actions = {
     const [err, res] = await this.$api.getStrategicalArticles({
       _start: (state.currentPage - 1) * state.pageSize,
       _limit: state.pageSize,
-      city: recommendCity
+      city: recommendCity || null
     })
 
     if (err) {

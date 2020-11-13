@@ -46,7 +46,7 @@ export default {
       // 点击搜索的时候通过地址栏把搜索状态显示给用户
       this.$router.push({
         path: '/strategy',
-        query: { city: recommendCity }
+        query: recommendCity !== '' ? { city: recommendCity } : undefined
       })
       this.$store.dispatch('strategy/searchRecommendArticles', recommendCity)
     }
