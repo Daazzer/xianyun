@@ -58,12 +58,12 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      strategicalArticles: state => state.strategy.strategicalArticles,
-      recommendCities: state => state.strategy.recommendCities,
-      currentPage: state => state.strategy.currentPage,
-      pageSize: state => state.strategy.pageSize,
-      totalPage: state => state.strategy.totalPage,
+    ...mapState('strategy', {
+      strategicalArticles: state => state.strategicalArticles,
+      recommendCities: state => state.recommendCities,
+      currentPage: state => state.currentPage,
+      pageSize: state => state.pageSize,
+      totalPage: state => state.totalPage
     })
   },
   async mounted () {
