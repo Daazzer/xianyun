@@ -1,9 +1,9 @@
 <template>
   <article>
     <!--
-    根据文章图片数决定是上下结构函数左右结构，
+    根据文章图片数来决定是上下结构还是左右结构，
     上下结构则只能显示 3 张
-    左右结构则最多能显示 1 张
+    左右结构则最多只能显示 1 张
     -->
     <el-row
       v-if="strategicalArticle.images.length >= 3"
