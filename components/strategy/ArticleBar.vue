@@ -46,7 +46,7 @@ export default {
     }
   },
   async mounted () {
-    const [err, res] = await this.$api.getStrategies()
+    const [err, res] = await this.$api.getStrategicalArticles()
 
     if (err) {
       return this.$message.error('获取文章数据失败，发生错误')

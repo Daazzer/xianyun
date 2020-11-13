@@ -11,7 +11,7 @@ export default axios => ({
    * @param {string} [params.city] 城市
    * @returns {Promise}
    */
-  getStrategies: params => handleAxiosRequest(axios.get('/posts', { params })),
+  getStrategicalArticles: params => handleAxiosRequest(axios.get('/posts', { params })),
   /**
    * 获取文章评论
    * @param {Object} params 参数对象
