@@ -2,7 +2,7 @@ export const state = () => ({
   strategicalArticles: [],
   recommendCities: [],
   currentPage: 1,
-  pageSize: 2,
+  pageSize: 3,
   totalPage: 0
 })
 
@@ -13,12 +13,18 @@ export const mutations = {
   setRecommendCities (state, data) {
     state.recommendCities = data
   },
+  setCurrentPage (state, data) {
+    state.currentPage = data
+  },
+  setPageSize (state, data) {
+    state.pageSize = data
+  },
   setTotalPage (state, data) {
     state.totalPage = data
   },
   resetPagination (state) {
     state.currentPage = 1
-    state.pageSize = 2
+    state.pageSize = 3
   }
 }
 
@@ -27,7 +33,7 @@ export const actions = {
     commit('resetPagination')
 
     const [err, res] = await this.$api.getStrategicalArticles({
-      _start: state.currentPage,
+      _start: (state.currentPage - 1) * state.pageSize,
       _limit: state.pageSize,
       city: recommendCity
     })

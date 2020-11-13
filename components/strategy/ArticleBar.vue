@@ -18,7 +18,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[2, 4, 6, 8]"
+        :page-sizes="[3, 4, 5, 6]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="totalPage"
@@ -36,7 +36,7 @@ export default {
       // 如果路由有 city 参数则返回对应城市的文章
       const city = this.$route.query.city
       const [err, res] = await this.$api.getStrategicalArticles({
-        _start: currentPage,
+        _start: (currentPage - 1) * pageSize,
         _limit: pageSize,
         city,
       })
@@ -49,11 +49,11 @@ export default {
       this.$store.commit('strategy/setTotalPage', res.data.total)
     },
     handleSizeChange (pageSize) {
-      this.pageSize = pageSize
+      this.$store.commit('strategy/setPageSize', pageSize)
       this.renderStrategicalArticles(this.currentPage, pageSize)
     },
     handleCurrentChange (currentPage) {
-      this.currentPage = currentPage
+      this.$store.commit('strategy/setCurrentPage', currentPage)
       this.renderStrategicalArticles(currentPage, this.pageSize)
     }
   },
