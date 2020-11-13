@@ -33,7 +33,6 @@ export default {
   data () {
     return {
       currentPage4: 4,
-      strategicalArticles: [],
       recommendCities: []
     }
   },
@@ -45,6 +44,11 @@ export default {
       console.log(`当前页: ${val}`)
     }
   },
+  computed: {
+    strategicalArticles () {
+      return this.$store.state.strategy.strategicalArticles
+    }
+  },
   async mounted () {
     const [err, res] = await this.$api.getStrategicalArticles()
 
@@ -52,7 +56,8 @@ export default {
       return this.$message.error('获取文章数据失败，发生错误')
     }
 
-    this.strategicalArticles = res.data.data
+    // this.strategicalArticles = res.data.data
+    this.$store.commit('strategy/setStrategicalArticles', res.data.data)
 
     // 在文章头部搜索栏显示前三个城市
     for (let i = 0; i < 3; i++) {
