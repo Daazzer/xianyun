@@ -1,5 +1,5 @@
 <template>
-  <div>文章发布页</div>
+  <div class="w">文章发布页</div>
 </template>
 
 <script>
