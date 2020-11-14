@@ -8,10 +8,11 @@ export default ({ $axios }, inject) => {
    * @param {string} url 请求地址段
    * @returns {boolean} 是否匹配给定的地址段
    */
-  const checkAuthUrl = url => (
+  const checkAuthUrl = (url, method) => (
     /^\/comments(\/like)?/.test(url) ||
     /^\/airorders(\/(pay|checkpay))?/.test(url) ||
     /^\/posts\/(star|like)/.test(url) ||
+    (/^\/posts/.test(url) && method === 'post') ||
     /^\/upload/.test(url)
   )
 
@@ -25,8 +26,7 @@ export default ({ $axios }, inject) => {
   // 请求拦截
   $axios.onRequest(config => {
     const xianyun = JSON.parse(localStorage.getItem('xianyun'))
-
-    if (xianyun && checkAuthUrl(config.url)) {
+    if (xianyun && checkAuthUrl(config.url, config.method)) {
       const token = xianyun.user.userInfo.token
       config.headers.Authorization = 'Bearer ' + token
     }
