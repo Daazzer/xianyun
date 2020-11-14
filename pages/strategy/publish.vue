@@ -9,7 +9,7 @@
         </el-form-item>
         <el-form-item>
           <client-only>
-            <VueEditor :config="config" />
+            <div>编辑器</div>
           </client-only>
         </el-form-item>
         <el-form-item label="选择城市">
@@ -20,7 +20,7 @@
           />
         </el-form-item>
         <el-form-item class="btn-group">
-          <el-button size="small" type="primary">发布</el-button>
+          <el-button size="small" type="primary" @click="publishArticle">发布</el-button>
           <span class="btn-group__side">
             或者
             <a class="save-btn" href="javascript:;">保存到草稿</a>
@@ -59,12 +59,6 @@
 </template>
 
 <script>
-import 'quill/dist/quill.snow.css'
-let VueEditor
-if (process.browser) {
-  VueEditor = require('vue-word-editor').default
-}
-
 export default {
   name: 'StrategyPublish',
   components: {
@@ -72,38 +66,50 @@ export default {
   },
   data () {
     return {
+      content: '',
       title: '',
       city: '',
-      config: {
-        // 上传图片的配置
-        uploadImage: {
-          url: "http://localhost:3000/upload",
-          name: "file",
-          // res是结果，insert方法会把内容注入到编辑器中，res.data.url是资源地址
-          uploadSuccess(res, insert){
-            insert("http://localhost:3000" + res.data.url)
-          }
+    }
+  },
+  methods: {
+    publishArticle () {
+      const publishForm = {
+        title: {
+          value: this.title,
+          message: '标题不能为空'
         },
-
-        // 上传视频的配置
-        uploadVideo: {
-          url: "http://localhost:3000/upload",
-          name: "file",
-          uploadSuccess(res, insert){
-            insert("http://localhost:3000" + res.data.url)
-          }
+        city: {
+          value: this.city,
+          message: '请选择城市'
         },
+        content: {
+          value: content,
+          message: '内容不能为空'
+        }
+      }
+      for (const key in publishForm) {
+        const item = publishForm[key]
+        switch (key) {
+          case 'title':
+          case 'city':
+            if (item.value === '') {
+              this.$alert(item.message, '提示', {
+                type: 'warning'
+              }).catch(err => err)
+            }
+            break
 
-        modules: {
-          toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
-            [{ 'header': 1 }, { 'header': 2 }],
-            ['image']
-          ]
+          case 'content':
+            if (/^<\/?[\w\s\/]*><br\/?><\/?[\w\s\/]*>$/.test(item.value) || /^<\/?[\w\s\/]*>(<\/?[\w\s\"\'\=\d\-\/]*>)*<\/?[\w\s\/]*>$/.test(item.value)) {
+              this.$alert(item.message, '提示', {
+                type: 'warning'
+              }).catch(err => err)
+            }
+            break
         }
       }
     }
-  },
+  }
 }
 </script>
 
