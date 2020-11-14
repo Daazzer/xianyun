@@ -10,7 +10,7 @@
         <span class="floor-num">3</span>
       </el-row>
       <div class="detail-comment-item__content">
-        <div class="comment-floor"></div>
+        <CommentFloor />
         <div class="comment-new">
           <p class="comment-new__message">套娃</p>
           <el-row type="flex">
