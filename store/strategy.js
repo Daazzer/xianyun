@@ -1,5 +1,6 @@
 export const state = () => ({
   strategicalArticles: [],
+  strategicalArticleDrafts: [],
   recommendCities: [],
   currentPage: 1,
   pageSize: 3,
@@ -25,6 +26,12 @@ export const mutations = {
   resetPagination (state) {
     state.currentPage = 1
     state.pageSize = 3
+  },
+  addStrategicalArticleDraft (state, data) {
+    state.strategicalArticleDrafts.unshift(data)
+  },
+  delStrategicalArticleDraft (state, index) {
+    state.strategicalArticleDrafts.splice(index, 1)
   }
 }
 

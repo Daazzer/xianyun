@@ -8,7 +8,11 @@ export default ({ store }) => {
        * 利用 paths 保存部分状态到本地
        * @see {@link https://github.com/robinvdvleuten/vuex-persistedstate#example-with-vuex-modules Github@vuex-persistedstate}
        */
-      paths: ['user.userInfo', 'air.queryAirsHistory']
+      paths: [
+        'user.userInfo',
+        'air.queryAirsHistory',
+        'strategy.strategicalArticleDrafts'
+      ]
     })(store)
   })
 }
