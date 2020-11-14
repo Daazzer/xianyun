@@ -3,7 +3,7 @@ export const state = () => ({
   strategicalArticleDrafts: [],
   recommendCities: [],
   currentPage: 1,
-  pageSize: 3,
+  pageSize: 5,
   totalPage: 0
 })
 
