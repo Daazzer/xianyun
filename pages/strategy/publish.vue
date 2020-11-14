@@ -43,11 +43,11 @@
             v-for="(draft, index) in strategicalArticleDrafts"
             :key="index"
           >
-            <h5>{{ draft.title }}</h5>
+            <h5 @click="editDraft(index)">{{ draft.title }}</h5>
             <el-row class="draft-item__main" type="flex" justify="space-between" align="middle">
               <p class="draft-item__date">{{ draft.date }}</p>
               <div class="draft-item__opt">
-                <el-button type="text" icon="el-icon-edit" />
+                <el-button type="text" icon="el-icon-edit" @click="editDraft(index)" />
                 <el-button type="text" icon="el-icon-delete" @click="delDraft(index)" />
               </div>
             </el-row>
@@ -135,7 +135,7 @@ export default {
           this.$alert(item.message, '提示', {
             type: 'warning'
           }).catch(err => err)
-          break
+          return
         }
       }
       const [err, res] = await this.$api.publishStrategicalArticle({
@@ -181,6 +181,12 @@ export default {
       }).then(() => {
         this.$store.commit('strategy/delStrategicalArticleDraft', index)
       }).catch(err => err)
+    },
+    editDraft (index) {
+      const draft = this.strategicalArticleDrafts[index]
+      this.title = draft.title
+      this.content = draft.content
+      this.city = draft.city
     }
   },
   computed: {
