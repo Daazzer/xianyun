@@ -13,6 +13,14 @@ export default axios => ({
    */
   getStrategicalArticles: params => handleAxiosRequest(axios.get('/posts', { params })),
   /**
+   * 新增文章
+   * @param {Object} data 参数对象
+   * @param {string} data.content 文章内容
+   * @param {string} data.title 文章标题
+   * @param {number|string} data.city 城市id | 城市名称
+   */
+  publishStrategicalArticle: data => handleAxiosRequest(axios.post('/posts', data)),
+  /**
    * 获取文章评论
    * @param {Object} params 参数对象
    * @param {number} [params.post] 文章 id
