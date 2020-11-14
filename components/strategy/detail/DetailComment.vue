@@ -63,11 +63,14 @@ export default {
   &-input {
     margin-bottom: 10px;
   }
-  &-ctrl__pics ::v-deep .el-upload {
-    $size: 100px;
-    width: $size;
-    height: $size;
-    line-height: $size;
+  &-ctrl {
+    margin-bottom: 30px;
+    &__pics ::v-deep .el-upload {
+      $size: 100px;
+      width: $size;
+      height: $size;
+      line-height: $size;
+    }
   }
 }
 </style>
