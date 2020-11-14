@@ -12,7 +12,8 @@
             <VueEditor
               v-model="content"
               :editor-toolbar="customToolbar"
-              @imageAdded="addImage"
+              useCustomImageHandler
+              @image-added="addImage"
             />
           </client-only>
         </el-form-item>
@@ -104,8 +105,20 @@ export default {
       const result = res.data.data.map(v => ({ value: v.name }))
       cb(result)
     },
-    addImage () {
+    async addImage (file, Editor, cursorLocation, resetUploader) {
+      const fd = new FormData()
 
+      fd.append('files', file)
+
+      const [err, res] = await this.$api.uploadFile(fd)
+
+      if (err) {
+        return this.$message.error('上传失败')
+      }
+
+      const imgSrc = this.$axios.defaults.baseURL + res.data[0].url
+      Editor.insertEmbed(cursorLocation, 'image', imgSrc)
+      resetUploader()
     },
     async publishArticle () {
       const publishItems = [
