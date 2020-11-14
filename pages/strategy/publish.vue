@@ -29,32 +29,26 @@
           <el-button size="small" type="primary" @click="publishArticle">发布</el-button>
           <span class="btn-group__side">
             或者
-            <a class="save-btn" href="javascript:;">保存到草稿</a>
+            <a class="save-btn" href="javascript:;" @click="saveAsDraft">保存到草稿</a>
           </span>
         </el-form-item>
       </el-form>
     </el-col>
     <el-col class="publish-draft">
       <div class="draft-box">
-        <h4>草稿箱（2）</h4>
+        <h4>草稿箱（{{ strategicalArticleDrafts.length }}）</h4>
         <ul class="draft-box__draft-list">
-          <li class="draft-item">
-            <h5>新标题</h5>
+          <li
+            class="draft-item"
+            v-for="(draft, index) in strategicalArticleDrafts"
+            :key="index"
+          >
+            <h5>{{ draft.title }}</h5>
             <el-row class="draft-item__main" type="flex" justify="space-between" align="middle">
-              <p class="draft-item__date">2020-11-13</p>
+              <p class="draft-item__date">{{ draft.date }}</p>
               <div class="draft-item__opt">
                 <el-button type="text" icon="el-icon-edit" />
-                <el-button type="text" icon="el-icon-delete" />
-              </div>
-            </el-row>
-          </li>
-          <li class="draft-item">
-            <h5>新标题</h5>
-            <el-row class="draft-item__main" type="flex" justify="space-between" align="middle">
-              <p class="draft-item__date">2020-11-13</p>
-              <div class="draft-item__opt">
-                <el-button type="text" icon="el-icon-edit" />
-                <el-button type="text" icon="el-icon-delete" />
+                <el-button type="text" icon="el-icon-delete" @click="delDraft(index)" />
               </div>
             </el-row>
           </li>
@@ -157,6 +151,42 @@ export default {
       this.$message.success('发布成功')
       console.log(res)
     },
+    saveAsDraft () {
+      const title = this.title
+
+      if (title === '') {
+        return this.$message.warning('标题不能为空')
+      }
+
+      const d = new Date()
+
+      const date = [
+        d.getFullYear(),
+        d.getMonth() + 1,
+        d.getDate()
+      ].join('-')
+
+      const draft = {
+        title,
+        content: this.content,
+        city: this.city,
+        date
+      }
+
+      this.$store.commit('strategy/addStrategicalArticleDraft', draft)
+    },
+    delDraft (index) {
+      this.$confirm('真的要删除这个草稿吗', '警告', {
+        type: 'warning'
+      }).then(() => {
+        this.$store.commit('strategy/delStrategicalArticleDraft', index)
+      }).catch(err => err)
+    }
+  },
+  computed: {
+    strategicalArticleDrafts () {
+      return this.$store.state.strategy.strategicalArticleDrafts
+    }
   }
 }
 </script>
@@ -222,6 +252,9 @@ export default {
       }
       &__date {
         color: #999;
+        max-width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
       }
       &__opt button {
         padding: 0;
