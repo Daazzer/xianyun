@@ -12,14 +12,16 @@
             <VueEditor
               v-model="content"
               :editor-toolbar="customToolbar"
+              @imageAdded="addImage"
             />
           </client-only>
         </el-form-item>
         <el-form-item label="选择城市">
-          <el-input
+          <el-autocomplete
             class="city"
             placeholder="请搜索游玩城市"
             v-model="city"
+            :fetch-suggestions="queryCity"
           />
         </el-form-item>
         <el-form-item class="btn-group">
@@ -84,7 +86,28 @@ export default {
     }
   },
   methods: {
-    publishArticle () {
+    /**
+     * 发送请求查询城市
+     * @param {string} name 输入的查询字符串
+     * @param {Function} cb 回调函数
+     */
+    async queryCity (name, cb) {
+      if (name === '') {
+        return cb([])
+      }
+      const [err, res] = await this.$api.getAirsCity({ name })
+
+      if (err) {
+        return cb([{ value: '数据查询失败' }])
+      }
+
+      const result = res.data.data.map(v => ({ value: v.name }))
+      cb(result)
+    },
+    addImage () {
+
+    },
+    async publishArticle () {
       const publishItems = [
         {
           value: this.title,
@@ -108,7 +131,19 @@ export default {
           break
         }
       }
-    }
+      const [err, res] = await this.$api.publishStrategicalArticle({
+        title: this.title,
+        content: this.content,
+        city: this.city
+      })
+
+      if (err) {
+        return
+      }
+
+      this.$message.success('发布成功')
+      console.log(res)
+    },
   }
 }
 </script>
