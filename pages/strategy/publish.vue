@@ -9,7 +9,10 @@
         </el-form-item>
         <el-form-item>
           <client-only>
-            <div>编辑器</div>
+            <VueEditor
+              v-model="content"
+              :editor-toolbar="customToolbar"
+            />
           </client-only>
         </el-form-item>
         <el-form-item label="选择城市">
@@ -59,6 +62,10 @@
 </template>
 
 <script>
+let VueEditor
+if (process.browser) {
+  VueEditor = require('vue2-editor').VueEditor
+}
 export default {
   name: 'StrategyPublish',
   components: {
@@ -69,43 +76,35 @@ export default {
       content: '',
       title: '',
       city: '',
+      customToolbar: [
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ header: 1 }, { header: 2 }],
+        ['image']
+      ]
     }
   },
   methods: {
     publishArticle () {
-      const publishForm = {
-        title: {
+      const publishItems = [
+        {
           value: this.title,
           message: '标题不能为空'
         },
-        city: {
+        {
           value: this.city,
           message: '请选择城市'
         },
-        content: {
-          value: content,
+        {
+          value: this.content,
           message: '内容不能为空'
         }
-      }
-      for (const key in publishForm) {
-        const item = publishForm[key]
-        switch (key) {
-          case 'title':
-          case 'city':
-            if (item.value === '') {
-              this.$alert(item.message, '提示', {
-                type: 'warning'
-              }).catch(err => err)
-            }
-            break
-
-          case 'content':
-            if (/^<\/?[\w\s\/]*><br\/?><\/?[\w\s\/]*>$/.test(item.value) || /^<\/?[\w\s\/]*>(<\/?[\w\s\"\'\=\d\-\/]*>)*<\/?[\w\s\/]*>$/.test(item.value)) {
-              this.$alert(item.message, '提示', {
-                type: 'warning'
-              }).catch(err => err)
-            }
-            break
+      ]
+      for (const item of publishItems) {
+        if (item.value === '') {
+          this.$alert(item.message, '提示', {
+            type: 'warning'
+          }).catch(err => err)
+          break
         }
       }
     }
@@ -127,7 +126,7 @@ export default {
     margin-bottom: 10px;
   }
   .el-form {
-    ::v-deep #editor {
+    ::v-deep #quill-container {
       height: 400px;
     }
     .el-input {
