@@ -12,8 +12,7 @@ export default ({ $axios }, inject) => {
     /^\/comments(\/like)?/.test(url) ||
     /^\/airorders(\/(pay|checkpay))?/.test(url) ||
     /^\/posts\/(star|like)/.test(url) ||
-    (/^\/posts/.test(url) && method === 'post') ||
-    /^\/upload/.test(url)
+    (/^\/posts/.test(url) && method === 'post')
   )
 
   /**

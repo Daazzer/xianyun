@@ -3,6 +3,7 @@ import hotel from './_hotel'
 import account from './_account'
 import air from './_air'
 import strategy from './_strategy'
+import upload from './_upload'
 
 /**
  * 集中处理 axios 的响应与错误
@@ -18,5 +19,6 @@ export default axios => ({
   ...hotel(axios),
   ...account(axios),
   ...air(axios),
-  ...strategy(axios)
+  ...strategy(axios),
+  ...upload(axios)
 })
