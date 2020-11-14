@@ -1,0 +1,23 @@
+{
+  "id": "2204026",
+  "name": "闲云旅游",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "485760",
+      "name": "评 论",
+      "font_class": "pinglun",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "1012757",
+      "name": "分享",
+      "font_class": "iconfontzhizuobiaozhun20",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    }
+  ]
+}

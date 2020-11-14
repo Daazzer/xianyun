@@ -1,0 +1,25 @@
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1605356390746'); /* IE9 */
+  src: url('iconfont.eot?t=1605356390746#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAPwAAsAAAAACDgAAAOhAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDBgqEDIMvATYCJAMMCwgABCAFhG0HTBsLBxHVm/3Iviiw24gF6W3PC4KFtL0qhgDZ9rbU7Oogz4MIqmXrudsLnxIOVIgSn8ujggKHQqNfOBAGBcJSSBRCkn0WBseQXTYXUrsXYgKhiyvuxUJFlnxum8ZbhHoZoViy51v/y3cESle4NPwKANCxDfYCzW6uxuDFoWrmecDmWyxOcwxclAtgOEABGnu3xQK3IAXyPsYGare7mkDTHBm4PWNLR0AhMTsF4iw02BdQZBRSAy7U4rJiZCIuAak6+0TblIvg9+NXiBqZIsfsuX+KDwAGH7QPI+Lp/ykeHgIwp9OBH0eOdUAijisNR4ijwDpiTVVA0hxfSkI2lfv//4ChicqN/uNlRIkpaCN2mZ9dFNOhEHyM6Ch0/eMoUeMGAA+IHX/DJLXiNWRgZkrUgfplbaxOJeUsATDYKcDR2W14n4fk6kCV/u6In/iQqP4YpVt9EiK9PjOhdUycxDTaJWBVE1cll3OH5ARBu21pqFGq97Ssx/axomOn2CR2LNNeP7BQLqPGCUFpp37BitRNzuS7mgYXvdoIO5wVNdXdIs3YplTvWQAm1tpbW8ddtUUQbempSuFoX48s3xaxXV+i7ddVjmVlTV51QqdOuq7YKAxTlCdk4ZFFNfX5cS4DBpKWR4F6C0f8IDygsbM7wC+4s/Pgee1sFw4gBMrTdxQi+9rzUa8pKUiBP7v2PgLROT+6ZBonc0mI2orExi/F4DxQmJnDiSaZzrcflQbSe+5MSzEOpylglAFSlbv7tUvPGcX8Xj7ZW7HYM0ylyebwCnwU2LNc2fVe/pNqNOcRZkUP06SyX/+OSc1juGexsucNfAD8z7qUI0Fozmxiwx/6N25/3f150+t81K0A749vQWj/nw3orlLfrjH4fcyORUljm8o8KQyHYRhz5ymbDKQJQj8tE4YuhosmnX2EOsPkIVOZhVxtHpmw61Bo2YBSbROa1piMbxmJQyzSwKo0gNDXB5mue8j17SAT9hwKM96h1I8cmg6CecaWxeCzRhh7wQmGH+SRjmirRYfpN0x16znNDvAv5DO7wRuXD3d4IE/R53ynIBIhMu3Qwnq4bQSFacFRzCxSGmtj1ZPMSLvSCmHsBScYfpBHOqJXXnTh52+Y6tZzQ0GV+oV85urBG9cB2QmOTgW3cs75TkEkQmTaoQUdblaAoFQ3W3AUMw/wlcaSUrGrwCwv2t9vBbDKnOylywrkJR9pq8f18mv85/yvNOSeorh6BKcUAAAA') format('woff2'),
+  url('iconfont.woff?t=1605356390746') format('woff'),
+  url('iconfont.ttf?t=1605356390746') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg?t=1605356390746#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-pinglun:before {
+  content: "\e60d";
+}
+
+.icon-iconfontzhizuobiaozhun20:before {
+  content: "\e613";
+}
+
