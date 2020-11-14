@@ -33,5 +33,51 @@ export default {
   padding: 2px;
   border: 1px solid #ddd;
   background-color: #f9f9f9;
+
+  &__content {
+    padding: 5px 10px 0;
+  }
+
+  &-info {
+    font-size: 12px;
+    color: #666;
+    .time {
+      color: #999;
+    }
+    .username {
+      margin-right: 5px;
+    }
+  }
+  &-message {
+    margin-top: 10px;
+  }
+  &-pic {
+    $size: 80px;
+    width: $size;
+    height: $size;
+    padding: 5px;
+    margin-right: 5px;
+    margin-top: 10px;
+    border: 1px dashed #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  &-reply {
+    height: 20px;
+    line-height: 20px;
+    text-align: right;
+    color: #1e50a2;
+    &:hover a {
+      display: inline;
+    }
+    a {
+      display: none;
+      font-size: 12px;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }
 </style>
