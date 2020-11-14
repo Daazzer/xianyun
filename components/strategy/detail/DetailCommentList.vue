@@ -5,7 +5,7 @@
         <el-row type="flex" align="middle">
           <el-image src="http://157.122.54.189:9095/assets/images/avatar.jpg" />
           <span class="username">地球发动机</span>
-          <span class="date">2020-11-14 7:41</span>
+          <span class="time">2020-11-14 7:41</span>
         </el-row>
         <span class="floor-num">3</span>
       </el-row>
@@ -53,7 +53,7 @@ export default {
       width: $size;
       height: $size;
     }
-    .date {
+    .time {
       color: #999;
     }
   }
