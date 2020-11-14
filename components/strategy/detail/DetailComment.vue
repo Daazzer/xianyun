@@ -27,6 +27,7 @@
         <el-button type="primary" size="small">提交</el-button>
       </div>
     </el-row>
+    <DetailCommentList />
   </el-row>
 </template>
 
