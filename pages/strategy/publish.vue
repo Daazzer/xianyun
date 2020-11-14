@@ -19,10 +19,41 @@
             v-model="city"
           />
         </el-form-item>
+        <el-form-item class="btn-group">
+          <el-button size="small" type="primary">发布</el-button>
+          <span class="btn-group__side">
+            或者
+            <a class="save-btn" href="javascript:;">保存到草稿</a>
+          </span>
+        </el-form-item>
       </el-form>
     </el-col>
     <el-col class="publish-draft">
-      草稿
+      <div class="draft-box">
+        <h4>草稿箱（2）</h4>
+        <ul class="draft-box__draft-list">
+          <li class="draft-item">
+            <h5>新标题</h5>
+            <el-row class="draft-item__main" type="flex" justify="space-between" align="middle">
+              <p class="draft-item__date">2020-11-13</p>
+              <div class="draft-item__opt">
+                <el-button type="text" icon="el-icon-edit" />
+                <el-button type="text" icon="el-icon-delete" />
+              </div>
+            </el-row>
+          </li>
+          <li class="draft-item">
+            <h5>新标题</h5>
+            <el-row class="draft-item__main" type="flex" justify="space-between" align="middle">
+              <p class="draft-item__date">2020-11-13</p>
+              <div class="draft-item__opt">
+                <el-button type="text" icon="el-icon-edit" />
+                <el-button type="text" icon="el-icon-delete" />
+              </div>
+            </el-row>
+          </li>
+        </ul>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -93,12 +124,58 @@ export default {
     ::v-deep #editor {
       height: 400px;
     }
-  }
-  .el-input.city {
-    width: 200px;
+    .el-input {
+      &.city {
+        width: 200px;
+      }
+    }
+    .btn-group {
+      margin-bottom: 0;
+      &__side {
+        margin-left: 10px;
+      }
+      .save-btn {
+        color: #ffa500;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }
 .publish-draft {
   width: 225px;
+  .draft-box {
+    padding: 10px;
+    border: 1px solid #ddd;
+    > h4 {
+      margin-bottom: 10px;
+      font-weight: normal;
+      color: #666;
+    }
+    .draft-item {
+      margin-bottom: 10px;
+      > h5 {
+        font-weight: 400;
+        cursor: pointer;
+        &:hover {
+          color: #ffa500;
+          text-decoration: underline;
+        }
+      }
+      &__date, > h5 {
+        font-size: 14px;
+      }
+      &__date {
+        color: #999;
+      }
+      &__opt button {
+        padding: 0;
+        margin: 0;
+        font-size: 16px;
+        color: #000;
+      }
+    }
+  }
 }
 </style>
