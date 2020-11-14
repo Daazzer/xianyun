@@ -149,7 +149,9 @@ export default {
       }
 
       this.$message.success('发布成功')
-      console.log(res)
+      this.title = ''
+      this.content = ''
+      this.city = ''
     },
     saveAsDraft () {
       const title = this.title
@@ -158,6 +160,7 @@ export default {
         return this.$message.warning('标题不能为空')
       }
 
+      // 添加日期
       const d = new Date()
 
       const date = [
@@ -179,6 +182,7 @@ export default {
       this.$confirm('真的要删除这个草稿吗', '警告', {
         type: 'warning'
       }).then(() => {
+        this.$message.success('删除成功')
         this.$store.commit('strategy/delStrategicalArticleDraft', index)
       }).catch(err => err)
     },
