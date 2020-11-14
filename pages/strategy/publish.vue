@@ -99,6 +99,7 @@ export default {
           message: '内容不能为空'
         }
       ]
+      // 数据校验
       for (const item of publishItems) {
         if (item.value === '') {
           this.$alert(item.message, '提示', {
