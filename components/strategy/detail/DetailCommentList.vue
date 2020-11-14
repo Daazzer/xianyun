@@ -40,6 +40,9 @@ export default {
 .detail-comment-item {
   padding: 20px 20px 5px;
   border-bottom: 1px dashed #ddd;
+  &:last-child {
+    border-bottom: none;
+  }
   &__info {
     margin-bottom: 10px;
     font-size: 12px;
@@ -58,6 +61,7 @@ export default {
     }
   }
   &__content {
+    padding-left: 30px;
     .comment-new {
       &__message {
         margin-top: 10px;
