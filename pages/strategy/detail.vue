@@ -21,6 +21,7 @@
           <p>分享</p>
         </div>
       </el-row>
+      <DetailComment />
     </el-col>
     <el-col class="detail__aside"></el-col>
   </el-row>
@@ -59,6 +60,22 @@ export default {
 
   &-ctrl {
     padding: 50px 0 30px;
+
+    &__item {
+      margin: 0 20px;
+      text-align: center;
+      cursor: pointer;
+      i {
+        display: block;
+        font-size: 40px;
+        color: #ffa500;
+      }
+      p {
+        margin-top: 5px;
+        font-size: 14px;
+        color: #999;
+      }
+    }
   }
 }
 </style>
