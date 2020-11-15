@@ -10,7 +10,7 @@
       :rows="2"
       resize="none"
       placeholder="说点什么吧..."
-      v-model="commentVal"
+      v-model="commentContent"
     />
     <el-row class="detail-comment-ctrl" type="flex" justify="space-between">
       <div class="detail-comment-ctrl__pics">
@@ -27,7 +27,7 @@
         </el-dialog>
       </div>
       <div>
-        <el-button type="primary" size="small">提交</el-button>
+        <el-button type="primary" size="small" @click="postComment">提交</el-button>
       </div>
     </el-row>
     <DetailCommentList />
@@ -50,7 +50,7 @@ export default {
   name: 'DetailComment',
   data () {
     return {
-      commentVal: '',
+      commentContent: '',
       dialogImageUrl: '',
       dialogVisible: false,
       currentPage: 1
@@ -69,6 +69,11 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+    },
+    postComment () {
+      if (this.commentContent === '') {
+        return this.$message.warning('评论信息不能为空')
+      }
     }
   }
 }
