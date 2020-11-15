@@ -69,6 +69,18 @@ export default {
     }
   },
   methods: {
+    async renderCommentList () {
+      const articleId = this.$route.query.id
+      const [err, res] = await this.$api.getComments({
+        post: articleId
+      })
+
+      if (err) {
+        return this.$message.error('获取文章评论失败')
+      }
+
+      this.comments = res.data.data
+    },
     uploadPicSuccess (resData) {
       const files = resData.map(v => {
         v.url = this.baseURL + v.url
@@ -125,6 +137,8 @@ export default {
       pics = []
       this.$refs.picUploader.clearFiles()
       this.isPosting = false
+      // 发送完评论后重新渲染评论列表
+      this.renderCommentList()
     }
   },
   computed: {
@@ -135,17 +149,8 @@ export default {
       return this.baseURL + '/upload'
     }
   },
-  async mounted () {
-    const articleId = this.$route.query.id
-    const [err, res] = await this.$api.getComments({
-      post: articleId
-    })
-
-    if (err) {
-      return this.$message.error('获取文章评论失败')
-    }
-
-    this.comments = res.data.data
+  mounted () {
+    this.renderCommentList()
   }
 }
 </script>
