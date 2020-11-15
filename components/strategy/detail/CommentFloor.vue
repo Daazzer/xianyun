@@ -1,6 +1,10 @@
 <template>
   <div class="comment-floor">
-    <CommentFloor v-if="floorComment.parent" :floorComment="floorComment.parent" />
+    <CommentFloor
+      v-if="floorComment.parent"
+      :floorComment="floorComment.parent"
+      @pic-preview="picPreview"
+    />
     <div class="comment-floor__content">
       <el-row class="comment-floor-info" type="flex" justify="space-between" align="middle">
         <el-row type="flex" align="middle">
@@ -15,6 +19,7 @@
           class="comment-floor-pic"
           v-for="pic in floorComment.pics"
           :key="pic.id"
+          @click="picPreview(baseURL + pic.url)"
         >
           <el-image :src="baseURL + pic.url" />
         </div>
@@ -36,6 +41,11 @@ export default {
       default () {
         return {}
       }
+    }
+  },
+  methods: {
+    picPreview (picUrl) {
+      this.$emit('pic-preview', picUrl)
     }
   },
   filters: {

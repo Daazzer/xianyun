@@ -39,7 +39,7 @@
         >提交</el-button>
       </div>
     </el-row>
-    <DetailCommentList :comments="comments" />
+    <DetailCommentList :comments="comments" @pic-preview="handlePicPreview" />
     <el-row class="detail-comment-pagination" type="flex" justify="center" align="middle">
       <el-pagination
         @size-change="handleSizeChange"
@@ -88,6 +88,10 @@ export default {
     },
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handlePicPreview (picUrl) {
+      this.dialogImageUrl = picUrl
       this.dialogVisible = true
     },
     handleSizeChange(val) {

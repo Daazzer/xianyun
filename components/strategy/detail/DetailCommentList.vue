@@ -14,7 +14,11 @@
         <span class="floor-num">{{ comment.level }}</span>
       </el-row>
       <div class="detail-comment-item__content">
-        <CommentFloor v-if="comment.parent" :floorComment="comment.parent" />
+        <CommentFloor
+          v-if="comment.parent"
+          :floorComment="comment.parent"
+          @pic-preview="picPreview"
+        />
         <div class="comment-new">
           <p class="comment-new__message">{{ comment.content }}</p>
           <el-row type="flex" v-if="comment.pics && comment.pics.length > 0">
@@ -22,6 +26,7 @@
               class="comment-new__pic"
               v-for="pic in comment.pics"
               :key="pic.id"
+              @click="picPreview(baseURL + pic.url)"
             >
               <el-image :src="baseURL + pic.url" />
             </div>
@@ -45,6 +50,11 @@ export default {
       default () {
         return []
       }
+    }
+  },
+  methods: {
+    picPreview (picUrl) {
+      this.$emit('pic-preview', picUrl)
     }
   },
   filters: {
