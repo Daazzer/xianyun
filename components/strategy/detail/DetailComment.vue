@@ -19,7 +19,7 @@
           name="files"
           :action="uploadURL"
           :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove"
+          :on-remove="handlePicRemove"
           :on-success="uploadPicSuccess"
           :on-error="uploadPicError"
         >
@@ -72,7 +72,7 @@ export default {
     uploadPicError () {
       this.$message.error('上传文件失败')
     },
-    handleRemove (file) {
+    handlePicRemove (file) {
       const delIndex = this.pics.findIndex(v =>
         v.id === file.response[0].id
       )
