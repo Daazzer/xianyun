@@ -52,13 +52,13 @@
     />
     <el-row class="detail-comment-pagination" type="flex" justify="center" align="middle">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :current-page="currentPage"
+        :page-sizes="[5, 6, 7, 8]"
+        :page-size="pageSize"
+        :total="totalPage"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
       />
     </el-row>
   </el-row>
@@ -81,20 +81,29 @@ export default {
       dialogVisible: false,
       isPosting: false,
       currentPage: 1,
+      pageSize: 5,
+      totalPage: 0
     }
   },
   methods: {
     async renderCommentList () {
-      const articleId = this.$route.query.id
+      const post = this.comment.post
+      const _limit = this.pageSize
+      const _start = (this.currentPage - 1) * _limit
+
       const [err, res] = await this.$api.getComments({
-        post: articleId
+        post,
+        _start,
+        _limit
       })
 
       if (err) {
         return this.$message.error('获取文章评论失败')
       }
 
-      this.comments = res.data.data
+      const { data, total } = res.data
+      this.comments = data
+      this.totalPage = total
     },
     uploadPicSuccess (resData) {
       const files = resData.map(v => {
@@ -122,11 +131,13 @@ export default {
       this.dialogImageUrl = picUrl
       this.dialogVisible = true
     },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+    handleSizeChange (pageSize) {
+      this.pageSize = pageSize
+      this.renderCommentList()
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+    handleCurrentChange (currentPage) {
+      this.currentPage = currentPage
+      this.renderCommentList()
     },
     async postComment () {
       const comment = this.comment
