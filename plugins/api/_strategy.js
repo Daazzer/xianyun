@@ -44,6 +44,13 @@ export default axios => ({
    */
   postComment: data => handleAxiosRequest(axios.post('/comments', data)),
   /**
+   * 文章点赞
+   * @param {Object} data 参数对象
+   * @param {number} data.id 文章 id
+   * @returns {Promise}
+   */
+  likeStrategicalArticle: data => handleAxiosRequest(axios.post('/posts/like', data)),
+  /**
    * 获取文章评论
    * @param {Object} params 参数对象
    * @param {number} [params.post] 文章 id
