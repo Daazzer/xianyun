@@ -31,7 +31,12 @@
         </el-dialog>
       </div>
       <div>
-        <el-button type="primary" size="small" @click="postComment">提交</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="postComment"
+          :loading="isPosting"
+        >提交</el-button>
       </div>
     </el-row>
     <DetailCommentList />
@@ -58,6 +63,7 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       currentPage: 1,
+      isPosting: false,
       pics: []
     }
   },
@@ -90,11 +96,13 @@ export default {
       console.log(`当前页: ${val}`);
     },
     async postComment () {
-      let content = this.commentContent
+      const content = this.commentContent
       let pics = this.pics
       if (content === '' && pics.length === 0) {
         return this.$message.warning('评论信息不能为空')
       }
+
+      this.isPosting = true
 
       const [err, res] = await this.$api.postComment({
         content,
@@ -102,12 +110,15 @@ export default {
         post: this.$route.query.id
       })
 
+
       if (err) {
+        this.isPosting = false
         return this.$message.error('发表评论失败')
       }
 
+      this.isPosting = false
       this.$message.success('发表评论成功')
-      content = ''
+      this.commentContent = ''
       pics = []
       this.$refs.picUploader.clearFiles()
     }
