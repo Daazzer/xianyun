@@ -129,6 +129,18 @@ export default {
     uploadURL () {
       return this.baseURL + '/upload'
     }
+  },
+  async mounted () {
+    const articleId = this.$route.query.id
+    const [err, res] = await this.$api.getComments({
+      post: articleId
+    })
+
+    if (err) {
+      return this.$message.error('获取文章评论失败')
+    }
+
+    console.log(res)
   }
 }
 </script>
