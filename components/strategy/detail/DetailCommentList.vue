@@ -18,6 +18,7 @@
           v-if="comment.parent"
           :floorComment="comment.parent"
           @pic-preview="picPreview"
+          @reply-comment="replyComment"
         />
         <div class="comment-new">
           <p class="comment-new__message">{{ comment.content }}</p>
@@ -32,7 +33,7 @@
             </div>
           </el-row>
           <div class="comment-new__reply">
-            <a href="javascript:;">回复</a>
+            <a href="javascript:;" @click="replyComment(comment.id)">回复</a>
           </div>
         </div>
       </div>
@@ -55,6 +56,9 @@ export default {
   methods: {
     picPreview (picUrl) {
       this.$emit('pic-preview', picUrl)
+    },
+    replyComment (id) {
+      this.$emit('reply-comment', id)
     }
   },
   filters: {

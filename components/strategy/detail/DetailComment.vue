@@ -39,7 +39,11 @@
         >提交</el-button>
       </div>
     </el-row>
-    <DetailCommentList :comments="comments" @pic-preview="handlePicPreview" />
+    <DetailCommentList
+      :comments="comments"
+      @pic-preview="handlePicPreview"
+      @reply-comment="handleReplyComment"
+    />
     <el-row class="detail-comment-pagination" type="flex" justify="center" align="middle">
       <el-pagination
         @size-change="handleSizeChange"
@@ -139,6 +143,9 @@ export default {
       this.isPosting = false
       // 发送完评论后重新渲染评论列表
       this.renderCommentList()
+    },
+    handleReplyComment (follow) {
+      console.log(follow)
     }
   },
   computed: {

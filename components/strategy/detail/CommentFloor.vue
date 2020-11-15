@@ -4,6 +4,7 @@
       v-if="floorComment.parent"
       :floorComment="floorComment.parent"
       @pic-preview="picPreview"
+      @reply-comment="replyComment"
     />
     <div class="comment-floor__content">
       <el-row class="comment-floor-info" type="flex" justify="space-between" align="middle">
@@ -25,7 +26,7 @@
         </div>
       </el-row>
       <div class="comment-floor-reply">
-        <a href="javascript:;">回复</a>
+        <a href="javascript:;" @click="replyComment(floorComment.id)">回复</a>
       </div>
     </div>
   </div>
@@ -46,6 +47,9 @@ export default {
   methods: {
     picPreview (picUrl) {
       this.$emit('pic-preview', picUrl)
+    },
+    replyComment (id) {
+      this.$emit('reply-comment', id)
     }
   },
   filters: {
