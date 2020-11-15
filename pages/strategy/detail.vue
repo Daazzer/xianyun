@@ -8,7 +8,7 @@
       <h1>{{ strategicalArticle.title }}</h1>
       <el-row class="detail-info">
         <span>创建于：{{ strategicalArticle.created_at | timeFormat }}</span>
-        <span>阅读：{{ strategicalArticle.watch }}</span>
+        <span>阅读：{{ strategicalArticle.watch || 0 }}</span>
       </el-row>
       <div class="detail-content" v-html="strategicalArticle.content"></div>
       <el-row class="detail-ctrl" type="flex" justify="center" align="middle">
@@ -52,12 +52,16 @@ export default {
   },
   filters: {
     timeFormat (time) {
+      if (isNaN(time)) {
+        return '-- :'
+      }
       const date = new Date(time)
       const MM = date.getMonth() + 1
+      const DD = date.getDate()
       const YYYYMMDD = [
         date.getFullYear(),
         MM < 10 ? `0${MM}` : MM,
-        date.getDate()
+        DD < 10 ? `0${DD}` : DD
       ].join('-')
       const hhmm = [
         date.getHours(),
