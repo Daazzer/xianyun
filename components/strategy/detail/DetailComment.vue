@@ -3,11 +3,12 @@
     <h4>评论</h4>
     <el-tag
       class="reply-tag"
-      closable type="info"
-      v-show="replyId !== ''"
-      @close="replyId = ''"
+      type="info"
+      closable
+      v-show="replyUsername !== ''"
+      @close="cancelReply"
     >
-      回复 @谁
+      回复 @{{ replyUsername }}
     </el-tag>
     <el-input
       class="detail-comment-input"
@@ -15,7 +16,7 @@
       :rows="2"
       resize="none"
       placeholder="说点什么吧..."
-      v-model="commentContent"
+      v-model="comment.content"
     />
     <el-row class="detail-comment-ctrl" type="flex" justify="space-between">
       <div class="detail-comment-ctrl__pics">
@@ -69,13 +70,17 @@ export default {
   data () {
     return {
       comments: [],
-      commentContent: '',
+      comment: {
+        content: '',
+        pics: [],
+        follow: '',
+        post: this.$route.query.id
+      },
+      replyUsername: '',
       dialogImageUrl: '',
       dialogVisible: false,
-      currentPage: 1,
       isPosting: false,
-      pics: [],
-      replyId: ''
+      currentPage: 1,
     }
   },
   methods: {
@@ -97,16 +102,17 @@ export default {
         return v
       })
       // 上传成功后将响应文件对象存储下来
-      this.pics.push(...resData)
+      this.comment.pics.push(...files)
     },
     uploadPicError () {
       this.$message.error('上传文件失败')
     },
     handlePicRemove (file) {
-      const delIndex = this.pics.findIndex(v =>
+      const pics = this.comment.pics
+      const delIndex = pics.findIndex(v =>
         v.id === file.response[0].id
       )
-      this.pics.splice(delIndex, 1)
+      pics.splice(delIndex, 1)
     },
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
@@ -123,19 +129,14 @@ export default {
       console.log(`当前页: ${val}`);
     },
     async postComment () {
-      const content = this.commentContent
-      let pics = this.pics
-      if (content === '' && pics.length === 0) {
+      const comment = this.comment
+      if (comment.content === '' && comment.pics.length === 0) {
         return this.$message.warning('评论信息不能为空')
       }
 
       this.isPosting = true
 
-      const [err, res] = await this.$api.postComment({
-        content,
-        pics,
-        post: this.$route.query.id
-      })
+      const [err, res] = await this.$api.postComment(comment)
 
       if (err) {
         this.isPosting = false
@@ -143,17 +144,22 @@ export default {
       }
 
       this.$message.success('发表评论成功')
-      this.commentContent = ''
-      pics = []
+      comment.content = ''
+      comment.pics = []
       this.$refs.picUploader.clearFiles()
       this.isPosting = false
       // 发送完评论后重新渲染评论列表
       this.renderCommentList()
     },
     // 评论回复
-    handleReplyComment (id) {
-      console.log(id)
-      this.replyId = id
+    handleReplyComment (id, nickname) {
+      console.log(id, nickname)
+      this.comment.follow = id
+      this.replyUsername = nickname
+    },
+    cancelReply () {
+      this.comment.follow = ''
+      this.replyUsername = ''
     }
   },
   computed: {
