@@ -153,7 +153,6 @@ export default {
     },
     // 评论回复
     handleReplyComment (id, nickname) {
-      console.log(id, nickname)
       this.comment.follow = id
       this.replyUsername = nickname
     },
