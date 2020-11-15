@@ -18,10 +18,10 @@
           list-type="picture-card"
           name="files"
           :action="uploadURL"
-          :file-list="pics"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
           :on-success="uploadPicSuccess"
+          :on-error="uploadPicError"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -61,17 +61,26 @@ export default {
     }
   },
   methods: {
-    uploadPicSuccess (res, file, fileList) {
-      console.log(res)
-      console.log(file)
-      console.log(fileList)
+    uploadPicSuccess (resData) {
+      const files = resData.map(v => {
+        v.url = this.baseURL + v.url
+        return v
+      })
+      // 上传成功后将响应文件对象存储下来
+      this.pics.push(...resData)
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    uploadPicError () {
+      this.$message.error('上传文件失败')
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+    handleRemove (file) {
+      const delIndex = this.pics.findIndex(v =>
+        v.id === file.response[0].id
+      )
+      this.pics.splice(delIndex, 1)
+    },
+    handlePictureCardPreview (file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -86,8 +95,11 @@ export default {
     }
   },
   computed: {
+    baseURL() {
+      return this.$axios.defaults.baseURL
+    },
     uploadURL () {
-      return this.$axios.defaults.baseURL + '/upload'
+      return this.baseURL + '/upload'
     }
   }
 }
