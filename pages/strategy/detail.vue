@@ -5,16 +5,16 @@
         <el-breadcrumb-item to="/strategy">旅游攻略</el-breadcrumb-item>
         <el-breadcrumb-item>攻略详情</el-breadcrumb-item>
       </el-breadcrumb>
-      <h1>塞班贵？一定是你的打开方式不对！6000块玩转塞班</h1>
+      <h1>{{ strategicalArticle.title }}</h1>
       <el-row class="detail-info">
-        <span>攻略：2019-05-22 10:57</span>
-        <span>阅读：14597</span>
+        <span>创建于：{{ strategicalArticle.created_at | timeFormat }}</span>
+        <span>阅读：{{ strategicalArticle.watch }}</span>
       </el-row>
-      <el-row class="detail-content">大家对塞班岛总存在着这样的误解，知道它是美属地盘，就理所当然地觉得这里的花费一定很高，花费高有高的玩法，那如果只有6000块的预算呢？要怎么玩？关于旅行这件事，我们要让钱花得更有道理，收下这份攻略，带你6000块花式玩转塞班。</el-row>
+      <div class="detail-content" v-html="strategicalArticle.content"></div>
       <el-row class="detail-ctrl" type="flex" justify="center" align="middle">
         <div class="detail-ctrl__item">
           <i class="iconfont icon-pinglun"></i>
-          <p>评论(8)</p>
+          <p>评论({{ strategicalArticle.comments.length }})</p>
         </div>
         <div class="detail-ctrl__item">
           <i class="iconfont icon-iconfontzhizuobiaozhun20"></i>
@@ -42,7 +42,39 @@
 
 <script>
 export default {
-  name: 'StrategyDetail'
+  name: 'StrategyDetail',
+  data () {
+    return {
+      strategicalArticle: {}
+    }
+  },
+  filters: {
+    timeFormat (time) {
+      const date = new Date(time)
+      const MM = date.getMonth() + 1
+      const YYYYMMDD = [
+        date.getFullYear(),
+        MM < 10 ? `0${MM}` : MM,
+        date.getDate()
+      ].join('-')
+      const hhmm = [
+        date.getHours(),
+        date.getMinutes()
+      ].join(':')
+      return YYYYMMDD + ' ' + hhmm
+    }
+  },
+  async mounted () {
+    const id = this.$route.query.id
+
+    const [err, res] = await this.$api.getStrategicalArticleDetail({ id })
+
+    if (err) {
+      return this.$message.error('获取文章数据失败')
+    }
+
+    this.strategicalArticle = res.data.data[0]
+  }
 }
 </script>
 
@@ -65,10 +97,16 @@ export default {
     padding: 20px;
     text-align: right;
     color: #999;
+    span {
+      margin-left: 20px;
+    }
   }
 
   &-content {
     line-height: 1.5;
+    ::v-deep * {
+      max-width: 700px !important;
+    }
   }
 
   &-ctrl {
