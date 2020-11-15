@@ -1,7 +1,12 @@
 <template>
   <el-row class="detail-comment">
     <h4>评论</h4>
-    <el-tag class="reply-tag" closable type="info">
+    <el-tag
+      class="reply-tag"
+      closable type="info"
+      v-show="replyId !== ''"
+      @close="replyId = ''"
+    >
       回复 @谁
     </el-tag>
     <el-input
@@ -69,7 +74,8 @@ export default {
       dialogVisible: false,
       currentPage: 1,
       isPosting: false,
-      pics: []
+      pics: [],
+      replyId: ''
     }
   },
   methods: {
@@ -144,8 +150,10 @@ export default {
       // 发送完评论后重新渲染评论列表
       this.renderCommentList()
     },
-    handleReplyComment (follow) {
-      console.log(follow)
+    // 评论回复
+    handleReplyComment (id) {
+      console.log(id)
+      this.replyId = id
     }
   },
   computed: {
