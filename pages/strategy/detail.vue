@@ -23,7 +23,20 @@
       </el-row>
       <DetailComment />
     </el-col>
-    <el-col class="detail__aside"></el-col>
+    <el-col class="detail__aside">
+      <h4>相关攻略</h4>
+      <ul class="recommend-list">
+        <li class="recommend-item">
+          <a href="#">
+            <el-image class="recommend-item__image" src="http://p1-q.mafengwo.net/s11/M00/B4/92/wKgBEFt6ZqaAJeK7AAbj58wpNlY06.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90" />
+            <el-row class="recommend-item__content" type="flex" justify="space-between">
+              <h5>小蛮腰广州塔，怎么玩才不遗憾？</h5>
+              <p>2019-05-22 1:16 阅读 695</p>
+            </el-row>
+          </a>
+        </li>
+      </ul>
+    </el-col>
   </el-row>
 </template>
 
@@ -74,6 +87,45 @@ export default {
         margin-top: 5px;
         font-size: 14px;
         color: #999;
+      }
+    }
+  }
+
+  &__aside {
+    > h4 {
+      padding-bottom: 10px;
+      font-size: 18px;
+      font-weight: 400;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .recommend-item {
+      > a {
+        display: flex;
+        justify-content: space-between;
+        height: 80px;
+        padding: 20px 0;
+        border-bottom: 1px solid #ddd;
+      }
+      &__image {
+        flex-shrink: 0;
+        width: 100px;
+        height: 80px;
+        margin-right: 10px;
+      }
+      &__content {
+        flex: 1;
+        flex-direction: column;
+        h5 {
+          height: 2.8em;
+          line-height: 1.4em;
+          font-size: 16px;
+          font-weight: 400;
+        }
+        p {
+          font-size: 12px;
+          color: #999;
+        }
       }
     }
   }
