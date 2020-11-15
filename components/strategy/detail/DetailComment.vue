@@ -45,12 +45,23 @@
         >提交</el-button>
       </div>
     </el-row>
+    <div
+      class="detail-comment-empty"
+      v-if="comments.length === 0"
+    >暂无评论，赶紧抢占沙发！</div>
     <DetailCommentList
+      v-else
       :comments="comments"
       @pic-preview="handlePicPreview"
       @reply-comment="handleReplyComment"
     />
-    <el-row class="detail-comment-pagination" type="flex" justify="center" align="middle">
+    <el-row
+      v-if="comments.length !== 0"
+      class="detail-comment-pagination"
+      type="flex"
+      justify="center"
+      align="middle"
+    >
       <el-pagination
         layout="total, sizes, prev, pager, next, jumper"
         :current-page="currentPage"
@@ -214,6 +225,13 @@ export default {
   }
   &-pagination {
     margin-top: 10px;
+  }
+  &-empty {
+    padding: 30px 0;
+    text-align: center;
+    font-size: 14px;
+    border: 1px dashed #ddd;
+    color: #999;
   }
   .reply-tag {
     margin-bottom: 10px;
