@@ -56,7 +56,7 @@ export default axios => ({
    * @param {number} [params.post] 文章 id
    * @param {string} [params._sort] 排序
    * @param {number} [params._limit] 	条数
-   * @param {number} [params._start] 开始数据（分页）
+   * @param {number} [params._start] 当前数据索引
    * @returns {Promise}
    */
   getComments: params => handleAxiosRequest(axios.get('/posts/comments', { params })),
