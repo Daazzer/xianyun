@@ -1,7 +1,7 @@
 <template>
   <ul class="detail-comment-list">
     <li class="detail-comment-item">
-      <el-row class="detail-comment-item__info" type="flex" justify="space-between">
+      <el-row class="detail-comment-item__info" type="flex" justify="space-between" align="middle">
         <el-row type="flex" align="middle">
           <el-image src="http://157.122.54.189:9095/assets/images/avatar.jpg" />
           <span class="username">地球发动机</span>
