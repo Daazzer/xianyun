@@ -16,6 +16,10 @@
           <i class="iconfont icon-pinglun"></i>
           <p>评论({{ strategicalArticle.comments.length }})</p>
         </div>
+        <div class="detail-ctrl__item">
+          <i class="iconfont icon-icon_dianzan-xian"></i>
+          <p>点赞({{ strategicalArticle.like || 0 }})</p>
+        </div>
         <div class="detail-ctrl__item" @click="$message.warning('暂不支持分享功能')">
           <i class="iconfont icon-iconfontzhizuobiaozhun20"></i>
           <p>分享</p>
