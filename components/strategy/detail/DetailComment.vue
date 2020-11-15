@@ -16,12 +16,12 @@
       <div class="detail-comment-ctrl__pics">
         <el-upload
           list-type="picture-card"
+          name="files"
           :action="uploadURL"
           :file-list="pics"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
           :on-success="uploadPicSuccess"
-          :http-request="uploadPic"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -61,9 +61,6 @@ export default {
     }
   },
   methods: {
-    uploadPic () {
-      console.log(1)
-    },
     uploadPicSuccess (res, file, fileList) {
       console.log(res)
       console.log(file)
@@ -116,7 +113,8 @@ export default {
         line-height: $size;
 
         &-list__item {
-          @extend .el-upload;
+          width: $size;
+          height: $size;
         }
       }
     }
