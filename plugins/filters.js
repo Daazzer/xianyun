@@ -16,7 +16,7 @@ export function timeFormat (time) {
 
   const hhmm = [
     date.getHours(),
-    mm < 10 ? `0${MM}` : mm
+    mm < 10 ? `0${mm}` : mm
   ].join(':')
 
   return YYYYMMDD + ' ' + hhmm
