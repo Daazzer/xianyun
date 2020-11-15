@@ -15,10 +15,13 @@
     <el-row class="detail-comment-ctrl" type="flex" justify="space-between">
       <div class="detail-comment-ctrl__pics">
         <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
           list-type="picture-card"
+          :action="uploadURL"
+          :file-list="pics"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
+          :on-success="uploadPicSuccess"
+          :http-request="uploadPic"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -53,10 +56,19 @@ export default {
       commentContent: '',
       dialogImageUrl: '',
       dialogVisible: false,
-      currentPage: 1
+      currentPage: 1,
+      pics: []
     }
   },
   methods: {
+    uploadPic () {
+      console.log(1)
+    },
+    uploadPicSuccess (res, file, fileList) {
+      console.log(res)
+      console.log(file)
+      console.log(fileList)
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -75,6 +87,11 @@ export default {
         return this.$message.warning('评论信息不能为空')
       }
     }
+  },
+  computed: {
+    uploadURL () {
+      return this.$axios.defaults.baseURL + '/upload'
+    }
   }
 }
 </script>
@@ -91,11 +108,17 @@ export default {
   }
   &-ctrl {
     margin-bottom: 30px;
-    &__pics ::v-deep .el-upload {
-      $size: 100px;
-      width: $size;
-      height: $size;
-      line-height: $size;
+    &__pics ::v-deep {
+      .el-upload {
+        $size: 100px;
+        width: $size;
+        height: $size;
+        line-height: $size;
+
+        &-list__item {
+          @extend .el-upload;
+        }
+      }
     }
   }
   &-pagination {
