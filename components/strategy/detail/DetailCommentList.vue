@@ -14,7 +14,7 @@
         <span class="floor-num">{{ comment.level }}</span>
       </el-row>
       <div class="detail-comment-item__content">
-        <CommentFloor />
+        <CommentFloor v-if="comment.parent" :floorComment="comment.parent" />
         <div class="comment-new">
           <p class="comment-new__message">{{ comment.content }}</p>
           <el-row type="flex" v-if="comment.pics && comment.pics.length > 0">
@@ -102,6 +102,14 @@ export default {
         border: 1px dashed #ddd;
         border-radius: 6px;
         overflow: hidden;
+        cursor: pointer;
+        .el-image {
+          height: 100%;
+          ::v-deep &__inner {
+            display: block;
+            object-fit: cover;
+          }
+        }
       }
 
       &__reply {

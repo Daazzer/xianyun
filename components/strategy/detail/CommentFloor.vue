@@ -1,18 +1,22 @@
 <template>
   <div class="comment-floor">
-    <!-- <CommentFloor /> -->
+    <CommentFloor v-if="floorComment.parent" :floorComment="floorComment.parent" />
     <div class="comment-floor__content">
       <el-row class="comment-floor-info" type="flex" justify="space-between" align="middle">
         <el-row type="flex" align="middle">
-          <span class="username">地球发动机</span>
-          <span class="time">2020-11-14 7:37</span>
+          <span class="username">{{ floorComment.account.nickname }}</span>
+          <span class="time">{{ floorComment.created_at | timeFormat }}</span>
         </el-row>
-        <span class="floor-num">2</span>
+        <span class="floor-num">{{ floorComment.level }}</span>
       </el-row>
-      <p class="comment-floor-message">你个沙雕</p>
-      <el-row type="flex">
-        <div class="comment-floor-pic">
-          <el-image src="http://157.122.54.189:9095/uploads/ef1727a000164749a0fe16cea86eaefe.jpg" />
+      <p class="comment-floor-message">{{ floorComment.content }}</p>
+      <el-row type="flex" v-if="floorComment.pics && floorComment.pics.length > 0">
+        <div
+          class="comment-floor-pic"
+          v-for="pic in floorComment.pics"
+          :key="pic.id"
+        >
+          <el-image :src="baseURL + pic.url" />
         </div>
       </el-row>
       <div class="comment-floor-reply">
@@ -23,8 +27,25 @@
 </template>
 
 <script>
+import { timeFormat } from '@/plugins/filters'
 export default {
-  name: 'CommentFloor'
+  name: 'CommentFloor',
+  props: {
+    floorComment: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
+  filters: {
+    timeFormat
+  },
+  computed: {
+    baseURL () {
+      return this.$axios.defaults.baseURL
+    }
+  }
 }
 </script>
 
@@ -61,6 +82,14 @@ export default {
     border: 1px dashed #ddd;
     border-radius: 6px;
     overflow: hidden;
+    cursor: pointer;
+    .el-image {
+      height: 100%;
+      ::v-deep &__inner {
+        display: block;
+        object-fit: cover;
+      }
+    }
   }
 
   &-reply {
