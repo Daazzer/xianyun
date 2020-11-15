@@ -17,6 +17,7 @@
         <el-upload
           list-type="picture-card"
           name="files"
+          ref="picUploader"
           :action="uploadURL"
           :on-preview="handlePictureCardPreview"
           :on-remove="handlePicRemove"
@@ -88,10 +89,27 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
-    postComment () {
-      if (this.commentContent === '') {
+    async postComment () {
+      let content = this.commentContent
+      let pics = this.pics
+      if (content === '' && pics.length === 0) {
         return this.$message.warning('评论信息不能为空')
       }
+
+      const [err, res] = await this.$api.postComment({
+        content,
+        pics,
+        post: this.$route.query.id
+      })
+
+      if (err) {
+        return this.$message.error('发表评论失败')
+      }
+
+      this.$message.success('发表评论成功')
+      content = ''
+      pics = []
+      this.$refs.picUploader.clearFiles()
     }
   },
   computed: {
