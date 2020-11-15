@@ -17,7 +17,7 @@
           <p>评论({{ strategicalArticle.comments.length }})</p>
         </div>
         <div class="detail-ctrl__item">
-          <i class="iconfont icon-icon_dianzan-xian"></i>
+          <i :class="`iconfont icon-${isLike ? 'dianzan3' : 'icon_dianzan-xian'}`"></i>
           <p>点赞({{ strategicalArticle.like || 0 }})</p>
         </div>
         <div class="detail-ctrl__item" @click="$message.warning('暂不支持分享功能')">
@@ -50,8 +50,20 @@ export default {
   data () {
     return {
       strategicalArticle: {
-        comments: []
+        account: {},
+        comments: [],
+        likeIds: []
       }
+    }
+  },
+  computed: {
+    isLike () {
+      const accountId = this.strategicalArticle.account.id
+      const likeIds = this.strategicalArticle.likeIds
+      // 查询点赞状态
+      return likeIds.some(id =>
+        id === accountId
+      )
     }
   },
   filters: {
@@ -84,6 +96,8 @@ export default {
     }
 
     this.strategicalArticle = res.data.data[0]
+
+    console.log(this.isLike)
   }
 }
 </script>
