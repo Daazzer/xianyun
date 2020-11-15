@@ -1,12 +1,15 @@
 <template>
   <el-row class="detail-comment">
     <h4>评论</h4>
+    <el-tag class="reply-tag" closable type="info">
+      回复 @谁
+    </el-tag>
     <el-input
       class="detail-comment-input"
       type="textarea"
       :rows="2"
       resize="none"
-      placeholder="请输入内容"
+      placeholder="说点什么吧..."
       v-model="commentVal"
     />
     <el-row class="detail-comment-ctrl" type="flex" justify="space-between">
@@ -92,6 +95,9 @@ export default {
   }
   &-pagination {
     margin-top: 10px;
+  }
+  .reply-tag {
+    margin-bottom: 10px;
   }
 }
 </style>
