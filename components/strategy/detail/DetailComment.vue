@@ -28,6 +28,17 @@
       </div>
     </el-row>
     <DetailCommentList />
+    <el-row class="detail-comment-pagination" type="flex" justify="center" align="middle">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[100, 200, 300, 400]"
+        :page-size="100"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400"
+      />
+    </el-row>
   </el-row>
 </template>
 
@@ -38,7 +49,8 @@ export default {
     return {
       commentVal: '',
       dialogImageUrl: '',
-      dialogVisible: false
+      dialogVisible: false,
+      currentPage: 1
     }
   },
   methods: {
@@ -48,6 +60,12 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
     }
   }
 }
@@ -71,6 +89,9 @@ export default {
       height: $size;
       line-height: $size;
     }
+  }
+  &-pagination {
+    margin-top: 10px;
   }
 }
 </style>
