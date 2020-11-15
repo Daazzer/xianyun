@@ -16,7 +16,7 @@
           <i class="iconfont icon-pinglun"></i>
           <p>评论({{ strategicalArticle.comments.length }})</p>
         </div>
-        <div class="detail-ctrl__item">
+        <div class="detail-ctrl__item" @click="likeArticle">
           <i :class="`iconfont icon-${isLike ? 'dianzan3' : 'icon_dianzan-xian'}`"></i>
           <p>点赞({{ strategicalArticle.like || 0 }})</p>
         </div>
@@ -54,6 +54,11 @@ export default {
         comments: [],
         likeIds: []
       }
+    }
+  },
+  methods: {
+    likeArticle () {
+      console.log(1)
     }
   },
   computed: {
