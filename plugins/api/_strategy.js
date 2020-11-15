@@ -28,6 +28,22 @@ export default axios => ({
    */
   getStrategicalArticleDetail: params => handleAxiosRequest(axios.get('/posts', { params })),
   /**
+   * 提交评论
+   * @param {Object} data 参数对象
+   * @param {string} data.content 评论内容
+   * @param {Object} data.score 评分对象
+   * @param {number} data.score.location 位置评分
+   * @param {number} data.score.service 服务评分
+   * @param {number} data.score.fancility 设施评分
+   * @param {number} data.score.all 总体评分
+   * @param {File[]} data.pics 图片
+   * @param {number} data.hotel 酒店 id
+   * @param {number} data.post 文章 id
+   * @param {number} data.follow 回复 id
+   * @returns {Promise}
+   */
+  postComment: data => handleAxiosRequest(axios.post('/comments', data)),
+  /**
    * 获取文章评论
    * @param {Object} params 参数对象
    * @param {number} [params.post] 文章 id
