@@ -96,8 +96,6 @@ export default {
     }
 
     this.strategicalArticle = res.data.data[0]
-
-    console.log(this.isLike)
   }
 }
 </script>
