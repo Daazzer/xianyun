@@ -1,21 +1,29 @@
 <template>
   <ul class="detail-comment-list">
-    <li class="detail-comment-item">
+    <li
+      class="detail-comment-item"
+      v-for="comment in comments"
+      :key="comment.id"
+    >
       <el-row class="detail-comment-item__info" type="flex" justify="space-between" align="middle">
         <el-row type="flex" align="middle">
           <el-image src="http://157.122.54.189:9095/assets/images/avatar.jpg" />
-          <span class="username">地球发动机</span>
-          <span class="time">2020-11-14 7:41</span>
+          <span class="username">{{ comment.account.nickname }}</span>
+          <span class="time">{{ comment.created_at | timeFormat }}</span>
         </el-row>
-        <span class="floor-num">3</span>
+        <span class="floor-num">{{ comment.level }}</span>
       </el-row>
       <div class="detail-comment-item__content">
         <CommentFloor />
         <div class="comment-new">
-          <p class="comment-new__message">套娃</p>
+          <p class="comment-new__message">{{ comment.content }}</p>
           <el-row type="flex">
-            <div class="comment-new__pic">
-              <el-image src="http://157.122.54.189:9095/uploads/ef1727a000164749a0fe16cea86eaefe.jpg" />
+            <div class="comment-new__pic" v-if="comment.pics && comment.pics.length > 0">
+              <el-image
+                v-for="pic in comment.pics"
+                :key="pic.id"
+                :src="baseURL + pic.url"
+              />
             </div>
           </el-row>
           <div class="comment-new__reply">
@@ -28,8 +36,25 @@
 </template>
 
 <script>
+import { timeFormat } from '@/plugins/filters'
 export default {
-  name: 'DetailCommentList'
+  name: 'DetailCommentList',
+  props: {
+    comments: {
+      type: Array,
+      default () {
+        return []
+      }
+    }
+  },
+  filters: {
+    timeFormat
+  },
+  computed: {
+    baseURL () {
+      return this.$axios.defaults.baseURL
+    }
+  }
 }
 </script>
 

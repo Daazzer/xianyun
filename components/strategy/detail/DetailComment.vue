@@ -39,7 +39,7 @@
         >提交</el-button>
       </div>
     </el-row>
-    <DetailCommentList />
+    <DetailCommentList :comments="comments" />
     <el-row class="detail-comment-pagination" type="flex" justify="center" align="middle">
       <el-pagination
         @size-change="handleSizeChange"
@@ -59,6 +59,7 @@ export default {
   name: 'DetailComment',
   data () {
     return {
+      comments: [],
       commentContent: '',
       dialogImageUrl: '',
       dialogVisible: false,
@@ -140,7 +141,7 @@ export default {
       return this.$message.error('获取文章评论失败')
     }
 
-    console.log(res)
+    this.comments = res.data.data
   }
 }
 </script>
