@@ -57,13 +57,20 @@ export default {
     }
   },
   methods: {
-    likeArticle () {
-      console.log(1)
+    async likeArticle () {
+      const id = this.$route.query.id
+      const [err, res] = await this.$api.likeStrategicalArticle({
+        id
+      })
+
+      if (err) {
+        return this.$message.error('点赞失败')
+      }
     }
   },
   computed: {
     isLike () {
-      const accountId = this.strategicalArticle.account.id
+      const userId = this.strategicalArticle.account.id
       const likeIds = this.strategicalArticle.likeIds
       // 查询点赞状态
       return likeIds.some(id =>
