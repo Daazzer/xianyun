@@ -116,11 +116,11 @@ export default {
         return this.$message.error('发表评论失败')
       }
 
-      this.isPosting = false
       this.$message.success('发表评论成功')
       this.commentContent = ''
       pics = []
       this.$refs.picUploader.clearFiles()
+      this.isPosting = false
     }
   },
   computed: {
