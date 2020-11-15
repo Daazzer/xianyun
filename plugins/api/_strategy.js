@@ -36,7 +36,7 @@ export default axios => ({
    * @param {number} data.score.service 服务评分
    * @param {number} data.score.fancility 设施评分
    * @param {number} data.score.all 总体评分
-   * @param {File[]} data.pics 图片
+   * @param {Object[]} data.pics 图片列表，上传文件成功后的文件信息对象
    * @param {number} data.hotel 酒店 id
    * @param {number} data.post 文章 id
    * @param {number} data.follow 回复 id
