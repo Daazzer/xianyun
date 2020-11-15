@@ -26,7 +26,7 @@
         </div>
       </el-row>
       <div class="comment-floor-reply">
-        <a href="javascript:;" @click="replyComment(floorComment.id)">回复</a>
+        <a href="javascript:;" @click="replyComment(floorComment.id, floorComment.account.nickname)">回复</a>
       </div>
     </div>
   </div>
@@ -48,8 +48,8 @@ export default {
     picPreview (picUrl) {
       this.$emit('pic-preview', picUrl)
     },
-    replyComment (id) {
-      this.$emit('reply-comment', id)
+    replyComment (id, nickname) {
+      this.$emit('reply-comment', id, nickname)
     }
   },
   filters: {
