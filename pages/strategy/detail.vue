@@ -66,15 +66,19 @@ export default {
       if (err) {
         return this.$message.error('点赞失败')
       }
+
+      this.$message.success('点赞成功')
+      // 在原点赞数据基础上添加当前用户 id，用于显示点赞状态
+      this.strategicalArticle.likeIds.push(this.$store.state.user.userInfo.user.id)
     }
   },
   computed: {
     isLike () {
-      const userId = this.strategicalArticle.account.id
+      const userId = this.$store.state.user.userInfo.user.id
       const likeIds = this.strategicalArticle.likeIds
       // 查询点赞状态
       return likeIds.some(id =>
-        id === accountId
+        id === userId
       )
     }
   },
