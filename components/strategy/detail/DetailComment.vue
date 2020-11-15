@@ -110,7 +110,6 @@ export default {
         post: this.$route.query.id
       })
 
-
       if (err) {
         this.isPosting = false
         return this.$message.error('发表评论失败')
