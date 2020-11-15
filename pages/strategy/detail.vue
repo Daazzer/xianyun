@@ -45,7 +45,9 @@ export default {
   name: 'StrategyDetail',
   data () {
     return {
-      strategicalArticle: {}
+      strategicalArticle: {
+        comments: []
+      }
     }
   },
   filters: {
