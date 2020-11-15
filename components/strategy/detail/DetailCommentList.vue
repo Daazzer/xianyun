@@ -17,13 +17,13 @@
         <CommentFloor />
         <div class="comment-new">
           <p class="comment-new__message">{{ comment.content }}</p>
-          <el-row type="flex">
-            <div class="comment-new__pic" v-if="comment.pics && comment.pics.length > 0">
-              <el-image
-                v-for="pic in comment.pics"
-                :key="pic.id"
-                :src="baseURL + pic.url"
-              />
+          <el-row type="flex" v-if="comment.pics && comment.pics.length > 0">
+            <div
+              class="comment-new__pic"
+              v-for="pic in comment.pics"
+              :key="pic.id"
+            >
+              <el-image :src="baseURL + pic.url" />
             </div>
           </el-row>
           <div class="comment-new__reply">
