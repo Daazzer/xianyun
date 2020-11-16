@@ -71,6 +71,17 @@ export default {
       this.$message.success('点赞成功')
       // 在原点赞数据基础上添加当前用户 id，用于显示点赞状态
       this.strategicalArticle.likeIds.push(this.$store.state.user.userInfo.user.id)
+    },
+    async renderArticleDetial () {
+      const id = this.$route.query.id
+
+      const [err, res] = await this.$api.getStrategicalArticleDetail({ id })
+
+      if (err) {
+        return this.$message.error('获取文章数据失败')
+      }
+
+      this.strategicalArticle = res.data.data[0]
     }
   },
   computed: {
@@ -86,16 +97,8 @@ export default {
   filters: {
     timeFormat
   },
-  async mounted () {
-    const id = this.$route.query.id
-
-    const [err, res] = await this.$api.getStrategicalArticleDetail({ id })
-
-    if (err) {
-      return this.$message.error('获取文章数据失败')
-    }
-
-    this.strategicalArticle = res.data.data[0]
+  mounted () {
+    this.renderArticleDetial()
   }
 }
 </script>
