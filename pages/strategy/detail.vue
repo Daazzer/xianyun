@@ -123,9 +123,13 @@ export default {
       const userId = this.$store.state.user.userInfo.user.id
       const likeIds = this.strategicalArticle.likeIds
       // 查询点赞状态
-      return likeIds.some(id =>
-        id === userId
-      )
+      if (likeIds) {
+        return likeIds.some(id =>
+          id === userId
+        )
+      } else {
+        return false
+      }
     },
     isStar () {
       const userId = this.$store.state.user.userInfo.user.id
