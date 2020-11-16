@@ -72,9 +72,7 @@ export default {
       // 在原点赞数据基础上添加当前用户 id，用于显示点赞状态
       this.strategicalArticle.likeIds.push(this.$store.state.user.userInfo.user.id)
     },
-    async renderArticleDetial () {
-      const id = this.$route.query.id
-
+    async renderArticleDetial (id) {
       const [err, res] = await this.$api.getStrategicalArticleDetail({ id })
 
       if (err) {
@@ -82,6 +80,9 @@ export default {
       }
 
       this.strategicalArticle = res.data.data[0]
+    },
+    async renderRecommendArticle (id) {
+
     }
   },
   computed: {
@@ -98,7 +99,8 @@ export default {
     timeFormat
   },
   mounted () {
-    this.renderArticleDetial()
+    const id = this.$route.query.id
+    this.renderArticleDetial(id)
   }
 }
 </script>
