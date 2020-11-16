@@ -58,6 +58,13 @@ export default axios => ({
    */
   likeStrategicalArticle: params => handleAxiosRequest(axios.get('/posts/like', { params })),
   /**
+   * 收藏文章
+   * @param {Object} params 参数对象
+   * @param {number} params.id 文章 id
+   * @returns {Promise}
+   */
+  starStrategicalArticle: params => handleAxiosRequest(axios.get('/posts/star', { params })),
+  /**
    * 获取文章评论
    * @param {Object} params 参数对象
    * @param {number} [params.post] 文章 id
