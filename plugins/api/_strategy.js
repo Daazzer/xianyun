@@ -44,6 +44,13 @@ export default axios => ({
    */
   postComment: data => handleAxiosRequest(axios.post('/comments', data)),
   /**
+   * 推荐文章
+   * @param {Object} [params=null] 参数对象
+   * @param {number} params.id 文章id
+   * @returns {Promise}
+   */
+  getRecommendStrategicalArticles: (params = null) => handleAxiosRequest(axios.get('/posts/recommend', { params })),
+  /**
    * 文章点赞
    * @param {Object} params 参数对象
    * @param {number} params.id 文章 id
