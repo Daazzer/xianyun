@@ -27,6 +27,7 @@ $ npm run generate
 - http 库：[@nuxtjs/axios](https://github.com/nuxt-community/axios-module#readme)
 - vuex 状态与本地存储动态数据更插件：[vuex-persistedstate](https://github.com/robinvdvleuten/vuex-persistedstate)
 - 二维码生成插件：[qrcode](https://github.com/soldair/node-qrcode)
+- 富文本编辑：[vue2-editor](https://github.com/davidroyer/vue2-editor)
 
 
 
@@ -81,16 +82,17 @@ export default {
 
 Api 地址：http://157.122.54.189:9095
 
-| 描述       | URL            |
-| ---------- | -------------- |
-| 首页       | `/`            |
-| 机票页     | `/air`         |
-| 航班列表页 | `/air/flights` |
-| 机票订单页 | `/air/order`   |
-| 付款页     | `/air/pay`     |
-| 酒店页     | `/hotel`       |
-| 旅游攻略页 | `/strategy`    |
-| 登录页     | `/user/login`  |
+| 描述             | URL                 |
+| ---------------- | ------------------- |
+| 首页             | `/`                 |
+| 机票页           | `/air`              |
+| 航班列表页       | `/air/flights`      |
+| 机票订单页       | `/air/order`        |
+| 付款页           | `/air/pay`          |
+| 酒店页           | `/hotel`            |
+| 旅游攻略页       | `/strategy`         |
+| 旅游攻略文章发布 | `/strategy/publish` |
+| 登录页           | `/user/login`       |
 
 
 
@@ -1426,3 +1428,19 @@ export default ({ store }) => {
       - 用户信息
       - 点赞数
       - 观看数
+
+## 旅游攻略文章发布页
+
+### 技术实现
+
+- 文章标题输入
+- 富文本编辑文章内容
+- 富文本内容图片上传
+- 城市搜索功能，自动搜索可用城市
+- 文章发布功能
+- 文章保存为草稿功能
+  - 利用 `vuex` 与 `vuex-persistedstate` 进行文章数据本地保存
+- 草稿箱功能
+- 草稿编辑功能
+- 删除草稿功能
+
