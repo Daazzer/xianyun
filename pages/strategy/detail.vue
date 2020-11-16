@@ -30,12 +30,20 @@
     <el-col class="detail__aside">
       <h4>相关攻略</h4>
       <ul class="recommend-list">
-        <li class="recommend-item">
-          <a href="#">
-            <el-image class="recommend-item__image" src="http://p1-q.mafengwo.net/s11/M00/B4/92/wKgBEFt6ZqaAJeK7AAbj58wpNlY06.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90" />
+        <li
+          class="recommend-item"
+          v-for="recommendStrategicalArticle in recommendStrategicalArticles"
+          :key="recommendStrategicalArticle.id"
+        >
+          <a :href="`/strategy/detail?id=${recommendStrategicalArticle.id}`">
+            <el-image
+              class="recommend-item__image"
+              v-if="recommendStrategicalArticle.images.length > 0"
+              :src="recommendStrategicalArticle.images[0]"
+            />
             <el-row class="recommend-item__content" type="flex" justify="space-between">
-              <h5>小蛮腰广州塔，怎么玩才不遗憾？</h5>
-              <p>2019-05-22 1:16 阅读 695</p>
+              <h5>{{ recommendStrategicalArticle.title }}</h5>
+              <p>{{ recommendStrategicalArticle.created_at | timeFormat }} 阅读 {{ recommendStrategicalArticle.watch }}</p>
             </el-row>
           </a>
         </li>
@@ -54,7 +62,8 @@ export default {
         account: {},
         comments: [],
         likeIds: []
-      }
+      },
+      recommendStrategicalArticles: []
     }
   },
   methods: {
@@ -82,7 +91,13 @@ export default {
       this.strategicalArticle = res.data.data[0]
     },
     async renderRecommendArticle (id) {
+      const [err, res] = await this.$api.getRecommendStrategicalArticles({ id })
 
+      if (err) {
+        return this.$message.error('获取相关攻略失败')
+      }
+
+      this.recommendStrategicalArticles = res.data.data
     }
   },
   computed: {
@@ -101,6 +116,7 @@ export default {
   mounted () {
     const id = this.$route.query.id
     this.renderArticleDetial(id)
+    this.renderRecommendArticle(id)
   }
 }
 </script>
