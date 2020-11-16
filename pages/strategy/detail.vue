@@ -18,11 +18,11 @@
         </div>
         <div class="detail-ctrl__item" @click="starArticle">
           <i :class="`iconfont icon-shoucang${isStar ? '1' : ''}`"></i>
-          <p>收藏({{ strategicalArticle.account.starPosts.length || 0 }})</p>
+          <p>收藏({{ strategicalArticle.account.starPosts ? strategicalArticle.account.starPosts.length : 0 }})</p>
         </div>
         <div class="detail-ctrl__item" @click="likeArticle">
           <i :class="`iconfont icon-${isLike ? 'dianzan3' : 'icon_dianzan-xian'}`"></i>
-          <p>点赞({{ strategicalArticle.like || 0 }})</p>
+          <p>点赞({{ strategicalArticle.likeIds ? strategicalArticle.likeIds.length : 0 }})</p>
         </div>
         <div class="detail-ctrl__item" @click="$message.warning('暂不支持分享功能')">
           <i class="iconfont icon-iconfontzhizuobiaozhun20"></i>
@@ -84,6 +84,9 @@ export default {
       }
 
       this.$message.success('点赞成功')
+      if (!this.strategicalArticle.likeIds) {
+        this.strategicalArticle.likeIds = []
+      }
       // 在原点赞数据基础上添加当前用户 id，用于显示点赞状态
       this.strategicalArticle.likeIds.push(this.$store.state.user.userInfo.user.id)
     },
