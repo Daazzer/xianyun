@@ -9,7 +9,7 @@
             :src="$axios.defaults.baseURL + strategicalArticle.account.defaultAvatar"
           />
         </nuxt-link>
-        <nuxt-link class="user-nickname" to="user/personal">{{ strategicalArticle.account.nickname }}</nuxt-link>
+        <nuxt-link class="user-nickname" to="/user/personal">{{ strategicalArticle.account.nickname }}</nuxt-link>
       </el-row>
       <span><i class="el-icon-view"></i> {{ strategicalArticle.watch || 0 }}</span>
     </el-row>

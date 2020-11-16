@@ -21,7 +21,7 @@
         <!-- 如果用户存在则展示用户信息，用户数据来自store -->
         <el-dropdown v-if="user.userInfo.token">
           <el-row type="flex" align="middle" class="el-dropdown-link">
-            <nuxt-link to="#">
+            <nuxt-link to="/user/personal">
               <img :src="userAvatarUrl" />
               {{ user.userInfo.user.nickname }}
             </nuxt-link>
@@ -29,7 +29,7 @@
           </el-row>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
-              <nuxt-link to="#">个人中心</nuxt-link>
+              <nuxt-link to="/user/personal">个人中心</nuxt-link>
             </el-dropdown-item>
             <el-dropdown-item>
               <div @click="logout">退出</div>
