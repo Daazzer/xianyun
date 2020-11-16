@@ -1425,9 +1425,45 @@ export default ({ store }) => {
   - 组件的进一步封装
 
     - `ArticleBarItemInfo` 组件展示文章信息
+      
       - 用户信息
       - 点赞数
       - 观看数
+      - 时间格式化过滤器函数封装，用于后续的时间展示，将时间戳展示为 `YYYY-MM-DD hh:mm` 的格式
+      
+      ```js
+      // @/plugins/filters.js
+      export function timeFormat (time) {
+        // 默认显示的内容
+        if (isNaN(time)) {
+          return '-- :'
+        }
+      
+        // 通过时间戳实例化日期对象
+        const date = new Date(time)
+        const MM = date.getMonth() + 1
+        const DD = date.getDate()
+        const mm = date.getMinutes()
+      
+        const YYYYMMDD = [
+          date.getFullYear(),
+          // 判断是否个位数的日期，如果是个位数则也要显示 0 前缀
+          MM < 10 ? `0${MM}` : MM,
+          DD < 10 ? `0${DD}` : DD
+        ].join('-')
+      
+        const hhmm = [
+          date.getHours(),
+          mm < 10 ? `0${mm}` : mm
+        ].join(':')
+      
+        return YYYYMMDD + ' ' + hhmm
+      }
+      
+      // ...
+      ```
+      
+      
 
 ## 旅游攻略文章发布页
 
@@ -1443,4 +1479,23 @@ export default ({ store }) => {
 - 草稿箱功能
 - 草稿编辑功能
 - 删除草稿功能
+
+
+
+## 旅游攻略文章详情页
+
+### 技术实现
+
+- 文章内容展示
+- 头部面包屑标签路径展示
+- 文章点赞功能、文章收藏功能
+- 相关攻略展示
+- `DetailComment` 评论组件
+  - 评论发表功能
+  - 上传评论图片功能
+  - 评论分页
+- `DetailCommentList` 评论列表组件
+  - 评论回复功能
+  - 评论图片查看功能
+  - `CommentFloor` 组件实现评论盖楼（组件递归），可以回复递归出来的评论
 
