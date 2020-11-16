@@ -99,6 +99,9 @@ export default {
       }
 
       this.$message.success('收藏成功')
+      if (!this.strategicalArticle.account.starPosts) {
+        this.strategicalArticle.account.starPosts = []
+      }
       // 在原收藏数据基础上添加当前用户 id，用于显示收藏状态
       this.strategicalArticle.account.starPosts.push(this.$store.state.user.userInfo.user.id)
     },
@@ -138,9 +141,13 @@ export default {
       const userId = this.$store.state.user.userInfo.user.id
       const starIds = this.strategicalArticle.account.starPosts
       // 查询收藏状态
-      return starIds.some(id =>
-        Number(id) === userId
-      )
+      if (starIds) {
+        return starIds.some(id =>
+          Number(id) === userId
+        )
+      } else {
+        return false
+      }
     }
   },
   filters: {
