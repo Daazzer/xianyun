@@ -16,6 +16,10 @@
           <i class="iconfont icon-pinglun"></i>
           <p>评论({{ strategicalArticle.comments.length }})</p>
         </div>
+        <div class="detail-ctrl__item" @click="starArticle">
+          <i :class="`iconfont icon-shoucang${isStar ? '1' : ''}`"></i>
+          <p>收藏({{ strategicalArticle.account.starPosts.length || 0 }})</p>
+        </div>
         <div class="detail-ctrl__item" @click="likeArticle">
           <i :class="`iconfont icon-${isLike ? 'dianzan3' : 'icon_dianzan-xian'}`"></i>
           <p>点赞({{ strategicalArticle.like || 0 }})</p>
@@ -59,7 +63,9 @@ export default {
   data () {
     return {
       strategicalArticle: {
-        account: {},
+        account: {
+          starPosts: []
+        },
         comments: [],
         likeIds: []
       },
@@ -80,6 +86,18 @@ export default {
       this.$message.success('点赞成功')
       // 在原点赞数据基础上添加当前用户 id，用于显示点赞状态
       this.strategicalArticle.likeIds.push(this.$store.state.user.userInfo.user.id)
+    },
+    async starArticle () {
+      const id = this.$route.query.id
+      const [err, res] = await this.$api.starStrategicalArticle({ id })
+
+      if (err) {
+        return this.$message.error('收藏失败')
+      }
+
+      this.$message.success('收藏成功')
+      // 在原收藏数据基础上添加当前用户 id，用于显示收藏状态
+      this.strategicalArticle.account.starPosts.push(this.$store.state.user.userInfo.user.id)
     },
     async renderArticleDetial (id) {
       const [err, res] = await this.$api.getStrategicalArticleDetail({ id })
@@ -107,6 +125,14 @@ export default {
       // 查询点赞状态
       return likeIds.some(id =>
         id === userId
+      )
+    },
+    isStar () {
+      const userId = this.$store.state.user.userInfo.user.id
+      const starIds = this.strategicalArticle.account.starPosts
+      // 查询收藏状态
+      return starIds.some(id =>
+        Number(id) === userId
       )
     }
   },
