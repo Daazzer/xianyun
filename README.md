@@ -92,6 +92,7 @@ Api 地址：http://157.122.54.189:9095
 | 酒店页           | `/hotel`            |
 | 旅游攻略页       | `/strategy`         |
 | 旅游攻略文章发布 | `/strategy/publish` |
+| 旅游攻略文章详情 | `strategy/detail`   |
 | 登录页           | `/user/login`       |
 
 
