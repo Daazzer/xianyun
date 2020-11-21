@@ -1,8 +1,9 @@
 import index from './_index'
-import hotel from './_hotel'
 import account from './_account'
 import air from './_air'
 import strategy from './_strategy'
+import hotel from './_hotel'
+import address from './_address'
 import upload from './_upload'
 
 /**
@@ -16,9 +17,10 @@ export const handleAxiosRequest = axios => (
 
 export default axios => ({
   ...index(axios),
-  ...hotel(axios),
   ...account(axios),
   ...air(axios),
   ...strategy(axios),
+  ...hotel(axios),
+  ...address(axios),
   ...upload(axios)
 })
