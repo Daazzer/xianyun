@@ -1,4 +1,5 @@
 import { handleAxiosRequest } from './index'
+import qs from 'querystring'
 
 export default axios => ({
   /**
@@ -21,7 +22,24 @@ export default axios => ({
    * @param {string} [params._sort] 排序
    * @returns {Promise}
    */
-  getHotels: params => handleAxiosRequest(axios.get('/hotels', { params })),
+  getHotels (params) {
+    params = JSON.parse(JSON.stringify(params)) // 排除掉 undefined 项
+    const filteParams = {}
+
+    for (let key in params) {
+      if (Array.isArray(params[key]) && params[key].length > 0) {
+        filteParams[key] = params[key]
+      } else if (!Array.isArray(params[key])) {
+        filteParams[key] = params[key]
+      }
+    }
+    return handleAxiosRequest(axios.get('/hotels', {
+      params: filteParams,
+      paramsSerializer (params) {
+        return qs.stringify(params)
+      }
+    }))
+  },
   /** 获取酒店选项数据 */
   getHotelFilterOptions: () => handleAxiosRequest(axios.get('/hotels/options')),
   /**
