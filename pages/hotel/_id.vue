@@ -2,7 +2,7 @@
   <div class="hotel-detail w">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item to="/hotel">酒店</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/hotel', query: { cityName: $store.state.hotel.locationCity } }">{{ hotel.real_city }}酒店</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/hotel', query: { cityName: $store.state.hotel.locationCity || hotel.city.name } }">{{ hotel.real_city }}酒店</el-breadcrumb-item>
       <el-breadcrumb-item>{{ hotel.name }}</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- <HotelDetailNameInfo :hotel="hotel" /> -->
@@ -21,21 +21,28 @@ export default {
       hotel: {
         hotellevel: {},
         hoteltype: {},
-        location: {}
+        location: {},
+        city: {}
       },
       hotelAreaInfo: {}
     }
   },
   methods: {
-    /** 获取酒店详情 */
-    getHotelDetails (params) {
-      return this.$axios.get('/hotels', { params }).then(res => [null, res]).catch(err => [err])
-    },
     async renderHotelDetails (id) {
-      const [err, res] = await this.getHotelDetails({ id })
+      const [err, res] = await this.$api.getHotels({ id })
 
       if (err) {
         return this.$message.error('获取酒店详情信息失败')
+      }
+
+      if (res.data.data.length === 0) {
+        this.hotel = {
+          hotellevel: {},
+          hoteltype: {},
+          location: {},
+          city: {}
+        }
+        return
       }
 
       this.hotel = res.data.data[0]
