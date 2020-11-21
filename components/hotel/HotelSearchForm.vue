@@ -68,36 +68,43 @@ export default {
   data () {
     return {
       cityName: '',
+      cityId: undefined,
+      hotelDate: [],
       adults: [],
       children: [],
-      cityId: undefined,
       adultsNum: 1,
       childrenNum: 0,
-      hotelDate: [],
-      visible: false,
-      personStr: ''
+      personStr: '',
+      visible: false
     }
   },
   methods: {
-    async queryCity (cityName, cb) {
-      if (cityName === '') {
+    async queryCity (name, cb) {
+      if (name === '') {
         return cb([])
       }
 
       this.cityId = undefined
 
-      const [err, res] = await this.api.getCities({ name })
+      const [err, res] = await this.$api.getCities({ name })
 
       if (err) {
         this.cityId = undefined
         return cb([{ value: '搜索城市失败' }])
       }
 
-      if (!res.data.data) {
+      let cities = res.data.data
+
+      if (typeof cities === 'undefined') {
+        this.cityId = undefined
+        return cb([])
+      }
+
+      if (cities.length === 0) {
         this.cityId = undefined
       }
 
-      const cities = res.data.data.map(city => {
+      cities = cities.map(city => {
         if (name === city.name) {
           this.cityId = city.id
         }
@@ -124,14 +131,16 @@ export default {
     },
     searchHotel () {
       this.$store.commit('hotel/setLocationCity', this.cityName)
-      this.$store.commit('hotel/setCityId', this.cityId)
+      this.$store.commit('hotel/setHotelListParams', { city: this.cityId })
       if (this.hotelDate) {
-        this.$store.commit('hotel/setEnterTime', this.hotelDate[0])
-        this.$store.commit('hotel/setLeftTime', this.hotelDate[1])
+        this.$store.commit('hotel/setHotelListParams', {
+          enterTime: this.hotelDate[0],
+          leftTime: this.hotelDate[1]
+        })
       }
       // todo 由于后端接口问题，此参数暂时不用
       // if (this.personStr !== '') {
-      //   searchData.person = this.adultsNum + this.childrenNum
+      //   this.$store.commit('hotel/setHotelListParams', { person: this.adultsNum + this.childrenNum })
       // }
       this.$emit('search-hotel', this.cityName)
     }
