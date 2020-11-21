@@ -14,74 +14,25 @@
         />
       </div>
     </el-col>
-    <el-col class="filter-form__item" :span="4">
-      <h4>住宿等级</h4>
+    <el-col
+      class="filter-form__item"
+      :span="4"
+      v-for="(filter, index) in filters"
+      :key="filter.key"
+    >
+      <h4>{{ filter.title }}</h4>
       <div class="opt">
         <el-dropdown @command="filterHotelInfoByKey">
           <span class="el-dropdown-link">
-            {{ hotellevel }}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{ getOptionLabel(filter.key, index) }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu class="opt-dropdown-menu" slot="dropdown">
             <el-dropdown-item
-              v-for="(level, index) in filterOption.levels"
-              :icon="`${level.isSelected ? 'el-icon-circle-check' : 'iconfont icon-yuanxing'}`"
-              :key="level.id"
-              :command="{ index, key: 'levels' }"
-            >{{ level.name }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-    </el-col>
-    <el-col class="filter-form__item" :span="4">
-      <h4>住宿类型</h4>
-      <div class="opt">
-        <el-dropdown @command="filterHotelInfoByKey">
-          <span class="el-dropdown-link">
-            {{ hoteltype }}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu class="opt-dropdown-menu" slot="dropdown">
-            <el-dropdown-item
-              v-for="(type, index) in filterOption.types"
-              :icon="`${type.isSelected ? 'el-icon-circle-check' : 'iconfont icon-yuanxing'}`"
-              :key="type.id"
-              :command="{ index, key: 'types' }"
-            >{{ type.name }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-    </el-col>
-    <el-col class="filter-form__item" :span="4">
-      <h4>酒店设施</h4>
-      <div class="opt">
-        <el-dropdown @command="filterHotelInfoByKey">
-          <span class="el-dropdown-link">
-            {{ hotelasset }}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu class="opt-dropdown-menu" slot="dropdown">
-            <el-dropdown-item
-              v-for="(asset, index) in filterOption.assets"
-              :icon="`${asset.isSelected ? 'el-icon-circle-check' : 'iconfont icon-yuanxing'}`"
-              :key="asset.id"
-              :command="{ index, key: 'assets' }"
-            >{{ asset.name }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-    </el-col>
-    <el-col class="filter-form__item" :span="4">
-      <h4>酒店品牌</h4>
-      <div class="opt">
-        <el-dropdown @command="filterHotelInfoByKey">
-          <span class="el-dropdown-link">
-            {{ hotelbrand }}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu class="opt-dropdown-menu" slot="dropdown">
-            <el-dropdown-item
-              v-for="(brand, index) in filterOption.brands"
-              :icon="`${brand.isSelected ? 'el-icon-circle-check' : 'iconfont icon-yuanxing'}`"
-              :key="brand.id"
-              :command="{ index, key: 'brands' }"
-            >{{ brand.name }}</el-dropdown-item>
+              v-for="(option, index) in filter.options"
+              :icon="`${option.isSelected ? 'el-icon-circle-check' : 'iconfont icon-yuanxing'}`"
+              :key="option.id"
+              :command="{ index, key: filter.key }"
+            >{{ option.name }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -95,16 +46,17 @@
 </template>
 
 <script>
+import filters from '~/plugins/filters'
 export default {
   name: 'HotelFilterForm',
   data () {
     return {
-      filterOption: {
-        assets: [],
-        brands: [],
-        levels: [],
-        types: []
-      },
+      filters: [
+        { title: '住宿等级', options: [], key: 'hotellevel', dataKey: 'levels' },
+        { title: '住宿类型', options: [], key: 'hoteltype', dataKey: 'types' },
+        { title: '酒店设施', options: [], key: 'hotelasset', dataKey: 'assets' },
+        { title: '酒店品牌', options: [], key: 'hotelbrand', dataKey: 'brands' }
+      ],
       price: 4000
     }
   },
@@ -114,48 +66,38 @@ export default {
       this.$emit('filter-hotels')
     },
     filterHotelInfoByKey ({ index, key }) {
-      // 修改对应选项的选中状态
-      const data = this.filterOption[key]
-      const isSelected = data[index].isSelected
-      data[index].isSelected = !isSelected
+      let data = []
 
-      const dataArr = data.filter(v => v.isSelected).map(v => v.id)
-      let hotelListParamKey = ''
-
-      switch (key) {
-        case 'levels':
-          hotelListParamKey = 'hotellevel'
-          break
-        case 'types':
-          hotelListParamKey = 'hoteltype'
-          break
-        case 'assets':
-          hotelListParamKey = 'hotelasset'
-          break
-        case 'brands':
-          hotelListParamKey = 'hotelbrand'
-          break
-      }
-
-      this.$store.commit('hotel/setHotelListParams', {
-        [hotelListParamKey]: dataArr
+      this.filters.forEach(filter => {
+        if (filter.key === key) {
+          // 拿到被点击的那一项的选项
+          data = filter.options
+          // 修改对应选项的选中状态
+          let isSelected = filter.options[index].isSelected
+          filter.options[index].isSelected = !isSelected
+        }
       })
+
+      // 拿到已选中的所有选项保存到一个数组
+      data = data.filter(v => v.isSelected).map(v => v.id)
+
+      this.$store.commit('hotel/setHotelListParams', { [key]: data })
 
       this.$emit('filter-hotels')
     },
     /**
      * 返回过滤选项在不同状态下的标签名
-     * @param {string} dataKey vuex 对应的数据项的 key 值
-     * @param {string} optKey 请求回来的数据项的 key 值
+     * @param {string} key vuex 对应的数据项的 key 值
+     * @param {number} index 选项索引
      * @returns {string} 每个选项的标签名
      */
-    getOptLabel (dataKey, optKey) {
-      const data = this.$store.state.hotel.hotelListParams[dataKey]
+    getOptionLabel (key, index) {
+      const data = this.$store.state.hotel.hotelListParams[key]
       const len = data.length
       if (len === 1) {
         // 找出被选中的那一项
-        const opt = this.filterOption[optKey].find(v => v.isSelected)
-        return opt.name
+        const option = this.filters[index].options.find(v => v.isSelected)
+        return option.name
       } else if (len > 1) {
         return `已选${len}项`
       }
@@ -164,30 +106,14 @@ export default {
     resetFilter () {
       this.$store.commit('hotel/resetFilter')
       // 重置选中状态
-      const filterOption = this.filterOption
-      for (const key in filterOption) {
-        filterOption[key].forEach(opt => {
-          if (opt.isSelected) {
-            opt.isSelected = false
-          }
+      this.filters.forEach(filter => {
+        filter.options.forEach(option => {
+          option.isSelected = false
         })
-      }
+      })
+
       this.price = 4000
       this.$emit('filter-hotels')
-    }
-  },
-  computed: {
-    hotellevel () {
-      return this.getOptLabel('hotellevel', 'levels')
-    },
-    hoteltype () {
-      return this.getOptLabel('hoteltype', 'types')
-    },
-    hotelasset () {
-      return this.getOptLabel('hotelasset', 'assets')
-    },
-    hotelbrand () {
-      return this.getOptLabel('hotelbrand', 'brands')
     }
   },
   async mounted () {
@@ -198,12 +124,18 @@ export default {
     }
 
     const data = res.data.data
+    let filters = this.filters
 
-    // 数据改造，添加一个选择状态
     for (const key in data) {
-      this.filterOption[key] = data[key].map(v => {
-        v.isSelected = false
-        return v
+      filters.forEach(filter => {
+        // 将对应的属性值存到对应的选项中
+        if (key === filter.dataKey) {
+          // 数据改造，添加一个选择状态
+          filter.options = data[key].map(v => {
+            v.isSelected = false
+            return v
+          })
+        }
       })
     }
   }
