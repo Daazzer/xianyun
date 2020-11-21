@@ -1,12 +1,12 @@
 <template>
   <div class="hotel-detail w">
-    <el-breadcrumb separator-class="el-icon-arrow-right">
+    <el-breadcrumb>
       <el-breadcrumb-item to="/hotel">酒店</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: '/hotel', query: { cityName: $store.state.hotel.locationCity || hotel.city.name } }">{{ hotel.real_city }}酒店</el-breadcrumb-item>
       <el-breadcrumb-item>{{ hotel.name }}</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- <HotelDetailNameInfo :hotel="hotel" /> -->
-    <!-- <HotelDetailPicsInfo /> -->
+    <HotelDetailNameInfo :hotel="hotel" />
+    <HotelDetailPicsInfo />
     <!-- <HotelDetailProducts :hotelProductsTableData="hotel.products" /> -->
     <!-- <HotelDetailAreaInfo :hotelAreaInfo="hotelAreaInfo" @load-map="handleLoadMap" /> -->
     <!-- <HotelDetailAssets :hotel="hotel" /> -->
