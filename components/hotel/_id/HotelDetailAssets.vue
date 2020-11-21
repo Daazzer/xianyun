@@ -4,8 +4,8 @@
       <el-col class="assets-info-label" :span="4">基本信息</el-col>
       <el-col class="assets-info-content base-info" :span="20">
         <el-row :gutter="10" type="flex">
-          <el-col>入住时间：{{ hotel.enterTime !== 'null' ? hotel.enterTime + '之后' : '-' }}</el-col>
-          <el-col>离店时间：{{ hotel.leftTime !== 'null' ? hotel.leftTime + '之前' : '-' }}</el-col>
+          <el-col>入住时间：{{ hotel.enterTime !== 'null' && hotel.enterTime ? hotel.enterTime + '之后' : '-' }}</el-col>
+          <el-col>离店时间：{{ hotel.leftTime !== 'null' && hotel.leftTime ? hotel.leftTime + '之前' : '-' }}</el-col>
           <el-col>
             {{ hotel.creation_time !== 'null' ? hotel.creation_time : '-' }}
             /
