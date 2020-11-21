@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import timeDiff from '@/plugins/timeRank'
+import timeDiff from '@/plugins/time-rank'
 export default {
   props: {
     infoData: {
