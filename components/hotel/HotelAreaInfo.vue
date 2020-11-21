@@ -57,7 +57,7 @@
       </el-row>
     </el-col>
     <!-- 嵌入脚本的形式加载地图 -->
-    <script src="//webapi.amap.com/maps?v=1.4.15&key=a3bef07558c5ea956fe1aa766fac3400&callback=loadMap"></script>
+    <script v-if="isLoadedMap" src="//webapi.amap.com/maps?v=1.4.15&key=a3bef07558c5ea956fe1aa766fac3400&callback=loadMap"></script>
     <el-col class="area-info__map" id="map" :span="10" />
   </el-row>
 </template>
@@ -83,7 +83,8 @@ export default {
     return {
       isOpened: false,
       map: {},
-      averagePrices: [332, 512, 768]
+      averagePrices: [332, 512, 768],
+      isLoadedMap: false
     }
   },
   methods: {
@@ -170,6 +171,7 @@ export default {
   },
   mounted () {
     window.loadMap  = this.loadMap
+    this.isLoadedMap = true
   }
 }
 </script>

@@ -1,6 +1,7 @@
 <template>
   <el-row class="hotel-detail__area-info" id="hotelAreaInfo" type="flex">
-    <script src="//webapi.amap.com/maps?v=1.4.15&key=a3bef07558c5ea956fe1aa766fac3400&callback=loadMap"></script>
+    <!-- 要在地图函数声明好之后再加载脚本 -->
+    <script v-if="isLoadedMap" src="//webapi.amap.com/maps?v=1.4.15&key=a3bef07558c5ea956fe1aa766fac3400&callback=loadMap"></script>
     <div class="map" id="map" ref="map"></div>
     <div class="area-info" id="areaInfo">
       <el-tabs v-model="activeName" @tab-click="switchTab">
@@ -41,6 +42,7 @@ export default {
   data () {
     return {
       map: {},
+      isLoadedMap: false,
       activeName: 'scenic',
       scenics: [],
       stations: [],
@@ -233,6 +235,7 @@ export default {
   },
   mounted () {
     window.loadMap = this.loadMap
+    this.isLoadedMap = true
   }
 }
 </script>
