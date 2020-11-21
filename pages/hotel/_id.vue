@@ -7,7 +7,7 @@
     </el-breadcrumb>
     <HotelDetailNameInfo :hotel="hotel" />
     <HotelDetailPicsInfo />
-    <!-- <HotelDetailProducts :hotelProductsTableData="hotel.products" /> -->
+    <HotelDetailProducts :hotelProductsTableData="hotel.products" />
     <!-- <HotelDetailAreaInfo :hotelAreaInfo="hotelAreaInfo" @load-map="handleLoadMap" /> -->
     <!-- <HotelDetailAssets :hotel="hotel" /> -->
     <!-- <HotelDetailComments :hotel="hotel" /> -->
@@ -22,7 +22,8 @@ export default {
         hotellevel: {},
         hoteltype: {},
         location: {},
-        city: {}
+        city: {},
+        products: []
       },
       hotelAreaInfo: {}
     }
