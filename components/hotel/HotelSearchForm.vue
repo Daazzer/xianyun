@@ -142,7 +142,7 @@ export default {
       // if (this.personStr !== '') {
       //   this.$store.commit('hotel/setHotelListParams', { person: this.adultsNum + this.childrenNum })
       // }
-      this.$emit('search-hotel', this.cityName)
+      this.$emit('search-hotels', this.cityName)
     }
   },
   mounted () {
