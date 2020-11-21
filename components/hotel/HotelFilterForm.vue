@@ -86,9 +86,9 @@ export default {
       this.$emit('filter-hotels')
     },
     /**
-     * 返回过滤选项在不同状态下的标签名
+     * 返回过滤标签在不同状态下的标签名
      * @param {string} key vuex 对应的数据项的 key 值
-     * @param {number} index 选项索引
+     * @param {number} index 过滤器标签索引
      * @returns {string} 每个选项的标签名
      */
     getOptionLabel (key, index) {
