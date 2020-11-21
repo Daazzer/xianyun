@@ -8,11 +8,12 @@ export const state = () => ({
     price_in: undefined,  // 酒店价格
     hotellevel: [],  // 酒店等级
     hoteltype: [],  // 酒店类型
-    hotelbrand: [],  // 酒店设施
-    hotelasset: [],  // 酒店品牌
+    hotelasset: [],  // 酒店设施
+    hotelbrand: [],  // 酒店品牌
     _start: 0,  // 数据索引
     _limit: 6  // 返回数据的条数
-  }
+  },
+  totalHotels: 0
 })
 
 export const mutations = {
@@ -32,5 +33,17 @@ export const mutations = {
         hotelListParams[key] = data[key]
       }
     }
+  },
+  setTotalHotels (state, data) {
+    state.totalHotels = data
+  },
+  resetFilter () {
+    this.commit('hotel/setHotelListParams', {
+      price_in: undefined,
+      hotellevel: [],
+      hoteltype: [],
+      hotelasset: [],
+      hotelbrand: []
+    })
   }
 }
