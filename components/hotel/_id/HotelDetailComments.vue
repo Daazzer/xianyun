@@ -45,7 +45,7 @@
 
 <script>
 export default {
-  name: 'HotelDetailRate',
+  name: 'HotelDetailComments',
   props: {
     hotel: {
       type: Object,
