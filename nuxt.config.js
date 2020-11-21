@@ -27,7 +27,7 @@ export default {
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/axios',
-    { src: '@/plugins/localStorage', ssr: false }
+    { src: '@/plugins/vuex-persistedstate', ssr: false }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -45,9 +45,6 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
-    transpile: [/^element-ui/],
-    // You can extend webpack config here
-    extend(config, ctx) {
-    }
+    transpile: [/^element-ui/]
   }
 }
