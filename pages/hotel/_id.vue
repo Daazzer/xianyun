@@ -8,9 +8,9 @@
     <HotelDetailNameInfo :hotel="hotel" />
     <HotelDetailPicsInfo />
     <HotelDetailProducts :hotelProductsTableData="hotel.products" />
-    <!-- <HotelDetailAreaInfo :hotelAreaInfo="hotelAreaInfo" @load-map="handleLoadMap" /> -->
-    <!-- <HotelDetailAssets :hotel="hotel" /> -->
-    <!-- <HotelDetailComments :hotel="hotel" /> -->
+    <HotelDetailAreaInfo />
+    <HotelDetailAssets :hotel="hotel" />
+    <HotelDetailRate :hotel="hotel" />
   </div>
 </template>
 <script>
@@ -25,7 +25,7 @@ export default {
         city: {},
         products: []
       },
-      hotelAreaInfo: {}
+      hotelInfo: {}
     }
   },
   methods: {
@@ -47,29 +47,6 @@ export default {
       }
 
       this.hotel = res.data.data[0]
-    },
-    /*
-    由于地图与传入数据之间的顺序是不定的
-    但是需要在地图加载完成时，再将位置信息传到到子组件
-    所以这里需要再发多一次请求另外拿数据
-     */
-    async handleLoadMap () {
-      const id = this.$route.params.id
-      const [err, res] = await this.getHotelDetails({ id })
-
-      if (err) {
-        return this.$message.error('加载地图标记失败')
-      }
-
-      const { longitude, latitude }  = res.data.data[0].location
-      const { name, address } = res.data.data[0]
-
-      this.hotelAreaInfo = {
-        longitude,
-        latitude,
-        name,
-        address
-      }
     }
   },
   async mounted () {
