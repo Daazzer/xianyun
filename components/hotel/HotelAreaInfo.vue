@@ -131,11 +131,6 @@ export default {
       })
       return p
     },
-    // renderMapScript () {
-    //   const amapApi = document.createElement('script')
-    //   amapApi.src = this.mapUrl
-    //   document.head.appendChild(amapApi)
-    // },
     renderHotelMarkers (hotels) {
       this.map.clearMap()
       hotels.forEach((hotel, index) => {
