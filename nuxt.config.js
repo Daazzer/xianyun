@@ -1,7 +1,6 @@
 import pkg from './package'
 
 export default {
-  // mode: 'universal',
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: '闲云旅游',
