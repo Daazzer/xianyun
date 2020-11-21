@@ -10,7 +10,7 @@
     <HotelDetailProducts :hotelProductsTableData="hotel.products" />
     <HotelDetailAreaInfo />
     <HotelDetailAssets :hotel="hotel" />
-    <HotelDetailRate :hotel="hotel" />
+    <HotelDetailComments :hotel="hotel" />
   </div>
 </template>
 <script>
@@ -24,8 +24,7 @@ export default {
         location: {},
         city: {},
         products: []
-      },
-      hotelInfo: {}
+      }
     }
   },
   methods: {
