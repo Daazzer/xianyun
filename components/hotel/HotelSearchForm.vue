@@ -130,8 +130,12 @@ export default {
       this.visible = false
     },
     searchHotel () {
-      this.$store.commit('hotel/setLocationCity', this.cityName)
-      this.$store.commit('hotel/setHotelListParams', { city: this.cityId })
+      if (this.cityName !== '') {
+        this.$store.commit('hotel/setLocationCity', this.cityName)
+      }
+      if (typeof this.cityId !== 'undefined') {
+        this.$store.commit('hotel/setHotelListParams', { city: this.cityId })
+      }
       if (this.hotelDate) {
         this.$store.commit('hotel/setHotelListParams', {
           enterTime: this.hotelDate[0],
