@@ -10,7 +10,11 @@
       :hotelList="hotelList"
       @located="handleLocated"
     />
-    <HotelFilterForm @filter-hotels="handleFilterHotels" />
+    <HotelFilterForm @filter-hotels="renderHotelList(hotelListParams)" />
+    <HotelList
+      :hotelList="hotelList"
+      @pagination-change="renderHotelList(hotelListParams)"
+    />
   </div>
 </template>
 
@@ -33,6 +37,13 @@ export default {
         return this.$message.error('获取酒店周边数据失败')
       }
 
+      if (res.data.data.length === 0) {
+        this.cityInfo = {
+          scenics: []
+        }
+        return
+      }
+
       this.cityInfo = res.data.data[0]
     },
     async renderHotelList (hotelListParams) {
@@ -53,15 +64,14 @@ export default {
       this.renderHotelList(this.hotelListParams)
     },
     handleSearchHotels (cityName) {
-      this.renderCityInfo(cityName)
+      if (cityName !== '') {
+        this.renderCityInfo(cityName)
+        this.$router.push({
+          path: '/hotel',
+          query: { cityName }
+        })
+      }
       this.renderHotelList(this.hotelListParams)
-      this.$router.push({
-        path: '/hotel',
-        query: { cityName }
-      })
-    },
-    handleFilterHotels () {
-      console.log(1)
     }
   },
   computed: {
