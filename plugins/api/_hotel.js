@@ -27,9 +27,9 @@ export default axios => ({
     const filteParams = {}
 
     for (let key in params) {
-      if (Array.isArray(params[key]) && params[key].length > 0) {
+      if (!Array.isArray(params[key])) {
         filteParams[key] = params[key]
-      } else if (!Array.isArray(params[key])) {
+      } else if (Array.isArray(params[key]) && params[key].length > 0) {
         filteParams[key] = params[key]
       }
     }
