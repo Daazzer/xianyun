@@ -58,7 +58,13 @@
     </el-col>
     <!-- 嵌入脚本的形式加载地图 -->
     <script v-if="isLoadedMap" src="//webapi.amap.com/maps?v=1.4.15&key=a3bef07558c5ea956fe1aa766fac3400&callback=loadMap"></script>
-    <el-col class="area-info__map" id="map" :span="10" />
+    <el-col
+      element-loading-spinner="iconfont icon-jiazaizhong"
+      class="area-info__map"
+      id="map"
+      v-loading="loadingMap"
+      :span="10"
+    />
   </el-row>
 </template>
 
@@ -84,11 +90,13 @@ export default {
       isOpened: false,
       map: {},
       averagePrices: [332, 512, 768],
-      isLoadedMap: false
+      isLoadedMap: false,
+      loadingMap: false
     }
   },
   methods: {
     async loadMap () {
+      this.loadingMap = true
       this.map = new AMap.Map('map', {
         resizeEnable: true,
         zoom: 10
@@ -162,11 +170,15 @@ export default {
 
       // 显示出范围内所有标记点
       this.map.setFitView()
-    },
+    }
   },
   watch: {
     hotelList (hotels) {
+      this.loadingMap = true
       this.renderHotelMarkers(hotels)
+      setTimeout(() => {
+        this.loadingMap = false
+      }, 300)
     }
   },
   mounted () {
@@ -177,6 +189,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(3turn);
+  }
+}
+::v-deep .el-loading-spinner {
+  animation: rotating 3s linear infinite;
+  .icon-jiazaizhong {
+    font-size: 38px;
+  }
+}
 .hotel__area-info {
   min-height: 260px;
   margin-bottom: 20px;
