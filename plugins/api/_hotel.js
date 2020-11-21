@@ -43,12 +43,12 @@ export default axios => ({
   /** 获取酒店选项数据 */
   getHotelFilterOptions: () => handleAxiosRequest(axios.get('/hotels/options')),
   /**
-   * 获取酒店评论
+   * 获取酒店评论 (后台无数据)
    * @param {Object} params 参数对象
    * @param {number} params.hotel 酒店id
    * @param {string} params._sort 排序
    * @param {number} params._limit 条数
-   * @param {number} params._start 开始数据（分页）
+   * @param {number} params._start 数据索引
    * @returns {Promise}
    */
   getHotelComments: params => handleAxiosRequest(axios.get('/hotels/comments', { params }))
