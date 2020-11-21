@@ -72,7 +72,7 @@ export default {
         return []
       }
     },
-    hotelInfos: {
+    hotelList: {
       type: Array,
       default () {
         return []
@@ -169,7 +169,7 @@ export default {
     },
   },
   watch: {
-    hotelInfos (hotels) {
+    hotelList (hotels) {
       this.renderHotelMarkers(hotels)
     }
   },
@@ -179,30 +179,10 @@ export default {
 }
 </script>
 
-<style>
-.amap-icon img{
-  width: 22px;
-  height: 36px;
-}
-.amap-info-content {
-  font-size: 12px;
-}
-.custom-marker {
-  display: inline-block;
-  width: 22px;
-  height: 36px;
-  text-align: center;
-  line-height: 24px;
-  font-size: 12px;
-  color: #fff;
-  background-size: 22px 36px;
-  background-image: url(https://webapi.amap.com/theme/v1.3/markers/b/mark_bs.png);
-}
-</style>
-
 <style lang="scss" scoped>
 .hotel__area-info {
   min-height: 260px;
+  margin-bottom: 20px;
   .area-info {
     &__search-option {
       > .el-row {
