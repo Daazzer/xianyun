@@ -73,12 +73,12 @@ export default {
           // 拿到被点击的那一项的选项
           data = filter.options
           // 修改对应选项的选中状态
-          let isSelected = filter.options[index].isSelected
+          const isSelected = filter.options[index].isSelected
           filter.options[index].isSelected = !isSelected
         }
       })
 
-      // 拿到已选中的所有选项保存到一个数组
+      // 拿到已选中的所有选项，并且只将 id 保存到一个数组
       data = data.filter(v => v.isSelected).map(v => v.id)
 
       this.$store.commit('hotel/setHotelListParams', { [key]: data })
