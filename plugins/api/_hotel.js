@@ -24,17 +24,17 @@ export default axios => ({
    */
   getHotels (params) {
     params = JSON.parse(JSON.stringify(params)) // 排除掉 undefined 项
-    const filteParams = {}
+    const filterParams = {}
 
     for (let key in params) {
       if (!Array.isArray(params[key])) {
-        filteParams[key] = params[key]
+        filterParams[key] = params[key]
       } else if (Array.isArray(params[key]) && params[key].length > 0) {
-        filteParams[key] = params[key]
+        filterParams[key] = params[key]
       }
     }
     return handleAxiosRequest(axios.get('/hotels', {
-      params: filteParams,
+      params: filterParams,
       paramsSerializer (params) {
         return qs.stringify(params)
       }
