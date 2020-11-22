@@ -28,6 +28,7 @@ $ npm run generate
 - vuex 状态与本地存储动态数据更插件：[vuex-persistedstate](https://github.com/robinvdvleuten/vuex-persistedstate)
 - 二维码生成插件：[qrcode](https://github.com/soldair/node-qrcode)
 - 富文本编辑：[vue2-editor](https://github.com/davidroyer/vue2-editor)
+- 高德地图：[amap](https://lbs.amap.com/api/javascript-api/guide/abc/prepare)
 
 
 
@@ -92,8 +93,10 @@ Api 地址：http://157.122.54.189:9095
 | 酒店页           | `/hotel`            |
 | 旅游攻略页       | `/strategy`         |
 | 旅游攻略文章发布 | `/strategy/publish` |
-| 旅游攻略文章详情 | `strategy/detail`   |
+| 旅游攻略文章详情 | `/strategy/detail`  |
 | 登录页           | `/user/login`       |
+| 酒店列表页       | `/hotel`            |
+| 酒店详情页       | `/hotel/:id`        |
 
 
 
@@ -448,9 +451,13 @@ export default ({ $axios }, inject) => {
     ```
 
   - 输入框聚焦时清除校验规则，提升体验
+
   - 登录后将用户信息存储到 `vuex`
+
   - 利用 `vuex-persistedstate`  将 `vuex`  中的数据与 `localStorage` 同步更新，实现数据持久化
+
   - 登录成功后的页面跳转，并且将用户数据提交 `vuex` 进行数据更新
+
   - [vuex-persistedstate 的部分 vuex 数据存储](#使用 vuex-persistedstate 存储部分 vuex 数据到本地)
 
 - `RegisterForm` 组件实现注册功能
@@ -581,9 +588,9 @@ export default ({ $axios }, inject) => {
     }
     </script>
     ```
-    
+
     将组件引入到 `RegisterForm` 组件中，通过 `this.$refs` 调用其方法，传入时间到时的回调
-    
+
     ```vue
     <!-- @/components/user/RegisterForm.vue -->
     <template>
@@ -622,7 +629,7 @@ export default ({ $axios }, inject) => {
     }
     </script>
     ```
-    
+
     
 
 ### 使用 vuex-persistedstate 存储部分 vuex 数据到本地
@@ -745,9 +752,9 @@ export default ({ store }) => {
     - 以年开始考虑，换算成总小时与分钟数
     - 注意不要使用 UTC 方法，UTC 返回 0 时区时间
     - 利用时间戳进行时差计算，将时间戳毫秒换算为时分
-    
+
   - 计算两个日期相差的小时数与分钟数
-  
+
     ```vue
     <template>
     	<!-- 显示的机票信息 -->
@@ -776,6 +783,7 @@ export default ({ store }) => {
     	</el-row>
     </template>
     ```
+
     ```js
     // @/plugins/timeRank.js
     /**
@@ -814,9 +822,9 @@ export default ({ store }) => {
       return `${diffHours}时${mm}分`
     }
     ```
-  
+
     > **注意** 项目的航班系统将 00:59:59 算作当天的结束时刻，01:00:00 算作当天的开始时刻
-  
+
 - 机票项详情信息的展开与收起
 
 - `FlightsFilters` 组件实现机票列表的数据筛选
@@ -1011,9 +1019,9 @@ export default ({ store }) => {
     }
     </script>
     ```
-    
+
     - 筛选条件撤销功能
-    
+
       ```js
       // 撤销条件时候触发
       handleFiltersCancel () {
@@ -1099,21 +1107,25 @@ export default ({ store }) => {
   ```
 
 - `OrderForm` 组件封装，展示订单编辑信息
-  
+
   - 添加乘机人
+
 - 保险选择
+
 - 联系人信息填写
+
   - 复用验证码发送计时器组件
     - 发送验证码前手机号码数据验证
   - `refs` 调用子组件的 `methods`，用法与注册页相同
   - 订单表单提交
     - 订单信息提交前验证
+
 - 封装侧边栏组件 `FlightsAside` ，进行计价
-  
+
   - 通过 `vuex` 与 `OrderForm` 组件实现兄弟组件传值
-  
+
     定义 `vuex` 侧边栏数据
-  
+
     ```js
     // @/store/air.js
     export const state = () => ({
@@ -1136,9 +1148,9 @@ export default ({ store }) => {
       // ...
     }
     ```
-  
+
     在 `OrderAside` 中挂载好数据
-  
+
     ```vue
     <!-- @/components/air/OrderAside.vue -->
     <template>
@@ -1170,11 +1182,11 @@ export default ({ store }) => {
     }
     </script>
     ```
-  
+
     
-  
+
     在 `OrderForm` 挂载时初始化数据
-  
+
     ```vue
     <!-- @/components/air/OrderForm.vue -->
     <script>
@@ -1193,9 +1205,9 @@ export default ({ store }) => {
     // ...
     </script>
     ```
-  
+
     每次操作 `OrderForm` 时都 `commit` 一次修改 vuex 的数据，实现对 `OrderAside` 的动态响应
-  
+
     ```vue
     <script>
     export default {
@@ -1240,7 +1252,6 @@ export default ({ store }) => {
     }
     </script>
     ```
-  
 
 
 
@@ -1426,12 +1437,12 @@ export default ({ store }) => {
   - 组件的进一步封装
 
     - `ArticleBarItemInfo` 组件展示文章信息
-      
+
       - 用户信息
       - 点赞数
       - 观看数
       - 时间格式化过滤器函数封装，用于后续的时间展示，将时间戳展示为 `YYYY-MM-DD hh:mm` 的格式
-      
+
       ```js
       // @/plugins/filters.js
       export function timeFormat (time) {
@@ -1463,7 +1474,7 @@ export default ({ store }) => {
       
       // ...
       ```
-      
+
       
 
 ## 旅游攻略文章发布页
@@ -1499,4 +1510,303 @@ export default ({ store }) => {
   - 评论回复功能
   - 评论图片查看功能
   - `CommentFloor` 组件实现评论盖楼（组件递归），可以回复递归出来的评论
+
+
+
+## 酒店列表页
+
+### 技术实现
+
+- 由于酒店列表请求的参数选项由多个组件配合修改，因此决定将请求参数数据都抽离到 `vuex` 中
+
+  - 具体的数据结构
+
+    ```js
+    // @/store/hotel.js
+    export const state = () => ({
+      // ...
+      hotelListParams: {
+        city: undefined,  // 城市id
+        enterTime: undefined,  // 入店时间
+        leftTime: undefined,  // 离店时间
+        // person: undefined, // 人数（暂时不用）
+        price_in: undefined,  // 酒店价格
+        hotellevel: [],  // 酒店等级
+        hoteltype: [],  // 酒店类型
+        hotelasset: [],  // 酒店设施
+        hotelbrand: [],  // 酒店品牌
+        _start: 0,  // 数据索引
+        _limit: 6  // 返回数据的条数
+      },
+      // ...
+    })
+    ```
+
+  - 修改这个数据的 `mutation`
+
+    ```js
+    // @/store/hotel.js
+    export const mutations = {
+      // ...
+      /**
+       * 通过传入的 data 对象来修改酒店列表请求参数的数据，将传入的对象属性合并到已存在
+       * 的字段中，如果原字段不存在则忽略
+       * @param {Object} state vuex 中的 state
+       * @param {Object} data 传入的数据对象
+       */
+      setHotelListParams (state, data) {
+        const hotelListParams = state.hotelListParams
+        for (const key in data) {
+          if (hotelListParams.hasOwnProperty(key)) {
+            hotelListParams[key] = data[key]
+          }
+        }
+      },
+      // ...
+    }
+    ```
+
+- 头部面包屑路径显示
+
+  - 显示出定位到的城市名
+  - 显示出前端路由已有的城市名
+  - 显示出搜索框的值
+
+- `HotelSearchForm` 组件进行不同城市的酒店搜索，有三个搜索条件：城市名、入住日期与离店日期、人数（后端无接口）
+
+  - 搜索城市框，如果输入的城市名与请求回来的数据项完全一样，则自动获取请求回来数据的城市 `id`
+  - 入住日期与离店日期只能选择当日之后的日期
+  - 人数选择框可以显示多少个成人多少个儿童
+
+- `HotelAreaInfo` 组件展示城市周边信息以及显示地图
+
+  - 地图定位功能
+
+  - 加载地图并且触发加载地图 `located` 事件，将获取到的城市名给到父组件
+
+    ```vue
+    <!-- @/components/hotel/HotelAreaInfo.vue -->
+    <script>
+    export default {
+      name: 'HotelAreaInfo',
+     	// ...
+      methods: {
+        async loadMap () {
+          this.loadingMap = true
+          this.map = new AMap.Map('map', {
+            resizeEnable: true,
+            zoom: 10
+          })
+    			// 根据前端路由判断是否有定位城市
+          let cityName = this.$route.query.cityName
+    
+          if (cityName) {
+            this.$store.commit('hotel/setLocationCity', cityName)
+          } else {
+            // 如果路由没有定位城市，则查看一下 vuex 中是否有定位城市
+            cityName = this.$store.state.hotel.locationCity
+          }
+    
+          if (!cityName) {
+            // 定位并获取城市名
+            cityName = await locatingCity()
+            this.$store.commit('hotel/setLocationCity', cityName)
+            this.$alert(`定位当前城市：${cityName}`, { type: 'success' })
+          }
+    
+          this.$router.push({
+            path: '/hotel',
+            query: { cityName }
+          })
+          this.$emit('located', cityName)
+        },
+        // ...
+      },
+      mounted () {
+        window.loadMap  = this.loadMap  // 这个函数必须要在脚本加载之前声明好
+        this.isLoadedMap = true
+      }
+      // ...
+    }
+    </script>
+    ```
+
+    ```vue
+    <!-- @/pages/hotel/index.vue -->
+    <script>
+    export default {
+      name: 'Hotel',
+      // ...
+      methods: {
+        // ...
+        async handleLocated (cityName) {
+          await this.renderCityInfo(cityName)
+    
+          const city = this.cityInfo.id  // 城市 id
+          this.$store.commit('hotel/setHotelListParams', { city })
+          this.renderHotelList(this.hotelListParams)
+        },
+        // ...
+      },
+      // ...
+    }
+    </script>
+    ```
+
+- `HotelFilterForm` 组件进行酒店列表数据筛选
+
+  - 选项功能：价格筛选、住宿等级筛选、住宿类型筛选、酒店设施筛选、酒店品牌筛选
+
+  - 在返回的数据中添加一个选择状态属性，用于后续的列表项选中状态的修改
+
+    ```vue
+    <!-- @/components/hotel/HotelFilterForm.vue -->
+    <script>
+    export default {
+      name: 'HotelFilterForm',
+      data () {
+        return {
+          filters: [
+            { title: '住宿等级', options: [], key: 'hotellevel', dataKey: 'levels' },
+            { title: '住宿类型', options: [], key: 'hoteltype', dataKey: 'types' },
+            { title: '酒店设施', options: [], key: 'hotelasset', dataKey: 'assets' },
+            { title: '酒店品牌', options: [], key: 'hotelbrand', dataKey: 'brands' }
+          ],
+          // ...
+        }
+      },
+      // ...
+      async mounted () {
+        const [err, res] = await this.$api.getHotelFilterOptions()
+    
+        if (err) {
+          return this.$message.error('获取酒店筛选选项数据失败')
+        }
+    
+        const data = res.data.data
+        let filters = this.filters
+    
+        for (const key in data) {
+          filters.forEach(filter => {
+            // 将对应的属性值存到对应的选项中
+            if (key === filter.dataKey) {
+              // 数据改造，添加一个选择状态
+              filter.options = data[key].map(v => {
+                v.isSelected = false
+                return v
+              })
+            }
+          })
+        }
+      }
+    }
+    </script>
+    ```
+
+  - 可以对一个筛选器进行多选操作，将选中的数据项的 id 都保存到一个数组，存到 `vuex` 中，发送请求。
+
+  - 通过筛选器配合 `axios`，发送多个相同参数的 `GET` 请求，由于传入的多选值是一个数组，需要对 `axios` 进行单独配置处理
+
+    - 引用 node 的 `querystring` 核心模块
+
+    - 配置 axios 请求的  `paramsSerializer` 选项，对请求参数进行格式化
+
+    - 需要排除掉 `undefined` 字段，空数组
+
+    - 保留有值字段，非空数组，其中非空数组被格式化为多个相同的参数，如 `{ a: [1, 2, 3] } ==> a=1&a=2&a=3`
+
+    - axios `paramsSerializer` [配置说明](https://github.com/axios/axios#request-config)
+
+      > **注意** axios 如果直接传入数组参数字段会解析成 如 `{ a: [1, 2, 3] } ==> a[]=1&a[]=2&a[]=3`
+
+      ```js
+      // @/plugins/api/_hotel.js
+      import { handleAxiosRequest } from './index'
+      import qs from 'querystring'
+      
+      export default axios => ({
+        /**
+         * 获取酒店数据，可以获取列表或者获取详情
+         * @param {Object} [params] 参数对象
+         * @param {number} [params.id] 酒店id(酒店详情)
+         * @param {number} [params.city] 城市id ?
+         * @param {Date} [params.enterTime] 入店时间 ?
+         * @param {Date} [params.leftTime] 离店时间 ?
+         * @param {number} [params.person] 人数 ?
+         * @param {number} [params.price_in] 酒店价格 *
+         * @param {number[]} [params.hotellevel] 酒店等级 *
+         * @param {number[]} [params.hoteltype] 酒店类型 *
+         * @param {number[]} [params.hotelasset] 酒店设施 *
+         * @param {number[]} [params.hotelbrand] 酒店品牌 *
+         * @param {number} [params._start] 数据索引 >
+         * @param {number} [params._limit] 条数 >
+         * @param {number} [params.scenic] 景点id
+         * @param {string} [params.name_contains] 名字模糊查询
+         * @param {string} [params._sort] 排序
+         * @returns {Promise}
+         */
+        getHotels (params) {
+          params = JSON.parse(JSON.stringify(params)) // 排除掉 undefined 项
+          const filteParams = {}
+      
+          for (let key in params) {
+            // 排除空数组
+            if (!Array.isArray(params[key])) {
+              filteParams[key] = params[key]
+            } else if (Array.isArray(params[key]) && params[key].length > 0) {
+              filteParams[key] = params[key]
+            }
+          }
+          return handleAxiosRequest(axios.get('/hotels', {
+            params: filteParams,
+            paramsSerializer (params) {
+              return qs.stringify(params)
+            }
+          }))
+        },
+      	// ...
+      })
+      ```
+
+    - 对应的过滤操作函数
+
+      ```vue
+      <!-- @/components/hotel/HotelFilterForm.vue -->
+      <script>
+      export default {
+        name: 'HotelFilterForm',
+        // ...
+        methods: {
+          // ...
+          filterHotelInfoByKey ({ index, key }) {
+            let data = []
+      
+            for (const filter of this.filters) {
+              if (filter.key === key) {
+                // 拿到被点击的那一项的选项
+                data = filter.options
+                // 修改对应选项的选中状态
+                const isSelected = filter.options[index].isSelected
+                filter.options[index].isSelected = !isSelected
+                break
+              }
+            }
+      
+            // 拿到已选中的所有选项，并且只将 id 保存到一个数组
+            data = data.filter(v => v.isSelected).map(v => v.id)
+      
+            this.$store.commit('hotel/setHotelListParams', { [key]: data })
+      
+            this.$emit('filter-hotels')
+          },
+          // ...
+        }
+      }
+      </script>
+      ```
+
+- `HotelList` 组件渲染酒店列表
+
+  - 分页功能
+  - 页面切换功能
 
