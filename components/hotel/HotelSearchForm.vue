@@ -141,6 +141,11 @@ export default {
           enterTime: this.hotelDate[0],
           leftTime: this.hotelDate[1]
         })
+      } else {
+        this.$store.commit('hotel/setHotelListParams', {
+          enterTime: undefined,
+          leftTime: undefined
+        })
       }
       // todo 由于后端接口问题，此参数暂时不用
       // if (this.personStr !== '') {
