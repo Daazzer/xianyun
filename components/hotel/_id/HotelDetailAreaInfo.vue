@@ -78,7 +78,8 @@ export default {
         map: this.map,
         position: hotel.location,
         title: name,
-        icon: require('@/assets/images/mark_b.png')
+        icon: require('@/assets/images/mark_b.png'),
+        moveToMarker: true
       })
 
       this.renderScenics(address)
@@ -108,7 +109,8 @@ export default {
         const marker = renderMarker({
           map: this.map,
           position: poi.location,
-          title: poi.name
+          title: poi.name,
+          moveToMarker: true
         })
 
         // 计算酒店标记点与其它标记点的距离
@@ -147,15 +149,15 @@ export default {
 
       this.stations = this.sortPois(result.stationInfo)
     },
-    hoverTabItem (scenic) {
+    hoverTabItem (poi) {
       const infoWindow = new AMap.InfoWindow({
         offset: new AMap.Pixel(0, -35),
-        content: scenic.name,
-        position: scenic.location
+        content: poi.name,
+        position: poi.location
       })
 
       infoWindow.open(this.map)
-      this.map.setCenter(scenic.location)
+      this.map.setCenter(poi.location)
     },
     switchTab (tab) {
       const keyword = this.hotelInfo.address
