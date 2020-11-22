@@ -69,6 +69,12 @@
 </template>
 
 <script>
+import {
+  renderMarker,
+  getMarkerContent,
+  locatingCity
+} from '@/plugins/amap'
+
 export default {
   name: 'HotelAreaInfo',
   props: {
@@ -112,7 +118,7 @@ export default {
 
       if (!cityName) {
         // 定位并获取城市名
-        cityName = await this.locatingCity()
+        cityName = await locatingCity()
         this.$store.commit('hotel/setLocationCity', cityName)
         this.$alert(`定位当前城市：${cityName}`, { type: 'success' })
       }
@@ -123,62 +129,25 @@ export default {
       })
       this.$emit('located', cityName)
     },
-    /**
-     * 地图定位城市
-     * @returns {Promise} 加载地图后的等待结果
-     */
-    locatingCity () {
-      const p = new Promise(rv => {
-        AMap.plugin('AMap.CitySearch', () => {
-          const citySearch = new AMap.CitySearch()
-          citySearch.getLocalCity((status, result) => {
-            if (status === 'complete' && result.info === 'OK') {
-              rv(result.city)
-            }
-          })
-        })
-      })
-      return p
-    },
-    renderHotelMarkers (hotels) {
-      this.map.clearMap()
+    renderHotelMarker (hotels) {
+      const map = this.map
+      map.clearMap()
       hotels.forEach((hotel, index) => {
         const { longitude, latitude } = hotel.location
-        const marker = new AMap.Marker({
-          map: this.map,
+        renderMarker({
+          map,
           title: hotel.name,
           position: new AMap.LngLat(longitude, latitude),
-          content: `<span class="custom-marker">${index + 1}</span>`
-        })
-
-        // 新建信息窗体
-        const infoWindow = new AMap.InfoWindow({
-          anchor: 'bottom-center',
-          content: hotel.name,
-          offset: new AMap.Pixel(0, -35)
-        })
-
-        // 每个标记点都显示窗口信息
-        marker.on('mouseover', () => {
-          infoWindow.open(this.map, [longitude, latitude])
-        })
-
-        marker.on('mouseout', () => {
-          infoWindow.close()
+          content: getMarkerContent(index + 1)
         })
       })
-
-      // 显示出范围内所有标记点
-      this.map.setFitView()
     }
   },
   watch: {
     hotelList (hotels) {
       this.loadingMap = true
-      this.renderHotelMarkers(hotels)
-      setTimeout(() => {
-        this.loadingMap = false
-      }, 300)
+      this.renderHotelMarker(hotels)
+      setTimeout(() => this.loadingMap = false, 300)
     }
   },
   mounted () {

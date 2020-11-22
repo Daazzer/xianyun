@@ -37,6 +37,13 @@
 </template>
 
 <script>
+import {
+  renderMarker,
+  getMarkerContent,
+  searchScenics,
+  searchStation
+} from '@/plugins/amap'
+
 export default {
   name: 'HotelDetailAreaInfo',
   data () {
@@ -64,10 +71,11 @@ export default {
       const { name, address } = await this.renderHotelInfo()
 
       // 先生成酒店的标记
-      const result = await this.searchScenics(address)
+      const result = await searchScenics(address)
       const hotel = result.poiList.pois[0]
 
-      this.hotelMarker = this.renderMarker({
+      this.hotelMarker = renderMarker({
+        map: this.map,
         position: hotel.location,
         title: name,
         icon: require('@/assets/images/mark_b.png')
@@ -91,83 +99,14 @@ export default {
       return { name, address }
     },
     /**
-     * 渲染标记
-     * @param {Object} option 配置对象
-     * @param {string} option.icon 标记的图标
-     * @param {string} option.title 标记悬停时的显示内容
-     * @param {string} option.content 标记文本
-     * @param {Object} option.position 标记位置
-     */
-    renderMarker (option) {
-      const marker = new AMap.Marker({
-        map: this.map,
-        ...option
-      })
-
-      const infoWindow = new AMap.InfoWindow({
-        offset: new AMap.Pixel(0, -35),
-        content: option.title
-      })
-
-      marker.on('mouseover', e => {
-        infoWindow.open(this.map, e.target.getPosition())
-        this.map.setCenter(option.position)
-      })
-
-      marker.on('mouseout', () => {
-        infoWindow.close()
-      })
-
-      this.map.setFitView()
-
-      return marker
-    },
-    getMarkerContent (content) {
-      return `<span class="custom-marker">${content}</span>`
-    },
-    searchScenics (keyword) {
-      // 由于酒店的坐标不对，需要对酒店的地址进行搜索，搜索结果的第1项就是酒店坐标
-      const p = new Promise(rv => {
-        AMap.plugin('AMap.PlaceSearch', () => {
-          //构造地点查询类
-          const placeSearch = new AMap.PlaceSearch({
-            type: '风景名胜',
-            autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
-          })
-          placeSearch.search(keyword, (status, result) => {
-            if (status === 'complete' && result.info === 'OK') {
-              rv(result)
-            }
-          })
-        })
-      })
-      return p
-    },
-    searchStation (keyword) {
-      const p = new Promise(rv => {
-        AMap.plugin('AMap.StationSearch', () => {
-          const station = new AMap.StationSearch({
-            pageIndex: 1,
-            pageSize: 10
-          })
-
-          station.search(keyword, (status, result) => {
-            if (status === 'complete' && result.info === 'OK') {
-              rv(result)
-            }
-          })
-        })
-      })
-      return p
-    },
-    /**
-     * 对位置点进行排序
+     * 对位置点与位置点的标记进行排序
      * @param {Object[]} pois 位置列表
      * @returns {Array} 排序后的位置列表
      */
     sortPois (pois) {
       pois = pois.map((poi, index) => {
-        const marker = this.renderMarker({
+        const marker = renderMarker({
+          map: this.map,
           position: poi.location,
           title: poi.name
         })
@@ -184,26 +123,27 @@ export default {
         return poi
       })
 
-      pois.sort((a, b) => a.distance - b.distance)
-      this.markers.sort((a, b) => a.distance - b.distance)
+      pois.sort((a, b) => a.distance - b.distance)  // 排序位置列表
+      this.markers.sort((a, b) => a.distance - b.distance)  // 排序标记字母
 
       // 排序完再设置标记序号
       this.markers.forEach((marker, index) => {
-        const content = this.getMarkerContent(index + 1)
+        const content = getMarkerContent(index + 1)
         marker.setContent(content)
       })
 
       return pois
     },
     async renderScenics (keyword) {
-      const  result = await this.searchScenics(keyword)
+      const  result = await searchScenics(keyword)
 
+      // 由于酒店的坐标不对，需要对酒店的地址进行搜索，搜索结果的第1项就是酒店坐标
       const scenics = result.poiList.pois.slice(1)
 
       this.scenics = this.sortPois(scenics)
     },
     async renderStations (keyword) {
-      const result = await this.searchStation(keyword)
+      const result = await searchStation(keyword)
 
       this.stations = this.sortPois(result.stationInfo)
     },
