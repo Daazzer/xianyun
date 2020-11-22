@@ -151,8 +151,8 @@ export default {
     }
   },
   mounted () {
-    this.isLoadedMap = true
     window.loadMap  = this.loadMap
+    this.isLoadedMap = true
   }
 }
 </script>
