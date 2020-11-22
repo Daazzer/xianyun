@@ -71,7 +71,7 @@ export default {
     '@/plugins/element-ui',
     '@/plugins/axios',
     // 本地存储插件，在客户端渲染
-    { src: '@/plugins/localStorage', ssr: false }
+    { src: '@/plugins/vuex-persistedstate', ssr: false }
   ],
   // ...
 }
@@ -1809,4 +1809,152 @@ export default ({ store }) => {
 
   - 分页功能
   - 页面切换功能
+
+## 酒店详情页
+
+### 技术实现
+
+- 面包屑路径显示城市名，点击面包屑返回酒店列表页对应的城市路由
+
+- 酒店页面数据渲染
+
+- `HotelDetailNameInfo` 组件显示酒店头部名字介绍等信息
+
+- `HotelDetailPicsInfo` 组件显示酒店内部图片展示信息 (后端无图片数据)，mock 一组图片数据
+
+  ```vue
+  <!-- @/components/hotel/HotelDetailPicsInfo.vue -->
+  <script>
+  export default {
+    name: 'HotelDetailPicsInfo',
+    // ...
+    created () {
+      // 模拟添加一条酒店酒店内部图片数据
+      for (let i = 1; i <= 6; i++) {
+        this.pics.push(`http://157.122.54.189:9093/images/hotel-pics/${i}.jpeg`)
+      }
+      this.showPicSrc = this.pics[0]
+    }
+    // ...
+  }
+  </script>
+  ```
+
+- `HotelDetailProducts` 组件显示酒店价格来源表格数据
+
+- `HotelDetailAreaInfo` 显示以酒店为中心，周边的景点与交通信息
+
+  - 每种最多显示 10 条
+
+  - 由于后端返回酒店的坐标不对，所以就根据酒店的地址进行酒店的位置标记渲染
+
+    ```vue
+    <!-- @/components/hotel/_id/HotelDetailAreaInfo.vue -->
+    <script>
+    export default {
+      name: 'HotelDetailAreaInfo',
+      // ...
+      methods: {
+        // ...
+        async initMarkers () {
+          const { name, address } = await this.renderHotelInfo()  // 请求拿到数据以后
+    
+          // 先生成酒店的标记
+          const result = await searchScenics(address)  // 根据酒店地址渲染酒店标记
+          const hotel = result.poiList.pois[0]  // 搜索到的地址的所有数据中的第一条作为地址
+    
+          this.hotelMarker = renderMarker({
+            map: this.map,
+            position: hotel.location,
+            title: name,
+            icon: require('@/assets/images/mark_b.png'),
+            moveToMarker: true
+          })
+    
+          this.renderScenics(address)
+        },
+        async renderScenics (keyword) {
+          const  result = await searchScenics(keyword)
+    
+          // 由于酒店的坐标不对，需要对酒店的地址进行搜索，搜索结果的第1项就是酒店坐标
+          const scenics = result.poiList.pois.slice(1)
+    
+          this.scenics = this.sortPois(scenics)
+        },
+       // ...
+      },
+     	// ...
+    }
+    </script>
+    ```
+    
+  - 由于搜索的周边名胜位置返回的结果可能没有距离属性，或者距离属性为空，而这里需要根据距离进行排序与渲染，可以使用 `marker.distance()` api 进行距离计算与排序，最终渲染到位置列表，以距离的升序排列
+  
+    ```vue
+    
+    <!-- @/components/hotel/_id/HotelDetailAreaInfo.vue -->
+    <script>
+    export default {
+      name: 'HotelDetailAreaInfo',
+      // ...
+      methods: {
+       	// ...
+        /**
+         * 对位置点与位置点的标记进行排序
+         * @param {Object[]} pois 位置列表
+         * @returns {Array} 排序后的位置列表
+         */
+        sortPois (pois) {
+          pois = pois.map((poi, index) => {
+            const marker = renderMarker({
+              map: this.map,
+              position: poi.location,
+              title: poi.name,
+              moveToMarker: true
+            })
+    
+            // 计算酒店标记点与其它标记点的距离
+            const p1 = this.hotelMarker.getPosition()
+            const p2 = marker.getPosition()
+            const distance = Math.round(p1.distance(p2))
+            poi.distance = distance
+    
+            this.markers.push(marker)
+            this.markers[index].distance = distance
+    
+            return poi
+          })
+    
+          pois.sort((a, b) => a.distance - b.distance)  // 排序位置列表
+          this.markers.sort((a, b) => a.distance - b.distance)  // 排序标记字母
+    
+          // 排序完再设置标记序号
+          this.markers.forEach((marker, index) => {
+            const content = getMarkerContent(index + 1)
+            marker.setContent(content)
+          })
+    
+          return pois
+        },
+    		// ...
+      }
+    }
+    </script>
+    ```
+  
+- `HotelDetailAssets` 组件进行酒店信息列表渲染，展示基本信息、主要设施、停车服务、品牌信息
+
+- `HotelDetailComments` 组件进行酒店评论与评分统计（后端接口没评论数据，暂时没有评论列表）
+
+
+
+#### 地图与组件加载顺序问题
+
+- 如果地图需要进行父子组件数据交互，可能会出现地图会在父组件 `mounted` 之前就加载完毕了，此时，如果子组件的地图加载函数执行完毕后 `$emit` 一个事件，然后在父组件对应的处理函数中对子组件传递在 `mounted` 时机才能获取的值，就可能会出现地图标记渲染不出来的现象（如果子组件 `watch` 了此 `props` 并且在回调中访问全局的 `AMap` 还可能会报错），原因就是地图的加载时机与父组件 `mounted` 的执行时机是没有先后顺序的。
+- 以上问题就算父组件获取数据的时机是在 `created` 钩子也会出现
+  - 解决办法：
+    1. 在地图加载完后 `$emit` 的父组件事件处理函数中再独立拿一次数据，将拿到的数据赋值给子组件的 `props`，子组件 `watch` 对应的 `props` 就可以在这个 `watch` 的回调中访问全局的 `AMap`
+    2. 拿酒店数据的请求操作完全放到子组件中的 `loadMap` 方法函数中，如果要父子组件数据交互可以在获取完数据之后再 `$emit` 事件
+
+	> **注意** 如果地图要获取别的组件的数据，那就必须要等地图脚本完全加载完毕再获取，因为加载完毕时，全局中就有一个 `AMap` 对象，这时再访问 `AMap` 才不会报错
 
