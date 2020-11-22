@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import filters from '~/plugins/filters'
 export default {
   name: 'HotelFilterForm',
   data () {
@@ -68,15 +67,16 @@ export default {
     filterHotelInfoByKey ({ index, key }) {
       let data = []
 
-      this.filters.forEach(filter => {
+      for (const filter of this.filters) {
         if (filter.key === key) {
           // 拿到被点击的那一项的选项
           data = filter.options
           // 修改对应选项的选中状态
           const isSelected = filter.options[index].isSelected
           filter.options[index].isSelected = !isSelected
+          break
         }
-      })
+      }
 
       // 拿到已选中的所有选项，并且只将 id 保存到一个数组
       data = data.filter(v => v.isSelected).map(v => v.id)
