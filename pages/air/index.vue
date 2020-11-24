@@ -18,20 +18,16 @@
 
     <!-- 标语 -->
     <el-row type="flex" class="statement">
-      <el-col :span="8">
+      <el-col
+        :span="8"
+        v-for="(statement, index) in statements"
+        :key="index"
+      >
         <i
-          class="iconfont iconweibiaoti-_huabanfuben"
-          style="color: #409eff"
+          :class="['iconfont', statement.icon]"
+          :style="{ color: statement.color }"
         ></i>
-        <span>100%航协认证</span>
-      </el-col>
-      <el-col :span="8">
-        <i class="iconfont iconbaozheng" style="color: green"></i>
-        <span>出行保证</span>
-      </el-col>
-      <el-col :span="8">
-        <i class="iconfont icondianhua" style="color: #409eff"></i>
-        <span>7x24小时服务</span>
+        <span>{{ statement.content }}</span>
       </el-col>
     </el-row>
 
@@ -64,7 +60,12 @@ export default {
   name: 'Air',
   data () {
     return {
-      sales: []
+      sales: [],
+      statements: [
+        { content: '100%航协认证', icon: 'iconweibiaoti-_huabanfuben', color: '#409eff' },
+        { content: '出行保证', icon: 'iconbaozheng', color: '#008000' },
+        { content: '7x24小时服务', icon: 'icondianhua', color: '#409eff' }
+      ]
     }
   },
   async mounted () {
