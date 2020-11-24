@@ -50,6 +50,7 @@ export default {
       const [err, res] = await this.$api.getHotels(hotelListParams)
 
       if (err) {
+        this.hotelList = []  // 为了地图加载状态能取消
         return
       }
 
