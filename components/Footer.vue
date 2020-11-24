@@ -28,7 +28,7 @@
           <p>旅游资讯 APP下载</p>
         </el-col>
         <el-col :span="6" class="scan">
-          <p><el-image src="http://157.122.54.189:9093/images/1556522965.png" alt="follow us" /></p>
+          <el-image src="http://157.122.54.189:9093/images/1556522965.png" alt="follow us" />
           关注我们
         </el-col>
       </el-row>
@@ -60,9 +60,9 @@ export default {
 }
 .info-list {
   h5 {
+    margin-bottom: 10px;
     font-weight: normal;
     font-size: 16px;
-    margin-bottom: 10px;
   }
   p {
     font-size: 12px;
@@ -75,16 +75,18 @@ export default {
 .scan {
   text-align: center;
   .el-image {
+    display: block;
+    margin: 0 auto 5px auto;
     width: 140px;
     height: 140px;
   }
   font-size: 12px;
 }
 .licence {
-  border-top: 1px #666 solid;
   margin-top: 20px;
   padding: 50px 0;
   text-align: center;
   font-size: 12px;
+  border-top: 1px #666 solid;
 }
 </style>
