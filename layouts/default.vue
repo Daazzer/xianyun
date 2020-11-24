@@ -11,8 +11,3 @@ export default {
   name: 'App'
 }
 </script>
-
-<style lang="scss">
-@import "@/assets/fonts/iconfont.css";
-@import "@/assets/common.scss";
-</style>
