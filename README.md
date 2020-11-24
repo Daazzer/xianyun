@@ -37,11 +37,18 @@ $ npm run generate
 ```bash
 .
 ├─assets
+│  ├─fonts
+│  └─images
 ├─components
 │  ├─air # 机票页对应组件
+│  │  ├─flights
+│  │  └─order
 │  ├─hotel # 酒店页对应组件
+│  │  └─_id
 │  ├─strategy # 旅游攻略页对应组件
+│  │  └─detail
 │  └─user # 用户对应组件
+│      └─login
 ├─layouts
 ├─middleware
 ├─pages # 页面路由目录
@@ -85,6 +92,7 @@ api 地址：http://157.122.54.189:9095 ([项目 api](./plugins/api))
 
 | 描述             | URL                 |
 | ---------------- | ------------------- |
+| 404 页           | `*`                 |
 | 首页             | `/`                 |
 | 机票页           | `/air`              |
 | 航班列表页       | `/air/flights`      |
