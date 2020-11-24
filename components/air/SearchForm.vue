@@ -36,9 +36,7 @@
           style="width: 100%"
           value-format="yyyy-MM-dd"
           v-model="form.departDate"
-          :picker-options="{
-            disabledDate
-          }"
+          :picker-options="{ disabledDate }"
         />
       </el-form-item>
       <el-form-item>
