@@ -51,16 +51,14 @@ export default {
       })
 
       if (err) {
-        this.$message.error('支付失败')
-        return err
+        err.msg = '支付失败'
+        return
       }
 
       const statusTxt = res.data.statusTxt
 
       if (statusTxt === '支付完成') {
-        this.$alert('订单支付成功', '提示', {
-          type: 'success'
-        })
+        this.$alert('订单支付成功', '提示', { type: 'success' })
         return true
       }
 
@@ -73,7 +71,8 @@ export default {
     const [err, res] = await this.$api.getAirsOrderById(id)
 
     if (err) {
-      return this.$message.error('获取订单详情信息失败，发生错误')
+      err.msg = '获取订单信息失败'
+      return
     }
 
     const { payInfo: { code_url: codeUrl }, price } = res.data
@@ -87,16 +86,15 @@ export default {
       }
     })
 
-
     // 支付结果轮询
     this.checkPayTimer = setInterval(async () => {
       const isPaid = await this.checkPay(res.data)
 
+      // 如果支付成功或者出错了都取消轮询
       if (typeof isPaid !== 'boolean' || isPaid) {
         clearInterval(this.checkPayTimer)
         return
       }
-      console.log(isPaid)
     }, 3000)
   },
   beforeDestroy () {

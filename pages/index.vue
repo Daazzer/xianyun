@@ -81,7 +81,8 @@ export default {
   async created () {
     const [err, res] = await this.$api.getBanners()
     if (err) {
-      return this.$message.error('获取图片数据失败')
+      err.msg = '获取图片数据失败'
+      return
     }
 
     const bannersData = res.data.data.map(banner => {

@@ -21,11 +21,6 @@
           />
           <!-- 分页 -->
           <el-row type="flex" justify="center" style="margin-top: 10px">
-            <!-- size-change：切换条数时候触发 -->
-            <!-- current-change：选择页数时候触发 -->
-            <!-- current-page: 当前页数 -->
-            <!-- page-size：当前条数 -->
-            <!-- total：总条数 -->
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -73,7 +68,8 @@ export default {
       const [err, res] = await this.$api.getAirs(this.$route.query)
 
       if (err) {
-        return this.$message.error('获取航班信息失败，发生错误')
+        err.msg = '获取航班信息失败'
+        return
       }
 
       this.flightsData = res.data

@@ -36,7 +36,8 @@ export default {
     const [err, res] = await this.$api.getAirsById(id, { seat_xid })
 
     if (err) {
-      return this.$message.error('获取订单信息失败')
+      err.msg = '获取订单信息失败'
+      return
     }
 
     // 改造保险数据，添加选中状态属性

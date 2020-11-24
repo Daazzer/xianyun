@@ -62,8 +62,8 @@ export default {
   data () {
     return {
       tabs: [
-        { icon: "iconfont icondancheng", name: "单程" },
-        { icon: "iconfont iconshuangxiang", name: "往返" }
+        { icon: 'iconfont icondancheng', name: '单程' },
+        { icon: 'iconfont iconshuangxiang', name: '往返' }
       ],
       currentTab: 0,
       form: {

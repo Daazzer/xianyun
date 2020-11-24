@@ -180,7 +180,8 @@ export default {
 
       const [err, res] = await this.$api.getCaptchas({ tel })
       if (err) {
-        return this.$message.error('手机验证码获取失败，发生错误')
+        err.msg = '手机验证码获取失败'
+        return
       }
 
       const captcha = res.data.code
@@ -219,7 +220,7 @@ export default {
 
       if (err) {
         loadingInstance.close()
-        this.$message.error('生成订单失败，发生错误')
+        err.msg = '生成订单失败'
         return
       }
 
@@ -228,9 +229,7 @@ export default {
       loadingInstance.close()
       this.$router.push({
         path: '/air/pay',
-        query: {
-          id
-        }
+        query: { id }
       })
     }
   },
