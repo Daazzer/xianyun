@@ -109,7 +109,7 @@ export default {
       })
 
       if (err) {
-        return this.$message.error('获取文章评论失败')
+        return
       }
 
       const { data, total } = res.data
@@ -162,7 +162,7 @@ export default {
 
       if (err) {
         this.isPosting = false
-        return this.$message.error('发表评论失败')
+        return
       }
 
       this.$message.success('发表评论成功')

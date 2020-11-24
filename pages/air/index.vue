@@ -72,7 +72,6 @@ export default {
     const [err, res] = await this.$api.getRecommendAirs()
 
     if (err) {
-      err.msg = '获取推荐机票数据失败'
       return
     }
 

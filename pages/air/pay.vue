@@ -51,7 +51,6 @@ export default {
       })
 
       if (err) {
-        err.msg = '支付失败'
         return
       }
 
@@ -71,7 +70,6 @@ export default {
     const [err, res] = await this.$api.getAirsOrderById(id)
 
     if (err) {
-      err.msg = '获取订单信息失败'
       return
     }
 

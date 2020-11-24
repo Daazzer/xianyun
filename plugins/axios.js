@@ -25,7 +25,7 @@ export default ({ $axios, redirect }, inject) => {
     }
   })
 
-  // 集中处理错误，错误拦截 400 403 401
+  // 集中处理错误 500、401、400、403
   $axios.onError(err => {
     const errRes = err.response
     if (errRes.status === 500) {
@@ -36,8 +36,7 @@ export default ({ $axios, redirect }, inject) => {
       redirect('/user/login')
     }
     if (errRes.status === 400 || errRes.status === 403) {
-      const message = err.msg ? err.msg + '，' + errRes.data.message : errRes.data.message
-      Message.error(message)
+      Message.error(errRes.data.message)
     }
   })
 

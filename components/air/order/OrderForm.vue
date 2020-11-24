@@ -180,7 +180,6 @@ export default {
 
       const [err, res] = await this.$api.getCaptchas({ tel })
       if (err) {
-        err.msg = '手机验证码获取失败'
         return
       }
 
@@ -220,7 +219,6 @@ export default {
 
       if (err) {
         loadingInstance.close()
-        err.msg = '生成订单失败'
         return
       }
 

@@ -72,9 +72,6 @@ export default {
       const [err, res] = await this.$api.login(this.form)
 
       if (err) {
-        if (err.response.status === 400) {
-          this.$message.error('登录失败')
-        }
         return
       }
 

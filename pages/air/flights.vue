@@ -68,7 +68,6 @@ export default {
       const [err, res] = await this.$api.getAirs(this.$route.query)
 
       if (err) {
-        err.msg = '获取航班信息失败'
         return
       }
 

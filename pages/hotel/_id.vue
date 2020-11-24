@@ -32,7 +32,7 @@ export default {
       const [err, res] = await this.$api.getHotels({ id })
 
       if (err) {
-        return this.$message.error('获取酒店详情信息失败')
+        return
       }
 
       if (res.data.data.length === 0) {

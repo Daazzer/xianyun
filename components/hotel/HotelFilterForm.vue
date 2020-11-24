@@ -120,7 +120,7 @@ export default {
     const [err, res] = await this.$api.getHotelFilterOptions()
 
     if (err) {
-      return this.$message.error('获取酒店筛选选项数据失败')
+      return
     }
 
     const data = res.data.data

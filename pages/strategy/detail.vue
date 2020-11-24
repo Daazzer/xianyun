@@ -80,7 +80,7 @@ export default {
       })
 
       if (err) {
-        return this.$message.error('点赞失败')
+        return
       }
 
       this.$message.success('点赞成功')
@@ -95,7 +95,7 @@ export default {
       const [err, res] = await this.$api.starStrategicalArticle({ id })
 
       if (err) {
-        return this.$message.error('收藏失败')
+        return
       }
 
       this.$message.success('收藏成功')
@@ -109,16 +109,18 @@ export default {
       const [err, res] = await this.$api.getStrategicalArticleDetail({ id })
 
       if (err) {
-        return this.$message.error('获取文章数据失败')
+        return
       }
 
-      this.strategicalArticle = res.data.data[0]
+      if (res.data.data.length > 0) {
+        this.strategicalArticle = res.data.data[0]
+      }
     },
     async renderRecommendArticle (id) {
       const [err, res] = await this.$api.getRecommendStrategicalArticles({ id })
 
       if (err) {
-        return this.$message.error('获取相关攻略失败')
+        return
       }
 
       this.recommendStrategicalArticles = res.data.data

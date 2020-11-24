@@ -15,13 +15,13 @@
       align="middle"
     >
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+        layout="total, sizes, prev, pager, next, jumper"
         :current-page="currentPage"
         :page-sizes="[5, 6, 7, 8]"
         :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
         :total="totalPage"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
       />
     </el-row>
   </el-col>
@@ -42,7 +42,8 @@ export default {
       })
 
       if (err) {
-        return this.$message.error('获取文章数据失败，发生错误')
+        err.msg = '获取文章数据失败'
+        return
       }
 
       this.$store.commit('strategy/setStrategicalArticles', res.data.data)

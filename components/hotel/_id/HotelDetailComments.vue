@@ -71,7 +71,7 @@ export default {
       const [err, res] = await this.$api.getHotelComments({ hotel })
 
       if (err) {
-        return this.$message.error('获取酒店评论数据失败')
+        return
       }
 
       // 后台没数据

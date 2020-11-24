@@ -132,9 +132,11 @@ export default {
         }).catch(err => err)
         return
       }
+
       const [err, res] = await this.$api.getCaptchas({ tel })
+
       if (err) {
-        return this.$message.error('手机验证码获取失败，发生错误')
+        return
       }
 
       const captcha = res.data.code
@@ -165,7 +167,7 @@ export default {
       const [err, res] = await this.$api.register(prop)
 
       if (err) {
-        return this.$message.error('注册失败，发生错误')
+        return
       }
 
       this.$message.success('注册成功')

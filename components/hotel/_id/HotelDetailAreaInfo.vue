@@ -90,7 +90,10 @@ export default {
       const [err, res] = await this.$api.getHotels({ id })
 
       if (err) {
-        return this.$message.error('获取地图标记信息失败')
+        if (err.response.status === 400 || err.response.status === 403) {
+          this.$message.error('获取地图标记信息失败')
+        }
+        return
       }
 
       const { name, address } = res.data.data[0]

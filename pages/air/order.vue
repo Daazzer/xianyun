@@ -36,7 +36,6 @@ export default {
     const [err, res] = await this.$api.getAirsById(id, { seat_xid })
 
     if (err) {
-      err.msg = '获取订单信息失败'
       return
     }
 

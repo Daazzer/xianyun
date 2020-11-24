@@ -34,7 +34,7 @@ export default {
       const [err, res] = await this.$api.getCities({ name })
 
       if (err) {
-        return this.$message.error('获取酒店周边数据失败')
+        return
       }
 
       if (res.data.data.length === 0) {
@@ -50,7 +50,7 @@ export default {
       const [err, res] = await this.$api.getHotels(hotelListParams)
 
       if (err) {
-        return this.$message.error('获取酒店列表数据失败')
+        return
       }
 
       this.hotelList = res.data.data
