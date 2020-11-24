@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="hotel__list">
+    <ul class="hotel__list" v-if="hotelList.length > 0">
       <li
         class="list__item"
         v-for="hotel in hotelList"

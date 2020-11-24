@@ -95,13 +95,9 @@ export default {
 
       let cities = res.data.data
 
-      if (typeof cities === 'undefined') {
+      if (typeof cities === 'undefined' || Array.isArray(cities) && cities.length === 0) {
         this.cityId = undefined
         return cb([])
-      }
-
-      if (cities.length === 0) {
-        this.cityId = undefined
       }
 
       cities = cities.map(city => {
