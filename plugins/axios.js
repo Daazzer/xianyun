@@ -6,6 +6,7 @@ export default ({ $axios, redirect }, inject) => {
   /**
    * 判断是否请求到需要 token 的路由
    * @param {string} url 请求地址段
+   * @param {string} method 请求方法
    * @returns {boolean} 是否匹配给定的地址段
    */
   const checkAuthUrl = (url, method) => (
@@ -32,7 +33,7 @@ export default ({ $axios, redirect }, inject) => {
     }
     if (errRes.status === 401) {
       Message.warning('请登录')
-      // redirect('/user/login')
+      redirect('/user/login')
     }
     if (errRes.status === 400 || errRes.status === 403) {
       const message = err.msg ? err.msg + '，' + errRes.data.message : errRes.data.message
