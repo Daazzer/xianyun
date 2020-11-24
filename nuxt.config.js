@@ -34,6 +34,16 @@ export default {
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
 
+  router: {
+    extendRoutes (routes, resolve) {
+      routes.push({
+        name: 'NotFound',
+        path: '*',
+        component: resolve(__dirname, 'pages/notfound.vue')
+      })
+    }
+  },
+
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
   ],
