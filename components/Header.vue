@@ -1,14 +1,12 @@
 <template>
   <header class="header">
     <el-row type="flex" justify="space-between" class="main">
-      <!-- logo -->
       <div class="logo">
         <nuxt-link to="/">
           <img src="http://157.122.54.189:9093/images/logo.jpg" alt="logo" />
         </nuxt-link>
       </div>
 
-      <!-- 菜单栏 -->
       <el-row type="flex" class="navs">
         <nuxt-link to="/">首页</nuxt-link>
         <nuxt-link to="/strategy">旅游攻略</nuxt-link>
@@ -48,7 +46,7 @@
 
 <script>
 export default {
-  name: 'SiteHeader',
+  name: 'Header',
   methods: {
     logout () {
       this.$store.commit('user/removeUserInfo')

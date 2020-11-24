@@ -1,6 +1,6 @@
 <template>
-  <footer class="footer-wrapper">
-    <div class="footer">
+  <footer class="footer">
+    <div class="footer-wrapper">
       <el-row class="info-list">
         <el-col :span="6" :offset="1">
           <h5>闲云旅游旅游网</h5>
@@ -28,12 +28,7 @@
           <p>旅游资讯 APP下载</p>
         </el-col>
         <el-col :span="6" class="scan">
-          <p>
-            <img
-              src="http://157.122.54.189:9093/images/1556522965.png"
-              alt=""
-            />
-          </p>
+          <p><el-image src="http://157.122.54.189:9093/images/1556522965.png" alt="follow us" /></p>
           关注我们
         </el-col>
       </el-row>
@@ -48,19 +43,19 @@
 
 <script>
 export default {
-  name: 'SiteFooter'
+  name: 'Footer'
 }
 </script>
 
 <style lang="scss" scoped>
 .footer {
-  padding-top: 30px;
-  margin: 0 auto;
-  width: 1000px;
+  background: #333;
+  color: #ccc;
+  min-width: 1000px;
   &-wrapper {
-    background: #333;
-    color: #ccc;
-    min-width: 1000px;
+    padding-top: 30px;
+    margin: 0 auto;
+    width: 1000px;
   }
 }
 .info-list {
@@ -79,7 +74,7 @@ export default {
 }
 .scan {
   text-align: center;
-  img {
+  .el-image {
     width: 140px;
     height: 140px;
   }
