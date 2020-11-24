@@ -72,8 +72,10 @@ export default {
       const [err, res] = await this.$api.login(this.form)
 
       if (err) {
-        console.log(err)
-        return this.$message.error('登录失败，发生错误')
+        if (err.response.status === 400) {
+          this.$message.error('登录失败')
+        }
+        return
       }
 
       this.$store.commit('user/setUserInfo', res.data)
@@ -81,7 +83,7 @@ export default {
       this.$message.success('登录成功')
 
       // 跳转到首页
-      setTimeout(() => this.$router.replace('/'), 1000)
+      setTimeout(() => this.$router.back(), 1000)
     },
     // 清空当前表单验证
     clearValidate (prop) {
