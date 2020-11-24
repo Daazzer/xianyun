@@ -15,28 +15,12 @@ export default ({ $axios }, inject) => {
     (/^\/posts/.test(url) && method === 'post')
   )
 
-  /**
-   * @see {@link http://157.122.54.189:9093} 在线项目参考
-   * @see {@link http://157.122.54.189:9095} 在线数据库
-   * @see {@link http://localhost:1337} 本地数据库
-   */
-  $axios.setBaseURL('http://157.122.54.189:9095')
-
   // 请求拦截
   $axios.onRequest(config => {
     const xianyun = JSON.parse(localStorage.getItem('xianyun'))
     if (xianyun && checkAuthUrl(config.url, config.method)) {
       const token = xianyun.user.userInfo.token
       config.headers.Authorization = 'Bearer ' + token
-    }
-  })
-
-  // 可以设置请求拦截器
-  $axios.onError(error => {
-    console.dir('axios error: ', error)
-    const { statusCode, message } = error.response.data
-    if (statusCode === 400) {
-      Message.error(message)
     }
   })
 

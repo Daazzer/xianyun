@@ -44,6 +44,15 @@ export default {
     '@nuxtjs/axios',
   ],
 
+  /**
+   * @see {@link http://157.122.54.189:9093} 在线项目参考
+   * @see {@link http://157.122.54.189:9095} 在线数据库
+   * @see {@link http://localhost:1337} 本地数据库
+   */
+  axios: {
+    baseURL: 'http://157.122.54.189:9095'
+  },
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     transpile: [/^element-ui/]
