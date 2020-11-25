@@ -60,3 +60,17 @@ i {
   background-size: 22px 36px;
   background-image: url(//webapi.amap.com/theme/v1.3/markers/b/mark_bs.png);
 }
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(3turn);
+  }
+}
+.el-loading-spinner {
+  animation: rotating 3s linear infinite;
+  .icon-jiazaizhong {
+    font-size: 38px;
+  }
+}

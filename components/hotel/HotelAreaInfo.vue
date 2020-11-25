@@ -158,20 +158,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@keyframes rotating {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(3turn);
-  }
-}
-::v-deep .el-loading-spinner {
-  animation: rotating 3s linear infinite;
-  .icon-jiazaizhong {
-    font-size: 38px;
-  }
-}
 .hotel__area-info {
   min-height: 260px;
   margin-bottom: 20px;
