@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loadingHotelList" element-loading-spinner="iconfont icon-jiazaizhong">
     <ul class="hotel__list" v-if="hotelList.length > 0">
       <li
         class="list__item"
@@ -97,7 +97,8 @@ export default {
   },
   data () {
     return {
-      currentPage: 1
+      currentPage: 1,
+      loadingHotelList: false
     }
   },
   methods: {
@@ -105,12 +106,14 @@ export default {
       this.$store.commit('hotel/setHotelListParams', {
         _limit: pageSize
       })
+      this.loadingHotelList = true
       this.$emit('pagination-change')
     },
     handleCurrentChange (currentPage) {
       this.$store.commit('hotel/setHotelListParams', {
         _start: (currentPage - 1) * this.pageSize
       })
+      this.loadingHotelList = true
       this.$emit('pagination-change')
     },
     goToLink () {
@@ -122,6 +125,14 @@ export default {
       totalHotels: state => state.totalHotels,
       pageSize: state => state.hotelListParams._limit
     })
+  },
+  watch: {
+    hotelList () {
+      this.loadingHotelList = false
+    }
+  },
+  mounted () {
+    this.loadingHotelList = true
   }
 }
 </script>
