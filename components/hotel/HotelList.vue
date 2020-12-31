@@ -66,7 +66,8 @@
         </el-row>
       </li>
     </ul>
-    <div class="hotel__none" v-else>
+    <div class="hotel__list--loading" v-else-if="loadingHotelList"></div>
+    <div class="hotel__list--none" v-else>
       暂无酒店数据
     </div>
     <el-row class="hotel__list-pagination" type="flex" justify="center" align="middle">
@@ -194,13 +195,16 @@ export default {
       }
     }
   }
-}
-.hotel__none {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  font-size: 24px;
-  color: #555;
+  &--none {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    font-size: 24px;
+    color: #555;
+  }
+  &--loading {
+    height: 300px;
+  }
 }
 </style>
